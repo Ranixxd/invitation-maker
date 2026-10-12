@@ -1,4 +1,4 @@
-// 문서 정보 = core (CONSTITUTION §3.2). 여러 섹션이 함께 쓰는 사실을 한 곳에서 편집
+// 기본 정보 = core (CONSTITUTION §3.2). 여러 섹션이 함께 쓰는 사실을 한 곳에서 편집
 import type { HostSide, InvitationDoc, Parent } from '../../types/invitation';
 import type { EditorAction } from '../../store/editorReducer';
 import { PanelSection, TextField, Toggle } from '../common/fields';

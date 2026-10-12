@@ -4,16 +4,13 @@ import { useEditor } from '../store/EditorContext';
 import { createDoc } from '../data/templates';
 import { applyTemplate, getTemplate } from '../data/designTemplates';
 import { TemplatePreview } from '../components/common/TemplatePreview';
+import { AppHeader } from '../components/common/shared';
 
-export function FlowSteps({ current }: { current: 0 | 1 | 2 }) {
+export function BackLink({ to, label }: { to: string; label: string }) {
   return (
-    <ol className="flow-steps" aria-label="진행 단계">
-      {['템플릿', '시작 방법', '편집'].map((s, i) => (
-        <li key={s} className={i === current ? 'is-current' : i < current ? 'is-done' : ''} aria-current={i === current ? 'step' : undefined}>
-          {s}
-        </li>
-      ))}
-    </ol>
+    <Link to={to} className="icon-btn" aria-label={label}>
+      ←
+    </Link>
   );
 }
 
@@ -32,26 +29,14 @@ export default function StartChoice() {
 
   return (
     <main className="start">
-      <header className="flow-head">
-        <Link to={`/templates?selected=${template.id}`} className="icon-btn" aria-label="템플릿 선택으로">
-          ←
-        </Link>
-        <FlowSteps current={1} />
-      </header>
+      <AppHeader left={<BackLink to={`/templates?selected=${template.id}`} label="템플릿 선택으로" />} />
 
       <div className="start-inner">
         <div className="chosen-tpl">
           <div className="chosen-thumb">
             <TemplatePreview template={template} />
           </div>
-          <div>
-            <p className="field-hint">선택한 템플릿</p>
-            <b className="chosen-name">{template.name}</b>
-            <p className="field-hint">{template.tagline}</p>
-            <Link to={`/templates?selected=${template.id}`} className="link-btn">
-              템플릿 바꾸기
-            </Link>
-          </div>
+          <b className="chosen-name">{template.name}</b>
         </div>
 
         <h1>어떻게 시작할까요?</h1>
@@ -64,8 +49,7 @@ export default function StartChoice() {
               ✨
             </span>
             <h2>쉽게 시작</h2>
-            <p>사진과 이름·날짜만 알려주세요. 대표 사진을 고르고 갤러리까지 채워서 템플릿에 맞춰 드려요.</p>
-            <span className="choice-cta">사진으로 시작하기 →</span>
+            <p>기본 사진과 정보를 입력해서 간단하게 청첩장을 만들어요.</p>
           </Link>
 
           <button type="button" className="choice-card" onClick={startBlank}>
@@ -74,7 +58,6 @@ export default function StartChoice() {
             </span>
             <h2>바로 편집</h2>
             <p>템플릿을 그대로 열고 처음부터 직접 채워요.</p>
-            <span className="choice-cta">편집기 열기 →</span>
           </button>
         </div>
       </div>

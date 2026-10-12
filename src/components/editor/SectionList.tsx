@@ -2,36 +2,31 @@ import type { InvitationDoc } from '../../types/invitation';
 import { SECTION_LABELS } from '../../data/templates';
 import type { EditorAction } from '../../store/editorReducer';
 
-export type Selection = 'settings' | 'theme' | string; // string = section id
+export type Selection = 'settings' | string; // string = section id
 
 interface Props {
   doc: InvitationDoc;
   selected: Selection;
   onSelect: (s: Selection) => void;
   dispatch: (a: EditorAction) => void;
+  /** 기본 정보 항목 표시 (모바일 구성 시트는 툴바에 따로 있으므로 숨김) */
+  showBasics?: boolean;
 }
 
-export function SectionList({ doc, selected, onSelect, dispatch }: Props) {
+export function SectionList({ doc, selected, onSelect, dispatch, showBasics = true }: Props) {
   return (
     <nav className="section-list" aria-label="초대장 구성">
-      <p className="list-caption">기본</p>
-      <ul>
-        <li>
-          <button type="button" className={`list-item${selected === 'settings' ? ' is-on' : ''}`} onClick={() => onSelect('settings')}>
-            <span className="list-icon" aria-hidden>📋</span>
-            <span className="list-name">문서 정보</span>
-            <span className="list-desc">이름·날짜·장소·혼주</span>
-          </button>
-        </li>
-        <li>
-          <button type="button" className={`list-item${selected === 'theme' ? ' is-on' : ''}`} onClick={() => onSelect('theme')}>
-            <span className="list-icon" aria-hidden>🎨</span>
-            <span className="list-name">테마</span>
-            <span className="list-desc">분위기·색·글꼴</span>
-          </button>
-        </li>
-      </ul>
-
+      {showBasics && (
+        <ul>
+          <li>
+            <button type="button" className={`list-item${selected === 'settings' ? ' is-on' : ''}`} onClick={() => onSelect('settings')}>
+              <span className="list-icon" aria-hidden>📋</span>
+              <span className="list-name">기본 정보</span>
+              <span className="list-desc">이름·날짜·장소·혼주</span>
+            </button>
+          </li>
+        </ul>
+      )}
       <p className="list-caption">섹션 (위에서부터 순서대로 보여요)</p>
       <ul>
         {doc.sections.map((s, i) => {

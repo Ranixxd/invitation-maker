@@ -1,18 +1,17 @@
 // 모바일 편집기: 미리보기가 곧 편집 화면, 편집은 바텀시트로 (CONSTITUTION §6.5)
 import { useCallback, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import type { InvitationDoc, SectionType } from '../../types/invitation';
 import type { EditorAction } from '../../store/editorReducer';
-import { LEAVE_CONFIRM } from '../../store/EditorContext';
 import { SECTION_LABELS } from '../../data/templates';
 import { InvitationView } from '../invitation/InvitationView';
 import { BottomSheet } from '../common/BottomSheet';
+import { AppHeader } from '../common/shared';
 import { Toggle } from '../common/fields';
 import { toast } from '../common/toast';
 import { SectionList } from './SectionList';
 import { SectionPanel } from './SectionPanels';
 import { SettingsPanel } from './SettingsPanel';
-import { ThemePanel } from './ThemePanel';
 
 const EDIT_LABELS: Record<SectionType, string> = {
   hero: '대표 사진 편집',
@@ -25,16 +24,14 @@ const EDIT_LABELS: Record<SectionType, string> = {
   guestbook: '방명록 편집',
 };
 
-type SheetKind = 'list' | 'settings' | 'theme' | { sectionId: string };
+type SheetKind = 'list' | 'settings' | { sectionId: string };
 
 interface Props {
   doc: InvitationDoc;
   dispatch: (a: EditorAction) => void;
-  /** ✕ 눌렀을 때 돌아갈 곳 */
-  backTo: string;
 }
 
-export function MobileEditor({ doc, dispatch, backTo }: Props) {
+export function MobileEditor({ doc, dispatch }: Props) {
   const navigate = useNavigate();
   const [activeId, setActiveId] = useState<string | null>(doc.sections[0]?.id ?? null);
   // 닫히는 애니메이션 동안 내용이 비지 않도록 kind와 open을 분리
@@ -70,23 +67,18 @@ export function MobileEditor({ doc, dispatch, backTo }: Props) {
 
   const section = typeof sheet === 'object' ? doc.sections.find((s) => s.id === sheet.sectionId) : undefined;
   const title =
-    sheet === 'list' ? '구성' : sheet === 'settings' ? '문서 정보' : sheet === 'theme' ? '테마' : section ? SECTION_LABELS[section.type] : '';
+    sheet === 'list' ? '구성' : sheet === 'settings' ? '기본 정보' : section ? SECTION_LABELS[section.type] : '';
 
   return (
     <div className="m-editor">
-      <header className="m-top">
-        <Link
-          to={backTo}
-          className="m-round"
-          aria-label="편집 닫기"
-          onClick={(e) => !window.confirm(LEAVE_CONFIRM) && e.preventDefault()}
-        >
-          ✕
-        </Link>
-        <button type="button" className="m-pill" onClick={() => navigate('/view')}>
-          미리보기
-        </button>
-      </header>
+      <AppHeader
+        className="m-head"
+        right={
+          <button type="button" className="btn btn-ghost sm" onClick={() => navigate('/view')}>
+            미리보기
+          </button>
+        }
+      />
 
       <InvitationView
         doc={doc}
@@ -115,11 +107,8 @@ export function MobileEditor({ doc, dispatch, backTo }: Props) {
         <button type="button" onClick={() => show('list')}>
           <span aria-hidden>☰</span>구성
         </button>
-        <button type="button" onClick={() => show('theme')}>
-          <span aria-hidden>🎨</span>테마
-        </button>
         <button type="button" onClick={() => show('settings')}>
-          <span aria-hidden>📋</span>정보
+          <span aria-hidden>📋</span>기본 정보
         </button>
         <button type="button" className="is-primary" onClick={() => toast('공유 링크는 서버 연동 후 제공돼요')}>
           공유
@@ -132,13 +121,13 @@ export function MobileEditor({ doc, dispatch, backTo }: Props) {
             <SectionList
               doc={doc}
               selected={activeId ?? ''}
-              onSelect={(s) => (s === 'settings' || s === 'theme' ? show(s) : openSection(s))}
+              onSelect={(s) => (s === 'settings' ? show(s) : openSection(s))}
               dispatch={dispatch}
+              showBasics={false}
             />
           </div>
         )}
         {sheet === 'settings' && <SettingsPanel doc={doc} dispatch={dispatch} />}
-        {sheet === 'theme' && <ThemePanel doc={doc} dispatch={dispatch} />}
         {section && (
           <>
             {section.type !== 'hero' && (

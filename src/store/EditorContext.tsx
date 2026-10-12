@@ -27,6 +27,3 @@ export function useEditor() {
 export function findSection<K extends SectionType>(doc: InvitationDoc, type: K): SectionOf<K> | undefined {
   return doc.sections.find((s) => s.type === type) as SectionOf<K> | undefined;
 }
-
-/** 저장이 없으므로, 편집 중 페이지를 벗어나면 내용이 사라진다는 경고 (§7.1) */
-export const LEAVE_CONFIRM = '편집 중인 내용은 저장되지 않아요. 나가면 모두 사라집니다. 나갈까요?';

@@ -1,8 +1,7 @@
 // 쉽게 시작 v2 (규칙 기반). 디자인은 템플릿이, 사진 배치는 여기서 결정. CONSTITUTION §5
-import type { ImageAsset, InvitationDoc, ThemePreset, Venue } from '../types/invitation';
-import { createDoc, THEME_PRESETS, WEDDING } from '../data/templates';
+import type { ImageAsset, InvitationDoc, Venue } from '../types/invitation';
+import { createDoc, WEDDING } from '../data/templates';
 import { applyTemplate, type DesignTemplate } from '../data/designTemplates';
-import { clamp, hexToHsl, hslToHex } from './color';
 
 export interface QuickStartInput {
   template: DesignTemplate;
@@ -32,13 +31,6 @@ export function pickHero(images: ImageAsset[]): ImageAsset | null {
     }
   });
   return best;
-}
-
-/** 사진 색 → 흰 배경 대비 확보된 포인트 색 */
-export function accentFrom(color: string, preset: ThemePreset): string {
-  const { h, s, l } = hexToHsl(color);
-  if (s < 0.15) return THEME_PRESETS[preset].accent;
-  return hslToHex({ h, s: clamp(s, 0.35, 0.55), l: clamp(l, 0.38, 0.45) });
 }
 
 export function buildFromQuickStart(input: QuickStartInput): InvitationDoc {
@@ -86,12 +78,4 @@ export function buildFromQuickStart(input: QuickStartInput): InvitationDoc {
     }
   });
   return doc;
-}
-
-/** 대표 사진에서 뽑은 포인트 색 (§5.5). 무채색 사진이면 null */
-export function heroPhotoAccent(doc: InvitationDoc): string | null {
-  const hero = doc.sections.find((s) => s.type === 'hero');
-  const img = hero?.type === 'hero' && hero.data.imageId ? doc.images[hero.data.imageId] : null;
-  if (!img || hexToHsl(img.color).s < 0.15) return null;
-  return accentFrom(img.color, doc.theme.preset);
 }

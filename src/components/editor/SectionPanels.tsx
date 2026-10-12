@@ -1,8 +1,8 @@
-// 섹션별 속성 편집 폼 (CONSTITUTION §4)
+// 섹션별 내용 편집 폼 (CONSTITUTION §4). 디자인(레이아웃·테마)은 템플릿이 결정하므로 다루지 않는다(§6.2)
 import { useState } from 'react';
 import type { BankAccount, InvitationDoc, Section, SectionDataMap, SectionOf, SectionType } from '../../types/invitation';
 import type { EditorAction } from '../../store/editorReducer';
-import { PanelSection, Segmented, TextArea, TextField, Toggle } from '../common/fields';
+import { PanelSection, TextArea, TextField, Toggle } from '../common/fields';
 import { PhotoDrop } from '../common/shared';
 import { toast } from '../common/toast';
 import { filesToAssets, MAX_IMAGES_PER_DOC } from '../../lib/image';
@@ -68,17 +68,7 @@ function HeroPanel({ doc, section, dispatch }: PanelProps<'hero'>) {
           </>
         )}
       </PanelSection>
-      <PanelSection title="레이아웃">
-        <Segmented
-          label="사진 배치"
-          value={section.data.layout}
-          options={[
-            { value: 'full', label: '전체 화면' },
-            { value: 'frame', label: '액자' },
-            { value: 'arch', label: '아치' },
-          ]}
-          onChange={(layout) => set({ layout })}
-        />
+      <PanelSection title="문구">
         <TextField label="헤드라인" value={section.data.headline} onChange={(headline) => set({ headline })} maxLength={40} />
       </PanelSection>
     </div>
@@ -115,7 +105,7 @@ function GreetingPanel({ section, dispatch, goSettings }: PanelProps<'greeting'>
           checked={section.data.showSignature}
           onChange={(showSignature) => set({ showSignature })}
         />
-        <SettingsLink onClick={goSettings}>이름·부모님 성함은 문서 정보에서</SettingsLink>
+        <SettingsLink onClick={goSettings}>이름·부모님 성함은 기본 정보에서</SettingsLink>
       </PanelSection>
     </div>
   );
@@ -159,15 +149,6 @@ function GalleryPanel({ doc, section, dispatch }: PanelProps<'gallery'>) {
     <div className="panel-body">
       <PanelSection title="갤러리">
         <TextField label="제목" value={section.data.title} onChange={(title) => set({ title })} />
-        <Segmented
-          label="보기 방식"
-          value={section.data.layout}
-          options={[
-            { value: 'grid', label: '격자' },
-            { value: 'slide', label: '슬라이드' },
-          ]}
-          onChange={(layout) => set({ layout })}
-        />
       </PanelSection>
       <PanelSection title={`사진 ${ids.length}장`}>
         <PhotoDrop onFiles={upload} busy={busy} compact />
@@ -212,7 +193,7 @@ function ParentsPanel({ section, dispatch, goSettings }: PanelProps<'parents'>) 
       <PanelSection title="혼주 · 연락처">
         <TextField label="제목" value={section.data.title} onChange={(title) => set({ title })} />
         <Toggle label="전화·문자 버튼 표시" checked={section.data.showContact} onChange={(showContact) => set({ showContact })} />
-        <SettingsLink onClick={goSettings}>성함·연락처는 문서 정보에서 수정</SettingsLink>
+        <SettingsLink onClick={goSettings}>성함·연락처는 기본 정보에서 수정</SettingsLink>
       </PanelSection>
     </div>
   );

@@ -55,3 +55,14 @@ export function PhotoDrop({
     </div>
   );
 }
+
+/** 공통 헤더: 로고는 항상 중앙, 단계 표시 없음 (CONSTITUTION §8) */
+export function AppHeader({ left, right, className = '' }: { left?: ReactNode; right?: ReactNode; className?: string }) {
+  return (
+    <header className={`app-head ${className}`}>
+      <div className="app-head-side">{left}</div>
+      <span className="logo">청첩장 메이커</span>
+      <div className="app-head-side is-right">{right}</div>
+    </header>
+  );
+}
