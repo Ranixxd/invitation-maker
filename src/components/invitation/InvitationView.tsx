@@ -1,5 +1,5 @@
 // 초대장 렌더러. 편집기 미리보기와 /view가 공용으로 사용 (CONSTITUTION §6.3)
-import { useEffect, useRef, type CSSProperties } from 'react';
+import { useEffect, useRef, type CSSProperties, type ReactNode } from 'react';
 import type { InvitationDoc, Section } from '../../types/invitation';
 import { THEME_PRESETS } from '../../data/templates';
 import { HeroSection } from './sections/HeroSection';
@@ -58,17 +58,21 @@ interface Props {
   mode?: RenderMode;
   selectedSectionId?: string | null;
   onSectionClick?: (sectionId: string) => void;
+  /** 선택 섹션으로 자동 스크롤 (모바일 편집기는 스크롤이 곧 선택이므로 끔) */
+  autoScroll?: boolean;
+  /** 섹션 위에 겹쳐 그릴 편집 UI (모바일 [섹션 편집] 버튼) */
+  renderOverlay?: (section: Section) => ReactNode;
 }
 
-export function InvitationView({ doc, mode = 'view', selectedSectionId, onSectionClick }: Props) {
+export function InvitationView({ doc, mode = 'view', selectedSectionId, onSectionClick, autoScroll = true, renderOverlay }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
 
   // 편집기에서 섹션을 고르면 미리보기도 그 섹션으로 스크롤
   useEffect(() => {
-    if (mode !== 'preview' || !selectedSectionId) return;
+    if (mode !== 'preview' || !selectedSectionId || !autoScroll) return;
     const el = rootRef.current?.querySelector<HTMLElement>(`[data-section-id="${selectedSectionId}"]`);
     el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }, [mode, selectedSectionId]);
+  }, [mode, selectedSectionId, autoScroll]);
 
   // 하객 화면: 스크롤 등장 애니메이션
   useEffect(() => {
@@ -104,6 +108,7 @@ export function InvitationView({ doc, mode = 'view', selectedSectionId, onSectio
             onClickCapture={onSectionClick ? () => onSectionClick(s.id) : undefined}
           >
             {renderSection(doc, s, mode)}
+            {renderOverlay?.(s)}
           </div>
         ))}
       <footer className="inv-footer">초대장 메이커로 만들었어요</footer>
