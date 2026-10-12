@@ -1,31 +1,4 @@
 import { useRef, useState, type DragEvent, type ReactNode } from 'react';
-import type { EventType } from '../../types/invitation';
-import { EVENT_PRESETS } from '../../data/templates';
-
-const EVENT_ICONS: Record<EventType, string> = { wedding: '💍', 'first-birthday': '🎂', party: '🎉' };
-
-export function EventTypePicker({ value, onChange }: { value: EventType | null; onChange: (t: EventType) => void }) {
-  return (
-    <div className="type-grid" role="radiogroup" aria-label="행사 종류">
-      {(Object.keys(EVENT_PRESETS) as EventType[]).map((t) => (
-        <button
-          key={t}
-          type="button"
-          role="radio"
-          aria-checked={value === t}
-          className={`type-card${value === t ? ' is-on' : ''}`}
-          onClick={() => onChange(t)}
-        >
-          <span className="type-icon" aria-hidden>
-            {EVENT_ICONS[t]}
-          </span>
-          <b>{EVENT_PRESETS[t].label}</b>
-          <span>{EVENT_PRESETS[t].description}</span>
-        </button>
-      ))}
-    </div>
-  );
-}
 
 export function PhoneFrame({ children }: { children: ReactNode }) {
   return (

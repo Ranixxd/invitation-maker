@@ -2,7 +2,6 @@
 import type { HostSide, InvitationDoc, Parent } from '../../types/invitation';
 import type { EditorAction } from '../../store/editorReducer';
 import { PanelSection, TextField, Toggle } from '../common/fields';
-import { EVENT_PRESETS } from '../../data/templates';
 
 interface Props {
   doc: InvitationDoc;
@@ -50,7 +49,6 @@ function HostFields({ host, dispatch, parentsLabel }: { host: HostSide; dispatch
 }
 
 export function SettingsPanel({ doc, dispatch }: Props) {
-  const preset = EVENT_PRESETS[doc.eventType];
   return (
     <div className="panel-body">
       <PanelSection title="초대장">
@@ -67,10 +65,9 @@ export function SettingsPanel({ doc, dispatch }: Props) {
           onChange={(datetime) => dispatch({ type: 'UPDATE_CORE', patch: { datetime } })}
           hint="히어로·날짜 섹션에 함께 반영돼요"
         />
-        <p className="field-hint">행사 종류: {preset.label} (변경하려면 새로 시작해 주세요)</p>
       </PanelSection>
       {doc.core.hosts.map((h) => (
-        <HostFields key={h.id} host={h} dispatch={dispatch} parentsLabel={doc.eventType === 'wedding' ? '혼주 (부모님)' : '부모님'} />
+        <HostFields key={h.id} host={h} dispatch={dispatch} parentsLabel="혼주 (부모님)" />
       ))}
       <PanelSection title="장소">
         <VenueFields doc={doc} dispatch={dispatch} />

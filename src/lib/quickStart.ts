@@ -1,10 +1,9 @@
 // 쉽게 시작 v1 (규칙 기반). CONSTITUTION §5
-import type { EventType, ImageAsset, InvitationDoc, Theme, ThemePreset, Venue } from '../types/invitation';
-import { createDoc, EVENT_PRESETS, THEME_PRESETS } from '../data/templates';
+import type { ImageAsset, InvitationDoc, Theme, ThemePreset, Venue } from '../types/invitation';
+import { createDoc, THEME_PRESETS, WEDDING } from '../data/templates';
 import { clamp, hexToHsl, hslToHex } from './color';
 
 export interface QuickStartInput {
-  eventType: EventType;
   images: ImageAsset[];
   names: string[];
   datetime: string;
@@ -52,8 +51,7 @@ export function accentFrom(color: string, preset: ThemePreset): string {
 }
 
 export function buildFromQuickStart(input: QuickStartInput): InvitationDoc {
-  const doc = createDoc(input.eventType);
-  const preset = EVENT_PRESETS[input.eventType];
+  const doc = createDoc();
 
   doc.core.hosts.forEach((h, i) => {
     const name = input.names[i]?.trim();
@@ -61,7 +59,7 @@ export function buildFromQuickStart(input: QuickStartInput): InvitationDoc {
   });
   if (input.datetime) doc.core.datetime = input.datetime;
   doc.core.venue = { ...doc.core.venue, ...input.venue };
-  doc.title = preset.title(doc.core.hosts.map((h) => h.name));
+  doc.title = WEDDING.title(doc.core.hosts.map((h) => h.name));
 
   for (const img of input.images) doc.images[img.id] = img;
 

@@ -1,33 +1,30 @@
-// 쉽게 시작 마법사: 종류 → 사진 → 기본 정보 → 결과 (CONSTITUTION §5)
+// 쉽게 시작 마법사: 사진 → 기본 정보 → 결과 (CONSTITUTION §5)
 import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import type { EventType, ImageAsset, InvitationDoc, ThemePreset } from '../types/invitation';
-import { defaultDatetime, EVENT_PRESETS, THEME_PRESETS } from '../data/templates';
+import type { ImageAsset, InvitationDoc, ThemePreset } from '../types/invitation';
+import { defaultDatetime, THEME_PRESETS, WEDDING } from '../data/templates';
 import { filesToAssets, MAX_UPLOAD_PER_BATCH } from '../lib/image';
 import { applyPreset, buildFromQuickStart, pickHero } from '../lib/quickStart';
 import { useEditor } from '../store/EditorContext';
-import { EventTypePicker, PhoneFrame, PhotoDrop } from '../components/common/shared';
+import { PhoneFrame, PhotoDrop } from '../components/common/shared';
 import { TextField } from '../components/common/fields';
 import { InvitationView } from '../components/invitation/InvitationView';
 import { toast } from '../components/common/toast';
 import { confirmOverwrite } from './StartChoice';
 
-const STEPS = ['행사 종류', '사진', '기본 정보', '완성'];
+const STEPS = ['사진', '기본 정보', '완성'];
 
 export default function QuickStart() {
   const navigate = useNavigate();
   const { doc: existing, startNew } = useEditor();
   const [step, setStep] = useState(0);
-  const [eventType, setEventType] = useState<EventType | null>(null);
   const [images, setImages] = useState<ImageAsset[]>([]);
   const [busy, setBusy] = useState(false);
-  const [names, setNames] = useState<string[]>([]);
+  const [names, setNames] = useState<string[]>(() => WEDDING.hostLabels.map(() => ''));
   const [datetime, setDatetime] = useState(defaultDatetime());
   const [venueName, setVenueName] = useState('');
   const [address, setAddress] = useState('');
   const [result, setResult] = useState<InvitationDoc | null>(null);
-
-  const preset = eventType ? EVENT_PRESETS[eventType] : null;
 
   const addFiles = async (files: File[]) => {
     const room = MAX_UPLOAD_PER_BATCH - images.length;
@@ -43,11 +40,8 @@ export default function QuickStart() {
   };
 
   const generate = () => {
-    if (!eventType) return;
-    setResult(
-      buildFromQuickStart({ eventType, images, names, datetime, venue: { name: venueName, address } }),
-    );
-    setStep(3);
+    setResult(buildFromQuickStart({ images, names, datetime, venue: { name: venueName, address } }));
+    setStep(2);
   };
 
   const finish = async () => {
@@ -58,7 +52,7 @@ export default function QuickStart() {
 
   const heroId = useMemo(() => pickHero(images)?.id, [images]);
 
-  const canNext = step === 0 ? !!eventType : step === 1 ? images.length > 0 && !busy : true;
+  const canNext = step === 0 ? images.length > 0 && !busy : true;
 
   return (
     <main className="wizard">
@@ -76,21 +70,8 @@ export default function QuickStart() {
         </ol>
       </header>
 
-      <div className={`wizard-body${step === 3 ? ' is-result' : ''}`}>
+      <div className={`wizard-body${step === 2 ? ' is-result' : ''}`}>
         {step === 0 && (
-          <section className="wizard-step">
-            <h1>어떤 초대장을 만들까요?</h1>
-            <EventTypePicker
-              value={eventType}
-              onChange={(t) => {
-                setEventType(t);
-                setNames(EVENT_PRESETS[t].hostLabels.map(() => ''));
-              }}
-            />
-          </section>
-        )}
-
-        {step === 1 && (
           <section className="wizard-step">
             <h1>사진을 올려주세요</h1>
             <p className="lead">
@@ -123,16 +104,16 @@ export default function QuickStart() {
           </section>
         )}
 
-        {step === 2 && preset && (
+        {step === 1 && (
           <section className="wizard-step">
             <h1>기본 정보를 알려주세요</h1>
             <p className="lead">비워둬도 괜찮아요. 편집기에서 언제든 채울 수 있어요.</p>
             <div className="form-grid">
-              {preset.hostLabels.map((label, i) => (
+              {WEDDING.hostLabels.map((label, i) => (
                 <TextField
                   key={label}
                   label={`${label} 이름`}
-                  placeholder={preset.defaultNames[i]}
+                  placeholder={WEDDING.defaultNames[i]}
                   value={names[i] ?? ''}
                   onChange={(v) => setNames((prev) => prev.map((n, j) => (j === i ? v : n)))}
                 />
@@ -144,7 +125,7 @@ export default function QuickStart() {
           </section>
         )}
 
-        {step === 3 && result && (
+        {step === 2 && result && (
           <QuickResult result={result} onChange={setResult} />
         )}
       </div>
@@ -155,17 +136,17 @@ export default function QuickStart() {
             이전
           </button>
         )}
-        {step < 2 && (
+        {step === 0 && (
           <button type="button" className="btn btn-primary" disabled={!canNext} onClick={() => setStep(step + 1)}>
             다음
           </button>
         )}
-        {step === 2 && (
+        {step === 1 && (
           <button type="button" className="btn btn-primary" onClick={generate}>
             ✨ 틀 잡기
           </button>
         )}
-        {step === 3 && (
+        {step === 2 && (
           <button type="button" className="btn btn-primary" onClick={finish}>
             편집기에서 다듬기 →
           </button>

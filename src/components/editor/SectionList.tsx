@@ -1,5 +1,5 @@
 import type { InvitationDoc } from '../../types/invitation';
-import { sectionLabel } from '../../data/templates';
+import { SECTION_LABELS } from '../../data/templates';
 import type { EditorAction } from '../../store/editorReducer';
 
 export type Selection = 'settings' | 'theme' | string; // string = section id
@@ -36,7 +36,7 @@ export function SectionList({ doc, selected, onSelect, dispatch }: Props) {
       <ul>
         {doc.sections.map((s, i) => {
           const isHero = s.type === 'hero';
-          const label = sectionLabel(s.type, doc.eventType);
+          const label = SECTION_LABELS[s.type];
           return (
             <li key={s.id} className={`section-row${s.enabled ? '' : ' is-hidden'}`}>
               <button type="button" className={`list-item${selected === s.id ? ' is-on' : ''}`} onClick={() => onSelect(s.id)}>

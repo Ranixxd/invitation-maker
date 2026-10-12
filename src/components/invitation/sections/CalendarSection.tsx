@@ -17,12 +17,10 @@ export function CalendarSection({ doc, section }: SectionProps<SectionOf<'calend
   const rows = monthMatrix(date.getFullYear(), date.getMonth());
   const left = dday(date);
   const names = doc.core.hosts.map((h) => h.name || h.label).join(' ♥ ');
-  const [what, josa] =
-    doc.eventType === 'wedding' ? ['결혼식', '이'] : doc.eventType === 'first-birthday' ? ['돌잔치', '가'] : ['파티', '가'];
 
   return (
     <section className="inv-block calendar">
-      <p className="inv-eyebrow">{doc.eventType === 'wedding' ? 'WEDDING DAY' : 'SAVE THE DATE'}</p>
+      <p className="inv-eyebrow">WEDDING DAY</p>
       <h2 className="inv-title">{formatKo(date)}</h2>
       {showCalendar && (
         <table className="cal" aria-label={`${date.getFullYear()}년 ${date.getMonth() + 1}월 달력`}>
@@ -53,12 +51,12 @@ export function CalendarSection({ doc, section }: SectionProps<SectionOf<'calend
         <p className="countdown">
           {left > 0 ? (
             <>
-              {names}의 {what}{josa} <b>{left}일</b> 남았습니다
+              {names}의 결혼식이 <b>{left}일</b> 남았습니다
             </>
           ) : left === 0 ? (
-            <>오늘은 {names}의 {what} 날입니다</>
+            <>오늘은 {names}의 결혼식 날입니다</>
           ) : (
-            <>{names}의 {what}{josa} {-left}일 지났습니다</>
+            <>{names}의 결혼식이 {-left}일 지났습니다</>
           )}
         </p>
       )}

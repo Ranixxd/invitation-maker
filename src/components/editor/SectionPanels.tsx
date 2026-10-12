@@ -92,23 +92,21 @@ const GREETING_SAMPLES = [
   '평생을 같이하고 싶은 사람을 만났습니다.\n\n서로 아껴주고 이해하며\n사랑 베풀며 살고 싶습니다.\n\n오셔서 축복해 주시면 큰 기쁨이겠습니다.',
 ];
 
-function GreetingPanel({ doc, section, dispatch, goSettings }: PanelProps<'greeting'>) {
+function GreetingPanel({ section, dispatch, goSettings }: PanelProps<'greeting'>) {
   const set = useUpdate('greeting', dispatch);
   return (
     <div className="panel-body">
       <PanelSection title="문구">
         <TextField label="제목" value={section.data.title} onChange={(title) => set({ title })} maxLength={40} />
         <TextArea label="본문" rows={9} value={section.data.body} onChange={(body) => set({ body })} maxLength={600} hint={`${section.data.body.length}/600`} />
-        {doc.eventType === 'wedding' && (
-          <div className="sample-row">
-            <span className="field-hint">예시 문구:</span>
-            {GREETING_SAMPLES.map((s, i) => (
-              <button key={i} type="button" className="btn btn-ghost sm" onClick={() => set({ body: s })}>
-                {i + 1}
-              </button>
-            ))}
-          </div>
-        )}
+        <div className="sample-row">
+          <span className="field-hint">예시 문구:</span>
+          {GREETING_SAMPLES.map((s, i) => (
+            <button key={i} type="button" className="btn btn-ghost sm" onClick={() => set({ body: s })}>
+              {i + 1}
+            </button>
+          ))}
+        </div>
       </PanelSection>
       <PanelSection title="서명">
         <Toggle

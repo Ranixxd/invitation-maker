@@ -1,6 +1,7 @@
 // 초대장 도메인 모델. CONSTITUTION §3 참조.
 
-export type EventType = 'wedding' | 'first-birthday' | 'party';
+/** v0.2부터 결혼식 전용 (CONSTITUTION §1.3). 확장 여지를 위해 필드는 유지 */
+export type EventType = 'wedding';
 
 export type ThemePreset = 'classic' | 'modern' | 'romantic';
 export type ThemeFont = 'serif' | 'sans';

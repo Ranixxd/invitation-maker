@@ -9,7 +9,7 @@ import { SectionPanel } from '../components/editor/SectionPanels';
 import { InvitationView } from '../components/invitation/InvitationView';
 import { PhoneFrame } from '../components/common/shared';
 import { toast } from '../components/common/toast';
-import { sectionLabel } from '../data/templates';
+import { SECTION_LABELS } from '../data/templates';
 
 type MobileTab = 'list' | 'edit' | 'preview';
 const MOBILE_QUERY = '(max-width: 767px)';
@@ -44,7 +44,7 @@ export default function Editor() {
 
   const section = doc.sections.find((s) => s.id === selected);
   const panelTitle =
-    selected === 'settings' ? '문서 정보' : selected === 'theme' ? '테마' : section ? sectionLabel(section.type, doc.eventType) : '';
+    selected === 'settings' ? '문서 정보' : selected === 'theme' ? '테마' : section ? SECTION_LABELS[section.type] : '';
 
   return (
     <div className="editor" data-tab={tab}>
