@@ -127,6 +127,8 @@ export interface InvitationDoc {
   id: string;
   version: number;
   eventType: EventType;
+  /** 시작 시 고른 디자인 템플릿 id (§3.5). 이후 테마를 바꿔도 기록용으로 남는다 */
+  templateId?: string;
   title: string;
   createdAt: number;
   updatedAt: number;

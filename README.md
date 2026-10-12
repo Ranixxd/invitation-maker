@@ -7,7 +7,7 @@
 npm install
 npm run dev
 ```
-http://localhost:5173 → 시작하기
+http://localhost:5173 → 템플릿 선택 → 시작 방법 → 편집기 (저장 기능 없음: 새로고침하면 사라짐)
 
 ## 문서
 - [헌법 (살아있는 마스터 문서)](docs/CONSTITUTION.md) — 현재 유효한 시스템 로직·정책

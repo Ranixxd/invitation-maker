@@ -1,22 +1,24 @@
 // 쉽게 시작 마법사: 사진 → 기본 정보 → 결과 (CONSTITUTION §5)
 import { useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import type { ImageAsset, InvitationDoc, ThemePreset } from '../types/invitation';
-import { defaultDatetime, THEME_PRESETS, WEDDING } from '../data/templates';
+import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
+import type { ImageAsset, InvitationDoc } from '../types/invitation';
+import { defaultDatetime, WEDDING } from '../data/templates';
+import { getTemplate } from '../data/designTemplates';
 import { filesToAssets, MAX_UPLOAD_PER_BATCH } from '../lib/image';
-import { applyPreset, buildFromQuickStart, pickHero } from '../lib/quickStart';
+import { buildFromQuickStart, heroPhotoAccent, pickHero } from '../lib/quickStart';
 import { useEditor } from '../store/EditorContext';
 import { PhoneFrame, PhotoDrop } from '../components/common/shared';
 import { TextField } from '../components/common/fields';
 import { InvitationView } from '../components/invitation/InvitationView';
 import { toast } from '../components/common/toast';
-import { confirmOverwrite } from './StartChoice';
 
 const STEPS = ['사진', '기본 정보', '완성'];
 
 export default function QuickStart() {
   const navigate = useNavigate();
-  const { doc: existing, startNew } = useEditor();
+  const { startNew } = useEditor();
+  const [params] = useSearchParams();
+  const template = getTemplate(params.get('template'));
   const [step, setStep] = useState(0);
   const [images, setImages] = useState<ImageAsset[]>([]);
   const [busy, setBusy] = useState(false);
@@ -40,13 +42,14 @@ export default function QuickStart() {
   };
 
   const generate = () => {
-    setResult(buildFromQuickStart({ images, names, datetime, venue: { name: venueName, address } }));
+    if (!template) return;
+    setResult(buildFromQuickStart({ template, images, names, datetime, venue: { name: venueName, address } }));
     setStep(2);
   };
 
-  const finish = async () => {
-    if (!result || !confirmOverwrite(!!existing)) return;
-    await startNew({ ...result, updatedAt: Date.now() });
+  const finish = () => {
+    if (!result) return;
+    startNew({ ...result, updatedAt: Date.now() });
     navigate('/editor');
   };
 
@@ -54,10 +57,12 @@ export default function QuickStart() {
 
   const canNext = step === 0 ? images.length > 0 && !busy : true;
 
+  if (!template) return <Navigate to="/templates" replace />;
+
   return (
     <main className="wizard">
       <header className="wizard-head">
-        <Link to="/start" className="icon-btn" aria-label="시작 화면으로">
+        <Link to={`/start?template=${template.id}`} className="icon-btn" aria-label="시작 방법 선택으로">
           ←
         </Link>
         <ol className="stepper" aria-label="진행 단계">
@@ -161,7 +166,10 @@ function QuickResult({ result, onChange }: { result: InvitationDoc; onChange: (d
   const gallery = result.sections.find((s) => s.type === 'gallery');
   const heroImg = hero?.type === 'hero' && hero.data.imageId ? result.images[hero.data.imageId] : null;
   const galleryCount = gallery?.type === 'gallery' ? gallery.data.imageIds.length : 0;
-  const galleryLayout = gallery?.type === 'gallery' && gallery.data.layout === 'grid' ? '격자형' : '슬라이드형';
+  const template = getTemplate(result.templateId);
+  const templateAccent = template?.accent ?? result.theme.accent;
+  const photoAccent = heroPhotoAccent(result);
+  const setAccent = (accent: string) => onChange({ ...result, theme: { ...result.theme, accent } });
 
   return (
     <section className="result">
@@ -170,39 +178,41 @@ function QuickResult({ result, onChange }: { result: InvitationDoc; onChange: (d
         <p className="lead">아래 내용은 편집기에서 모두 바꿀 수 있어요.</p>
         <ul className="result-list">
           <li>
+            <b>템플릿</b>
+            <span>{template?.name ?? '-'}</span>
+          </li>
+          <li>
             <b>대표 사진</b>
             <span>
-              {heroImg
-                ? `${heroImg.aspect < 1 ? '세로' : '가로'} 사진 중 밝기가 알맞은 사진을 골라 ${heroImg.aspect < 1 ? '전체 화면' : '액자형'}으로 배치했어요`
-                : '사진 없음'}
+              {heroImg ? `${heroImg.aspect < 1 ? '세로' : '가로'} 사진 중 비율과 밝기가 가장 알맞은 사진을 골랐어요` : '사진 없음'}
             </span>
           </li>
           <li>
             <b>갤러리</b>
-            <span>{galleryCount ? `${galleryCount}장 · ${galleryLayout}` : '나머지 사진이 없어 숨겼어요'}</span>
-          </li>
-          <li>
-            <b>추천 색</b>
-            <span className="swatch-row">
-              <i className="swatch" style={{ background: result.theme.accent }} />
-              대표 사진의 색감에서 뽑았어요
-            </span>
+            <span>{galleryCount ? `나머지 ${galleryCount}장을 올린 순서대로 넣었어요` : '나머지 사진이 없어 숨겼어요'}</span>
           </li>
         </ul>
-        <h2 className="sub-title">다른 분위기로 바꿔보기</h2>
-        <div className="preset-row">
-          {(Object.keys(THEME_PRESETS) as ThemePreset[]).map((p) => (
-            <button
-              key={p}
-              type="button"
-              className={`preset-chip${result.theme.preset === p ? ' is-on' : ''}`}
-              onClick={() => onChange(applyPreset(result, p))}
-            >
-              <i style={{ background: THEME_PRESETS[p].bg, borderColor: THEME_PRESETS[p].accent }} />
-              {THEME_PRESETS[p].label}
-            </button>
-          ))}
-        </div>
+        {photoAccent && (
+          <>
+            <h2 className="sub-title">포인트 색</h2>
+            <div className="preset-row">
+              {[
+                { label: '템플릿 색', color: templateAccent },
+                { label: '사진에서 뽑은 색', color: photoAccent },
+              ].map((c) => (
+                <button
+                  key={c.label}
+                  type="button"
+                  className={`preset-chip${result.theme.accent === c.color ? ' is-on' : ''}`}
+                  onClick={() => setAccent(c.color)}
+                >
+                  <i style={{ background: c.color, borderColor: c.color }} />
+                  {c.label}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
       </div>
       <div className="result-preview">
         <PhoneFrame>

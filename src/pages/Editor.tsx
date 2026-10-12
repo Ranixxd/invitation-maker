@@ -1,7 +1,7 @@
 // 편집기 (CONSTITUTION 제6장). 데스크탑 3단 / 태블릿 2단 / 모바일은 미리보기+바텀시트(MobileEditor)
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { useEditor, type SaveStatus } from '../store/EditorContext';
+import { LEAVE_CONFIRM, useEditor } from '../store/EditorContext';
 import { SectionList, type Selection } from '../components/editor/SectionList';
 import { SettingsPanel } from '../components/editor/SettingsPanel';
 import { ThemePanel } from '../components/editor/ThemePanel';
@@ -13,8 +13,6 @@ import { toast } from '../components/common/toast';
 import { SECTION_LABELS } from '../data/templates';
 
 const MOBILE_QUERY = '(max-width: 767px)';
-
-const SAVE_TEXT: Record<SaveStatus, string> = { idle: '', saving: '저장 중…', saved: '저장됨', error: '저장 실패' };
 
 function useIsMobile() {
   const [m, setM] = useState(() => window.matchMedia(MOBILE_QUERY).matches);
@@ -28,14 +26,23 @@ function useIsMobile() {
 }
 
 export default function Editor() {
-  const { doc, dispatch, loadStatus, saveStatus } = useEditor();
+  const { doc, dispatch } = useEditor();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const [selected, setSelected] = useState<Selection>('settings');
 
-  if (loadStatus === 'loading') return <div className="center-msg">불러오는 중…</div>;
-  if (!doc) return <Navigate to="/start" replace />;
-  if (isMobile) return <MobileEditor doc={doc} dispatch={dispatch} saveStatus={saveStatus} />;
+  // 저장 기능이 없으므로 새로고침·탭 닫기 전에 경고 (§7.1)
+  const hasDoc = !!doc;
+  useEffect(() => {
+    if (!hasDoc) return;
+    const warn = (e: BeforeUnloadEvent) => e.preventDefault();
+    window.addEventListener('beforeunload', warn);
+    return () => window.removeEventListener('beforeunload', warn);
+  }, [hasDoc]);
+
+  if (!doc) return <Navigate to="/templates" replace />;
+  const backTo = doc.templateId ? `/start?template=${doc.templateId}` : '/templates';
+  if (isMobile) return <MobileEditor doc={doc} dispatch={dispatch} backTo={backTo} />;
 
   const select = setSelected;
 
@@ -46,12 +53,17 @@ export default function Editor() {
   return (
     <div className="editor">
       <header className="editor-top">
-        <Link to="/start" className="icon-btn" aria-label="시작 화면으로">
+        <Link
+          to={backTo}
+          className="icon-btn"
+          aria-label="시작 방법 선택으로"
+          onClick={(e) => !window.confirm(LEAVE_CONFIRM) && e.preventDefault()}
+        >
           ←
         </Link>
         <div className="editor-title">
           <b>{doc.title || '제목 없음'}</b>
-          <span className={`save-status is-${saveStatus}`}>{SAVE_TEXT[saveStatus]}</span>
+          <span className="save-status">저장 안 됨 (준비 중)</span>
         </div>
         <div className="editor-actions">
           <button type="button" className="btn btn-ghost sm" onClick={() => navigate('/view')}>

@@ -6,7 +6,7 @@ import { InvitationView } from '../components/invitation/InvitationView';
 import { THEME_PRESETS } from '../data/templates';
 
 export default function View() {
-  const { doc, loadStatus } = useEditor();
+  const { doc } = useEditor();
 
   useEffect(() => {
     if (doc) document.title = doc.title;
@@ -15,8 +15,7 @@ export default function View() {
     };
   }, [doc]);
 
-  if (loadStatus === 'loading') return <div className="center-msg">불러오는 중…</div>;
-  if (!doc) return <Navigate to="/start" replace />;
+  if (!doc) return <Navigate to="/templates" replace />;
 
   return (
     <div className="view-page" style={{ background: THEME_PRESETS[doc.theme.preset].surface }}>

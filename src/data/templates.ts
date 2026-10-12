@@ -163,12 +163,6 @@ export function createDoc(): InvitationDoc {
   };
 }
 
-/** 스키마 버전 마이그레이션 (§3.4). 현재 v1만 존재. */
-export function migrateDoc(doc: InvitationDoc): InvitationDoc {
-  if (doc.version === DOC_VERSION) return doc;
-  return { ...doc, version: DOC_VERSION };
-}
-
 export const SECTION_LABELS: Record<SectionType, string> = {
   hero: '히어로 (맨 위)',
   greeting: '인사말',

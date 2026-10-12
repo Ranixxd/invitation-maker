@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import type { InvitationDoc, SectionType } from '../../types/invitation';
 import type { EditorAction } from '../../store/editorReducer';
-import type { SaveStatus } from '../../store/EditorContext';
+import { LEAVE_CONFIRM } from '../../store/EditorContext';
 import { SECTION_LABELS } from '../../data/templates';
 import { InvitationView } from '../invitation/InvitationView';
 import { BottomSheet } from '../common/BottomSheet';
@@ -30,12 +30,11 @@ type SheetKind = 'list' | 'settings' | 'theme' | { sectionId: string };
 interface Props {
   doc: InvitationDoc;
   dispatch: (a: EditorAction) => void;
-  saveStatus: SaveStatus;
+  /** ✕ 눌렀을 때 돌아갈 곳 */
+  backTo: string;
 }
 
-const SAVE_TEXT: Record<SaveStatus, string> = { idle: '', saving: '저장 중…', saved: '저장됨', error: '저장 실패' };
-
-export function MobileEditor({ doc, dispatch, saveStatus }: Props) {
+export function MobileEditor({ doc, dispatch, backTo }: Props) {
   const navigate = useNavigate();
   const [activeId, setActiveId] = useState<string | null>(doc.sections[0]?.id ?? null);
   // 닫히는 애니메이션 동안 내용이 비지 않도록 kind와 open을 분리
@@ -76,10 +75,14 @@ export function MobileEditor({ doc, dispatch, saveStatus }: Props) {
   return (
     <div className="m-editor">
       <header className="m-top">
-        <Link to="/start" className="m-round" aria-label="편집 닫기">
+        <Link
+          to={backTo}
+          className="m-round"
+          aria-label="편집 닫기"
+          onClick={(e) => !window.confirm(LEAVE_CONFIRM) && e.preventDefault()}
+        >
           ✕
         </Link>
-        {saveStatus !== 'idle' && <span className={`m-save is-${saveStatus}`}>{SAVE_TEXT[saveStatus]}</span>}
         <button type="button" className="m-pill" onClick={() => navigate('/view')}>
           미리보기
         </button>
