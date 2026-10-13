@@ -1,21 +1,15 @@
-// 섹션 위에 붙은 스티커를 그린다. 위치 정하기 중인 스티커는 끌어서 옮길 수 있다 (CONSTITUTION §4.10)
-import { useRef, type CSSProperties } from 'react';
+// 스티커는 섹션에 잘리지 않도록 청첩장 최상단 레이어(StickerOverlay)에 그린다 (CONSTITUTION §4.10)
+// - 위치는 여전히 "섹션 기준 %" — 섹션의 레이아웃 위치(offsetTop 등)를 재서 겹쳐 그린다
+// - 섹션 순서 변경·내용 변경으로 높이가 바뀌면 ResizeObserver로 다시 잰다
+// - 위치 정하기 중에는 섹션 안 PlacingHitArea를 눌러도 그 자리로 옮길 수 있다
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type RefObject } from 'react';
 import type { InvitationDoc, Sticker } from '../../types/invitation';
-import { clampPos, shapeMask, sizePct, stickersIn } from '../../lib/stickers';
+import { clampPos, shapeMask, sizePct } from '../../lib/stickers';
 import type { RenderMode } from './InvitationView';
 
 export interface StickerEdit {
   sticker: Sticker;
   onMove: (x: number, y: number) => void;
-}
-
-interface Props {
-  doc: InvitationDoc;
-  sectionId: string;
-  mode: RenderMode;
-  /** 위치 정하기 중인 스티커 (이 섹션의 것일 때만 그려짐) */
-  edit?: StickerEdit | null;
-  onStickerClick?: (id: string) => void;
 }
 
 export function StickerArt({ sticker, src }: { sticker: Pick<Sticker, 'shape' | 'motion'>; src: string }) {
@@ -33,31 +27,107 @@ export function StickerArt({ sticker, src }: { sticker: Pick<Sticker, 'shape' | 
   );
 }
 
-export function StickerLayer({ doc, sectionId, mode, edit, onStickerClick }: Props) {
-  const layer = useRef<HTMLDivElement>(null);
-  const editing = edit && edit.sticker.sectionId === sectionId ? edit : null;
-  const list = stickersIn(doc.stickers, sectionId).filter((s) => s.id !== editing?.sticker.id);
-  if (!list.length && !editing) return null;
+/** 섹션 안 좌표(%) 계산: 화면 좌표 → 섹션 기준 % (경계까지 허용) */
+function toSectionPct(root: HTMLElement | null, sectionId: string, clientX: number, clientY: number) {
+  const el = root?.querySelector<HTMLElement>(`[data-section-id="${sectionId}"]`);
+  const r = el?.getBoundingClientRect();
+  if (!r || !r.width || !r.height) return null;
+  return { x: clampPos(((clientX - r.left) / r.width) * 100), y: clampPos(((clientY - r.top) / r.height) * 100) };
+}
 
-  const place = (e: { clientX: number; clientY: number }) => {
-    const r = layer.current?.getBoundingClientRect();
-    if (!r || !editing) return;
-    editing.onMove(clampPos(((e.clientX - r.left) / r.width) * 100), clampPos(((e.clientY - r.top) / r.height) * 100));
-  };
-
-  const style = (s: Sticker): CSSProperties => ({ left: `${s.x}%`, top: `${s.y}%`, width: `${sizePct(s.size)}%` });
-
+/** 위치 정하기 중: 섹션 아무 곳이나 누르면 그 자리로 이동 (끌기는 스티커에서만 → 화면 스크롤 유지) */
+export function PlacingHitArea({ edit, sectionId }: { edit: StickerEdit; sectionId: string }) {
   return (
     <div
-      ref={layer}
-      className={`sticker-layer${editing ? ' is-placing' : ''}`}
-      // 위치 정하기 중: 섹션 아무 곳이나 누르면 그 자리로 이동 (끌기는 스티커에서만 → 화면 스크롤 유지)
-      onClick={editing ? (e) => place(e) : undefined}
-    >
+      className="sticker-hit-area"
+      onClick={(e) => {
+        const root = (e.currentTarget as HTMLElement).closest<HTMLElement>('.inv');
+        const p = toSectionPct(root, sectionId, e.clientX, e.clientY);
+        if (p) edit.onMove(p.x, p.y);
+      }}
+    />
+  );
+}
+
+interface Box {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+}
+
+interface OverlayProps {
+  doc: InvitationDoc;
+  mode: RenderMode;
+  rootRef: RefObject<HTMLDivElement>;
+  edit?: StickerEdit | null;
+  onStickerClick?: (id: string) => void;
+}
+
+export function StickerOverlay({ doc, mode, rootRef, edit, onStickerClick }: OverlayProps) {
+  const [boxes, setBoxes] = useState<Record<string, Box>>({});
+  const sectionKey = doc.sections.map((s) => `${s.id}:${s.enabled}`).join('|');
+
+  // 섹션의 레이아웃 위치를 잰다 (offset*은 등장 애니메이션 transform의 영향을 받지 않음)
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const measure = () => {
+      const next: Record<string, Box> = {};
+      root.querySelectorAll<HTMLElement>(':scope > [data-section-id]').forEach((el) => {
+        next[el.dataset.sectionId!] = { top: el.offsetTop, left: el.offsetLeft, width: el.offsetWidth, height: el.offsetHeight };
+      });
+      setBoxes(next);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(root);
+    root.querySelectorAll(':scope > [data-section-id]').forEach((el) => ro.observe(el));
+    return () => ro.disconnect();
+  }, [rootRef, sectionKey]);
+
+  // 하객 화면: 섹션처럼 화면에 들어올 때 나타나게 (§4.10)
+  useEffect(() => {
+    const root = rootRef.current;
+    if (mode !== 'view' || !root) return;
+    const els = root.querySelectorAll('.sticker-reveal:not(.is-visible)');
+    if (!('IntersectionObserver' in window)) {
+      els.forEach((el) => el.classList.add('is-visible'));
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('is-visible');
+            io.unobserve(e.target);
+          }
+        }),
+      { threshold: 0.2 },
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [mode, rootRef, boxes, doc.stickers]);
+
+  const editing = edit ?? null;
+  const list = doc.stickers.filter((s) => s.id !== editing?.sticker.id && boxes[s.sectionId]);
+  if (!list.length && !(editing && boxes[editing.sticker.sectionId])) return null;
+
+  const style = (s: Sticker): CSSProperties => {
+    const b = boxes[s.sectionId];
+    return {
+      left: b.left + (b.width * s.x) / 100,
+      top: b.top + (b.height * s.y) / 100,
+      width: (b.width * sizePct(s.size)) / 100,
+    };
+  };
+
+  return (
+    <div className={`sticker-overlay${editing ? ' is-placing' : ''}`}>
       {list.map((s) => {
         const img = doc.images[s.imageId];
         if (!img) return null;
-        // 하객 화면: 장식이므로 클릭을 막지 않는다. 편집기: 눌러서 수정
+        // 하객 화면: 장식이므로 누를 수 없음(아래 버튼을 가리지 않음). 편집기: 눌러서 수정
         return mode === 'preview' && onStickerClick ? (
           <button
             key={s.id}
@@ -73,43 +143,56 @@ export function StickerLayer({ doc, sectionId, mode, edit, onStickerClick }: Pro
             <StickerArt sticker={s} src={img.src} />
           </button>
         ) : (
-          <span key={s.id} className="sticker" style={style(s)} aria-hidden>
+          <span key={s.id} className={`sticker${mode === 'view' ? ' sticker-reveal' : ''}`} style={style(s)} aria-hidden>
             <StickerArt sticker={s} src={img.src} />
           </span>
         );
       })}
-      {editing && doc.images[editing.sticker.imageId] && (
-        <span
-          className="sticker is-dragging-target"
-          style={style(editing.sticker)}
-          role="slider"
-          aria-label="스티커 위치 (끌어서 옮기기)"
-          aria-valuetext={`가로 ${Math.round(editing.sticker.x)}%, 세로 ${Math.round(editing.sticker.y)}%`}
-          tabIndex={0}
-          onPointerDown={(e) => {
-            e.preventDefault();
-            try {
-              (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-            } catch {
-              /* 캡처 불가 환경 무시 */
-            }
-            place(e);
-          }}
-          onPointerMove={(e) => {
-            if (e.buttons || e.pointerType === 'touch') place(e);
-          }}
-          onKeyDown={(e) => {
-            const step = 2;
-            const { x, y } = editing.sticker;
-            const d = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] }[e.key];
-            if (!d) return;
-            e.preventDefault();
-            editing.onMove(clampPos(x + d[0]), clampPos(y + d[1]));
-          }}
-        >
-          <StickerArt sticker={editing.sticker} src={doc.images[editing.sticker.imageId].src} />
-        </span>
+      {editing && boxes[editing.sticker.sectionId] && doc.images[editing.sticker.imageId] && (
+        <DraftSticker edit={editing} rootRef={rootRef} style={style(editing.sticker)} src={doc.images[editing.sticker.imageId].src} />
       )}
     </div>
+  );
+}
+
+function DraftSticker({ edit, rootRef, style, src }: { edit: StickerEdit; rootRef: RefObject<HTMLDivElement>; style: CSSProperties; src: string }) {
+  const dragging = useRef(false);
+  const move = (clientX: number, clientY: number) => {
+    const p = toSectionPct(rootRef.current, edit.sticker.sectionId, clientX, clientY);
+    if (p) edit.onMove(p.x, p.y);
+  };
+  return (
+    <span
+      className="sticker is-dragging-target"
+      style={style}
+      role="slider"
+      aria-label="스티커 위치 (끌어서 옮기기)"
+      aria-valuetext={`가로 ${Math.round(edit.sticker.x)}%, 세로 ${Math.round(edit.sticker.y)}%`}
+      tabIndex={0}
+      onPointerDown={(e) => {
+        e.preventDefault();
+        dragging.current = true;
+        try {
+          (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+        } catch {
+          /* 캡처 불가 환경 무시 */
+        }
+      }}
+      onPointerMove={(e) => {
+        if (dragging.current) move(e.clientX, e.clientY);
+      }}
+      onPointerUp={() => (dragging.current = false)}
+      onPointerCancel={() => (dragging.current = false)}
+      onKeyDown={(e) => {
+        const step = 2;
+        const { x, y } = edit.sticker;
+        const d = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] }[e.key];
+        if (!d) return;
+        e.preventDefault();
+        edit.onMove(clampPos(x + d[0]), clampPos(y + d[1]));
+      }}
+    >
+      <StickerArt sticker={edit.sticker} src={src} />
+    </span>
   );
 }

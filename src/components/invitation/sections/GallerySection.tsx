@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
 
@@ -54,7 +55,10 @@ export function GallerySection({ doc, section, mode }: SectionProps<SectionOf<'g
           ))}
         </div>
       )}
-      {open !== null && images[open] && (
+      {/* 라이트박스는 body로 포털: 섹션·스티커 레이어 위에 뜨도록 */}
+      {open !== null &&
+        images[open] &&
+        createPortal(
         <div className="lightbox" role="dialog" aria-modal="true" onClick={() => setOpen(null)}>
           <img src={images[open].src} alt={`사진 ${open + 1}`} onClick={(e) => e.stopPropagation()} />
           <button type="button" className="lightbox-close" aria-label="닫기" onClick={() => setOpen(null)}>
@@ -85,8 +89,9 @@ export function GallerySection({ doc, section, mode }: SectionProps<SectionOf<'g
           >
             ›
           </button>
-        </div>
-      )}
+        </div>,
+          document.body,
+        )}
     </section>
   );
 }

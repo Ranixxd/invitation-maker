@@ -474,7 +474,7 @@ a.choice-card:hover, button.choice-card:hover { border-color: var(--primary); tr
 .sec-edit-layer {
   position: absolute;
   inset: 0;
-  z-index: 3;
+  z-index: 5; /* 스티커 오버레이(4) 위 (§4.10) */
   display: flex;
   justify-content: center;
   pointer-events: none;

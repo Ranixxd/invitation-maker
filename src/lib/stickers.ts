@@ -43,8 +43,8 @@ export const SIZES: { value: StickerSize; label: string; pct: number }[] = [
 
 export const sizePct = (size: StickerSize) => SIZES.find((s) => s.value === size)?.pct ?? 26;
 
-/** 위치는 섹션 안으로 제한: 중심 좌표 4~96% */
-export const clampPos = (v: number) => Math.min(96, Math.max(4, Math.round(v * 10) / 10));
+/** 위치: 스티커 중심은 섹션 안(0~100%). 스티커는 최상단 레이어라 섹션 경계에 걸쳐 밖으로 나올 수 있다 */
+export const clampPos = (v: number) => Math.min(100, Math.max(0, Math.round(v * 10) / 10));
 
 export function stickersIn(stickers: Sticker[], sectionId: string): Sticker[] {
   return stickers.filter((s) => s.sectionId === sectionId);

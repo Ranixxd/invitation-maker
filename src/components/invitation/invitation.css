@@ -352,10 +352,13 @@
 .inv-brand-copy { margin: 0; font-size: 12px; color: var(--inv-muted); }
 .inv-brand-link { margin-top: 10px; font-size: 12px; color: var(--inv-accent); text-decoration: underline; text-underline-offset: 3px; }
 
-/* ---- 붙이기(스티커) (§4.10) ---- */
+/* ---- 붙이기(스티커) (§4.10) ----
+   스티커는 섹션에 잘리지 않도록 청첩장 최상단 오버레이에 그린다. 청첩장 바깥 가장자리에서만 잘림(가로 스크롤 방지).
+   쌓임 순서: 섹션 내용 < 위치 정하기 영역(3) < 스티커(4) < [섹션 편집]/[붙이기] 버튼(5) */
+.inv { position: relative; }
 .inv-section { position: relative; }
-.sticker-layer { position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
-.sticker-layer.is-placing { pointer-events: auto; cursor: crosshair; }
+.sticker-overlay { position: absolute; inset: 0; z-index: 4; pointer-events: none; overflow: hidden; }
+.sticker-hit-area { position: absolute; inset: 0; z-index: 3; cursor: crosshair; }
 .sticker {
   position: absolute;
   display: block;
@@ -367,6 +370,8 @@
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.18));
 }
 .sticker.is-editable { pointer-events: auto; cursor: pointer; }
+.inv--view .sticker-reveal { opacity: 0; transition: opacity 0.8s ease; }
+.inv--view .sticker-reveal.is-visible { opacity: 1; }
 .sticker.is-dragging-target {
   pointer-events: auto;
   cursor: grab;
@@ -407,4 +412,5 @@
 @keyframes st-wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-9deg); } 75% { transform: rotate(9deg); } }
 @media (prefers-reduced-motion: reduce) {
   .sticker-motion { animation: none !important; }
+  .inv--view .sticker-reveal { opacity: 1; transition: none; }
 }

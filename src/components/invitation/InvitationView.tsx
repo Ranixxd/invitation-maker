@@ -15,7 +15,7 @@ import { LocationSection } from './sections/LocationSection';
 import { SnapSection } from './sections/SnapSection';
 import { ClosingSection } from './sections/ClosingSection';
 import { BrandSection } from './sections/BrandSection';
-import { StickerLayer, type StickerEdit } from './StickerLayer';
+import { PlacingHitArea, StickerOverlay, type StickerEdit } from './StickerLayer';
 import './invitation.css';
 
 export type RenderMode = 'view' | 'preview';
@@ -140,10 +140,12 @@ export function InvitationView({
             onClickCapture={onSectionClick ? () => onSectionClick(s.id) : undefined}
           >
             {renderSection(doc, s, mode)}
-            <StickerLayer doc={doc} sectionId={s.id} mode={mode} edit={stickerEdit} onStickerClick={onStickerClick} />
+            {stickerEdit?.sticker.sectionId === s.id && <PlacingHitArea edit={stickerEdit} sectionId={s.id} />}
             {renderOverlay?.(s)}
           </div>
         ))}
+      {/* 스티커는 섹션에 잘리지 않도록 최상단 레이어에 (§4.10) */}
+      <StickerOverlay doc={doc} mode={mode} rootRef={rootRef} edit={stickerEdit} onStickerClick={onStickerClick} />
     </div>
   );
 }
