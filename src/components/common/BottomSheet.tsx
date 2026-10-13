@@ -1,4 +1,4 @@
-// 모바일 바텀시트 (CONSTITUTION §6.5). 헤더를 아래로 끌어 닫기, Esc/배경 탭으로 닫기
+// 모바일 바텀시트 / 768px 이상 가운데 대화상자 (CONSTITUTION §6.5, §6.6). 헤더 끌어 닫기(모바일), Esc/배경 탭으로 닫기
 import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from 'react';
 
 interface Props {
@@ -9,6 +9,7 @@ interface Props {
 }
 
 const CLOSE_DRAG_PX = 110;
+const DIALOG_QUERY = '(min-width: 768px)';
 
 export function BottomSheet({ open, title, onClose, children }: Props) {
   const [dragY, setDragY] = useState(0);
@@ -35,6 +36,8 @@ export function BottomSheet({ open, title, onClose, children }: Props) {
 
   const onDown = (e: PointerEvent) => {
     if ((e.target as HTMLElement).closest('button')) return;
+    // 768px 이상에서는 가운데 대화상자로 표시되므로 끌어서 닫기를 쓰지 않는다 (§6.6)
+    if (window.matchMedia(DIALOG_QUERY).matches) return;
     startY.current = e.clientY;
     dragRef.current = 0;
     try {

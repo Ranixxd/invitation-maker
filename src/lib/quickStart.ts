@@ -1,6 +1,7 @@
 // 쉽게 시작 v2 (규칙 기반). 디자인은 템플릿이, 사진 배치는 여기서 결정. CONSTITUTION §5
 import type { ImageAsset, InvitationDoc, Venue } from '../types/invitation';
-import { createDoc, WEDDING } from '../data/templates';
+import { createDoc } from '../data/templates';
+import { defaultSlug } from './slug';
 import { applyTemplate, type DesignTemplate } from '../data/designTemplates';
 
 export interface QuickStartInput {
@@ -40,9 +41,11 @@ export function buildFromQuickStart(input: QuickStartInput): InvitationDoc {
     const name = input.names[i]?.trim();
     if (name) h.name = name;
   });
-  if (input.datetime) doc.core.datetime = input.datetime;
+  if (input.datetime) {
+    doc.core.datetime = input.datetime;
+    doc.slug = defaultSlug(input.datetime);
+  }
   doc.core.venue = { ...doc.core.venue, ...input.venue };
-  doc.title = WEDDING.title(doc.core.hosts.map((h) => h.name));
 
   for (const img of input.images) doc.images[img.id] = img;
 

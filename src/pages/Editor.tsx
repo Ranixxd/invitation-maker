@@ -1,5 +1,5 @@
 // 편집기 (CONSTITUTION 제6장). 데스크탑 3단 / 태블릿 2단 / 모바일은 미리보기+바텀시트(MobileEditor). 디자인 편집 없음(§6.2)
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useEditor } from '../store/EditorContext';
 import { SectionList, type Selection } from '../components/editor/SectionList';
@@ -8,7 +8,8 @@ import { SectionPanel } from '../components/editor/SectionPanels';
 import { MobileEditor } from '../components/editor/MobileEditor';
 import { InvitationView } from '../components/invitation/InvitationView';
 import { AppHeader, PhoneFrame } from '../components/common/shared';
-import { toast } from '../components/common/toast';
+import { BottomSheet } from '../components/common/BottomSheet';
+import { PublishPanel } from '../components/editor/PublishPanel';
 import { SECTION_LABELS } from '../data/templates';
 
 const MOBILE_QUERY = '(max-width: 767px)';
@@ -29,6 +30,8 @@ export default function Editor() {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const [selected, setSelected] = useState<Selection>('settings');
+  const [publishOpen, setPublishOpen] = useState(false);
+  const closePublish = useCallback(() => setPublishOpen(false), []);
 
   // 저장 기능이 없으므로 새로고침·탭 닫기 전에 경고 (§7.1)
   const hasDoc = !!doc;
@@ -53,20 +56,14 @@ export default function Editor() {
       <AppHeader
         className="editor-top"
         left={
-          <div className="editor-title">
-            <b>{doc.title || '제목 없음'}</b>
-            <span className="save-status">저장 안 됨 (준비 중)</span>
-          </div>
+          <button type="button" className="btn btn-ghost sm" onClick={() => navigate('/view')}>
+            미리보기
+          </button>
         }
         right={
-          <>
-            <button type="button" className="btn btn-ghost sm" onClick={() => navigate('/view')}>
-              하객 화면 보기
-            </button>
-            <button type="button" className="btn btn-primary sm" onClick={() => toast('공유 링크는 서버 연동 후 제공돼요')}>
-              공유하기
-            </button>
-          </>
+          <button type="button" className="btn btn-primary sm" onClick={() => setPublishOpen(true)}>
+            청첩장 만들기
+          </button>
         }
       />
 
@@ -103,6 +100,11 @@ export default function Editor() {
         <p className="field-hint preview-hint">미리보기에서 섹션을 누르면 바로 편집할 수 있어요</p>
       </section>
 
+      <BottomSheet open={publishOpen} title="청첩장 만들기" onClose={closePublish}>
+        <div className="sheet-pad">
+          <PublishPanel doc={doc} dispatch={dispatch} />
+        </div>
+      </BottomSheet>
     </div>
   );
 }

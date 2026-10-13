@@ -3,7 +3,6 @@ import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { useEditor } from '../store/EditorContext';
 import { createDoc } from '../data/templates';
 import { applyTemplate, getTemplate } from '../data/designTemplates';
-import { TemplatePreview } from '../components/common/TemplatePreview';
 import { AppHeader } from '../components/common/shared';
 
 export function BackLink({ to, label }: { to: string; label: string }) {
@@ -32,13 +31,6 @@ export default function StartChoice() {
       <AppHeader left={<BackLink to={`/templates?selected=${template.id}`} label="템플릿 선택으로" />} />
 
       <div className="start-inner">
-        <div className="chosen-tpl">
-          <div className="chosen-thumb">
-            <TemplatePreview template={template} />
-          </div>
-          <b className="chosen-name">{template.name}</b>
-        </div>
-
         <h1>어떻게 시작할까요?</h1>
         <p className="lead">어떤 방법으로 시작해도 편집기에서 모두 바꿀 수 있어요.</p>
 

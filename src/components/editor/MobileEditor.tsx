@@ -8,10 +8,10 @@ import { InvitationView } from '../invitation/InvitationView';
 import { BottomSheet } from '../common/BottomSheet';
 import { AppHeader } from '../common/shared';
 import { Toggle } from '../common/fields';
-import { toast } from '../common/toast';
 import { SectionList } from './SectionList';
 import { SectionPanel } from './SectionPanels';
 import { SettingsPanel } from './SettingsPanel';
+import { PublishPanel } from './PublishPanel';
 
 const EDIT_LABELS: Record<SectionType, string> = {
   hero: '대표 사진 편집',
@@ -24,7 +24,7 @@ const EDIT_LABELS: Record<SectionType, string> = {
   guestbook: '방명록 편집',
 };
 
-type SheetKind = 'list' | 'settings' | { sectionId: string };
+type SheetKind = 'list' | 'settings' | 'publish' | { sectionId: string };
 
 interface Props {
   doc: InvitationDoc;
@@ -67,15 +67,28 @@ export function MobileEditor({ doc, dispatch }: Props) {
 
   const section = typeof sheet === 'object' ? doc.sections.find((s) => s.id === sheet.sectionId) : undefined;
   const title =
-    sheet === 'list' ? '구성' : sheet === 'settings' ? '기본 정보' : section ? SECTION_LABELS[section.type] : '';
+    sheet === 'list'
+      ? '구성'
+      : sheet === 'settings'
+        ? '기본 정보'
+        : sheet === 'publish'
+          ? '청첩장 만들기'
+          : section
+            ? SECTION_LABELS[section.type]
+            : '';
 
   return (
     <div className="m-editor">
       <AppHeader
         className="m-head"
-        right={
+        left={
           <button type="button" className="btn btn-ghost sm" onClick={() => navigate('/view')}>
             미리보기
+          </button>
+        }
+        right={
+          <button type="button" className="btn btn-primary sm" onClick={() => show('publish')}>
+            청첩장 만들기
           </button>
         }
       />
@@ -110,9 +123,6 @@ export function MobileEditor({ doc, dispatch }: Props) {
         <button type="button" onClick={() => show('settings')}>
           <span aria-hidden>📋</span>기본 정보
         </button>
-        <button type="button" className="is-primary" onClick={() => toast('공유 링크는 서버 연동 후 제공돼요')}>
-          공유
-        </button>
       </nav>
 
       <BottomSheet open={open} title={title} onClose={close}>
@@ -128,6 +138,11 @@ export function MobileEditor({ doc, dispatch }: Props) {
           </div>
         )}
         {sheet === 'settings' && <SettingsPanel doc={doc} dispatch={dispatch} />}
+        {sheet === 'publish' && (
+          <div className="sheet-pad">
+            <PublishPanel doc={doc} dispatch={dispatch} />
+          </div>
+        )}
         {section && (
           <>
             {section.type !== 'hero' && (

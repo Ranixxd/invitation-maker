@@ -1,6 +1,7 @@
 // 청첩장 기본값의 유일한 정의 위치. CONSTITUTION §1.3, §3.4
 import type { HostSide, InvitationDoc, Section, SectionType, Theme, ThemePreset } from '../types/invitation';
 import { uid } from '../lib/id';
+import { defaultSlug } from '../lib/slug';
 
 export const DOC_VERSION = 1;
 
@@ -145,17 +146,19 @@ export function createDoc(): InvitationDoc {
   const preset: ThemePreset = 'classic';
   const hosts = createHosts();
   const now = Date.now();
+  const datetime = defaultDatetime();
   return {
     id: uid('doc'),
     version: DOC_VERSION,
     eventType: 'wedding',
-    title: WEDDING.title(hosts.map((h) => h.name)),
+    title: '',
+    slug: defaultSlug(datetime),
     createdAt: now,
     updatedAt: now,
     theme: { preset, accent: THEME_PRESETS[preset].accent, font: THEME_PRESETS[preset].font },
     core: {
       hosts,
-      datetime: defaultDatetime(),
+      datetime,
       venue: { name: '', hall: '', address: '', tel: '' },
     },
     images: {},

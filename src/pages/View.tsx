@@ -4,12 +4,13 @@ import { Link, Navigate } from 'react-router-dom';
 import { useEditor } from '../store/EditorContext';
 import { InvitationView } from '../components/invitation/InvitationView';
 import { THEME_PRESETS } from '../data/templates';
+import { resolveTitle } from '../lib/publish';
 
 export default function View() {
   const { doc } = useEditor();
 
   useEffect(() => {
-    if (doc) document.title = doc.title;
+    if (doc) document.title = resolveTitle(doc);
     return () => {
       document.title = '초대장 메이커';
     };

@@ -13,13 +13,13 @@ import { MAX_IMAGES_PER_DOC } from '../lib/image';
 
 export type EditorAction =
   | { type: 'LOAD'; doc: InvitationDoc }
-  | { type: 'SET_TITLE'; title: string }
+  | { type: 'SET_PUBLISH'; patch: Partial<Pick<InvitationDoc, 'title' | 'slug'>> }
   | { type: 'UPDATE_THEME'; patch: Partial<Theme> }
   | { type: 'UPDATE_CORE'; patch: Partial<Pick<Core, 'datetime' | 'venue'>> }
   | { type: 'UPDATE_HOST'; hostId: string; patch: Partial<Omit<HostSide, 'id'>> }
   | { type: 'UPDATE_SECTION'; sectionType: SectionType; patch: Partial<SectionDataMap[SectionType]> }
   | { type: 'TOGGLE_SECTION'; sectionId: string }
-  | { type: 'MOVE_SECTION'; sectionId: string; dir: -1 | 1 }
+  | { type: 'REORDER_SECTION'; sectionId: string; toIndex: number }
   | { type: 'ADD_IMAGES'; images: ImageAsset[]; target: 'hero' | 'gallery' }
   | { type: 'REMOVE_IMAGE'; imageId: string };
 
@@ -48,8 +48,8 @@ export function editorReducer(state: EditorState, action: EditorAction): EditorS
   const doc = state;
 
   switch (action.type) {
-    case 'SET_TITLE':
-      return touch(doc, { title: action.title });
+    case 'SET_PUBLISH':
+      return touch(doc, action.patch);
 
     case 'UPDATE_THEME':
       return touch(doc, { theme: { ...doc.theme, ...action.patch } });
@@ -77,13 +77,14 @@ export function editorReducer(state: EditorState, action: EditorAction): EditorS
         ),
       });
 
-    case 'MOVE_SECTION': {
-      const i = doc.sections.findIndex((s) => s.id === action.sectionId);
-      const j = i + action.dir;
-      // 히어로 이동 금지, 히어로 자리(0)로 이동 금지
-      if (i <= 0 || j <= 0 || j >= doc.sections.length) return state;
+    case 'REORDER_SECTION': {
+      const from = doc.sections.findIndex((s) => s.id === action.sectionId);
+      // 히어로 이동 금지, 히어로 자리(0)로 이동 금지 (§4.2-2)
+      const to = Math.min(Math.max(action.toIndex, 1), doc.sections.length - 1);
+      if (from <= 0 || from === to) return state;
       const next = [...doc.sections];
-      [next[i], next[j]] = [next[j], next[i]];
+      const [moved] = next.splice(from, 1);
+      next.splice(to, 0, moved);
       return touch(doc, { sections: next });
     }
 

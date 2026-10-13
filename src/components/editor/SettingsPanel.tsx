@@ -51,13 +51,7 @@ function HostFields({ host, dispatch, parentsLabel }: { host: HostSide; dispatch
 export function SettingsPanel({ doc, dispatch }: Props) {
   return (
     <div className="panel-body">
-      <PanelSection title="초대장">
-        <TextField
-          label="초대장 제목"
-          hint="링크 공유 시 제목으로 쓰여요"
-          value={doc.title}
-          onChange={(title) => dispatch({ type: 'SET_TITLE', title })}
-        />
+      <PanelSection title="예식 일시">
         <TextField
           label="일시"
           type="datetime-local"
