@@ -23,3 +23,4 @@
 | [PRD-0011](./PRD-0011-sticker-overlay.md) | 스티커를 최상단 레이어로 (섹션 크롭 해제) | 2026-10-13 | 확정 |
 | [PRD-0012](./PRD-0012-sticker-instant-attach.md) | 붙이기: 바로 붙이고, 눌러서 꾸미기 | 2026-10-13 | 확정 |
 | [PRD-0013](./PRD-0013-sticker-kinds-adjust.md) | 스티커 종류·사진 조정·네모 프레임 | 2026-10-13 | 확정 |
+| [PRD-0014](./PRD-0014-desktop-sticker-panel.md) | 데스크탑 붙이기: 타이틀 옆 버튼, 패널 교체 | 2026-10-13 | 확정 |

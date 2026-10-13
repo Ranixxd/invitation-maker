@@ -9,6 +9,7 @@ import { SettingsPanel } from '../components/editor/SettingsPanel';
 import { SectionPanel } from '../components/editor/SectionPanels';
 import { MobileEditor } from '../components/editor/MobileEditor';
 import { useStickerFlow } from '../components/editor/useStickerFlow';
+import { StickerPlusIcon } from '../components/common/icons';
 import { InvitationView } from '../components/invitation/InvitationView';
 import { AppHeader, PhoneFrame } from '../components/common/shared';
 import { BottomSheet } from '../components/common/BottomSheet';
@@ -53,13 +54,21 @@ function DesktopEditor({ doc, dispatch }: { doc: InvitationDoc; dispatch: (a: Ed
   const closePublish = useCallback(() => setPublishOpen(false), []);
 
   // 붙이기 (§4.10): 붙이기·선택·이동은 오른쪽 휴대폰 미리보기 안에서
-  const sticker = useStickerFlow(doc, dispatch, (sectionId) => {
-    document
-      .querySelector<HTMLElement>(`.editor-preview [data-section-id="${sectionId}"]`)
-      ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const sticker = useStickerFlow(doc, dispatch, {
+    // 스티커를 선택하면 그 섹션의 편집 패널로(타이틀 = 섹션 이름), 아래 내용은 스티커 꾸미기로 교체
+    onSelected: (sectionId) => setSelected(sectionId),
+    onAttached: (sectionId) => {
+      document
+        .querySelector<HTMLElement>(`.editor-preview [data-section-id="${sectionId}"]`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    },
   });
 
-  const select = setSelected;
+  // 목록에서 다른 항목을 고르면 스티커 꾸미기를 끝내고 그 편집 정보로
+  const select = (s: Selection) => {
+    if (sticker.placing) sticker.deselect();
+    setSelected(s);
+  };
   const section = doc.sections.find((s) => s.id === selected);
   const panelTitle = selected === 'settings' ? '기본 정보' : section ? SECTION_LABELS[section.type] : '';
 
@@ -85,13 +94,18 @@ function DesktopEditor({ doc, dispatch }: { doc: InvitationDoc; dispatch: (a: Ed
 
       <main className="editor-panel" aria-label="편집">
         <div className="panel-head">
-          <h2>{panelTitle}</h2>
-          {section && section.type !== PINNED_LAST && (
-            <button type="button" className="btn btn-ghost sm" onClick={() => sticker.startNew(section.id)} disabled={sticker.placing}>
-              붙이기
-            </button>
-          )}
-          {section && !isPinned(section.type) && (
+          <div className="panel-title">
+            <h2>{panelTitle}</h2>
+            {/* 붙이기: 타이틀 옆, 모바일과 같은 아이콘 (§4.10) */}
+            {section && section.type !== PINNED_LAST && !sticker.placing && (
+              <button type="button" className="btn btn-ghost sm panel-sticker-btn" onClick={() => sticker.startNew(section.id)}>
+                <StickerPlusIcon size={18} />
+                붙이기
+              </button>
+            )}
+            {sticker.placing && <span className="panel-mode-badge">스티커 꾸미기</span>}
+          </div>
+          {section && !isPinned(section.type) && !sticker.placing && (
             <label className="panel-visibility">
               <span>{section.enabled ? '보이는 중' : '숨김'}</span>
               <input
@@ -105,9 +119,16 @@ function DesktopEditor({ doc, dispatch }: { doc: InvitationDoc; dispatch: (a: Ed
             </label>
           )}
         </div>
-        {section && !section.enabled && <p className="notice">이 섹션은 숨겨져 있어 초대장에 보이지 않아요.</p>}
-        {selected === 'settings' && <SettingsPanel doc={doc} dispatch={dispatch} />}
-        {section && <SectionPanel doc={doc} section={section} dispatch={dispatch} goSettings={() => select('settings')} />}
+        {sticker.placing ? (
+          // 스티커 선택 중: 타이틀 아래를 프레임·종류·크기·움직임 + 붙이기 완료로 교체, 완료하면 원래 편집 정보로 복귀
+          sticker.panel
+        ) : (
+          <>
+            {section && !section.enabled && <p className="notice">이 섹션은 숨겨져 있어 초대장에 보이지 않아요.</p>}
+            {selected === 'settings' && <SettingsPanel doc={doc} dispatch={dispatch} />}
+            {section && <SectionPanel doc={doc} section={section} dispatch={dispatch} goSettings={() => select('settings')} />}
+          </>
+        )}
       </main>
 
       <section className="editor-preview" aria-label="미리보기">
@@ -121,7 +142,9 @@ function DesktopEditor({ doc, dispatch }: { doc: InvitationDoc; dispatch: (a: Ed
             onStickerClick={sticker.openExisting}
           />
         </PhoneFrame>
-        {sticker.placementBar ?? <p className="field-hint preview-hint">미리보기에서 섹션을 누르면 바로 편집할 수 있어요</p>}
+        <p className="field-hint preview-hint">
+          {sticker.placing ? '스티커를 끌거나 섹션 안을 눌러 위치를 옮길 수 있어요' : '미리보기에서 섹션을 누르면 바로 편집할 수 있어요'}
+        </p>
       </section>
 
       <BottomSheet open={publishOpen} title="청첩장 만들기" onClose={closePublish}>
@@ -130,6 +153,7 @@ function DesktopEditor({ doc, dispatch }: { doc: InvitationDoc; dispatch: (a: Ed
         </div>
       </BottomSheet>
       {sticker.picker}
+      {sticker.adjustEditor}
     </div>
   );
 }

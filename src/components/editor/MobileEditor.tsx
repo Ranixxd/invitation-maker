@@ -13,6 +13,7 @@ import { SectionPanel } from './SectionPanels';
 import { SettingsPanel } from './SettingsPanel';
 import { PublishPanel } from './PublishPanel';
 import { useStickerFlow } from './useStickerFlow';
+import { StickerPlusIcon } from '../common/icons';
 
 /** 모바일 [섹션 편집] 버튼 문구. 브랜드 소개는 편집 불가라 버튼 없음 (§4.9) */
 const EDIT_LABELS: Record<SectionType, string | null> = {
@@ -52,10 +53,12 @@ export function MobileEditor({ doc, dispatch }: Props) {
   const close = useCallback(() => setOpen(false), []);
 
   // 붙이기 (§4.10): 새로 붙이면 해당 섹션을 화면 가운데로
-  const sticker = useStickerFlow(doc, dispatch, (sectionId) => {
-    document
-      .querySelector<HTMLElement>(`.m-editor [data-section-id="${sectionId}"]`)
-      ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const sticker = useStickerFlow(doc, dispatch, {
+    onAttached: (sectionId) => {
+      document
+        .querySelector<HTMLElement>(`.m-editor [data-section-id="${sectionId}"]`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    },
   });
 
   // 화면 중앙선에 걸친 섹션 = 활성 섹션 (§6.5-1)
@@ -142,13 +145,7 @@ export function MobileEditor({ doc, dispatch }: Props) {
                     sticker.startNew(s.id);
                   }}
                 >
-                  <svg className="btn-icon" viewBox="0 0 24 24" aria-hidden width="20" height="20">
-                    <path d="M20 12a8 8 0 1 1-8-8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                    <path d="M8.5 14.5c.9 1.2 2.1 1.8 3.5 1.8s2.6-.6 3.5-1.8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                    <circle cx="9" cy="10" r="1.2" fill="currentColor" />
-                    <circle cx="15" cy="10" r="1.2" fill="currentColor" />
-                    <path d="M19 2v6M16 5h6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                  </svg>
+                  <StickerPlusIcon />
                   붙이기
                 </button>
               </div>
@@ -158,6 +155,7 @@ export function MobileEditor({ doc, dispatch }: Props) {
       />
 
       {sticker.placementBar}
+      {sticker.adjustEditor}
       {sticker.picker}
 
       <nav className="m-toolbar" aria-label="편집 도구" hidden={sticker.placing}>

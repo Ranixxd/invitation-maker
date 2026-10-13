@@ -772,3 +772,24 @@ a.choice-card:hover, button.choice-card:hover { border-color: var(--primary); tr
 .adjust-hint { margin: 0; font-size: 12px; opacity: 0.75; text-align: center; }
 .adjust-zoom { display: flex; align-items: center; gap: 10px; width: min(100%, 360px); }
 .adjust-zoom input { flex: 1; accent-color: #9aa6ff; }
+
+/* ---------- 데스크탑: 패널 타이틀 옆 붙이기, 스티커 꾸미기 패널 (§4.10) ---------- */
+.panel-title { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; }
+.panel-head .panel-title h2 { flex: none; }
+.panel-sticker-btn { gap: 4px; padding: 0 12px 0 8px; }
+.panel-mode-badge { padding: 3px 10px; border-radius: 999px; background: var(--primary-soft); color: var(--primary); font-size: 12px; font-weight: 700; }
+.sticker-panel-hint { margin: 0; }
+.sticker-options.is-wrap { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); overflow: visible; gap: 8px; }
+.sticker-panel .sticker-option {
+  min-width: 0;
+  padding: 10px 4px 8px;
+  border-color: var(--line);
+  background: #fff;
+  color: var(--text);
+}
+.sticker-panel .sticker-option:hover { border-color: #c9cdf8; }
+.sticker-panel .sticker-option.is-on { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); }
+.sticker-panel .sticker-option-art { width: 44px; }
+.sticker-panel-actions { display: flex; justify-content: flex-end; gap: 8px; padding-bottom: 8px; }
+.sticker-panel-actions .sticker-remove { color: var(--danger); }
+.sticker-panel-actions .sticker-done { min-width: 120px; }

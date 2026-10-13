@@ -2,7 +2,7 @@
 // [붙이기] → 기기 사진 선택 창 → 고르면 바로 붙고 선택된 상태(끌어서 위치 이동)
 // 붙은 스티커를 누르면 선택 → 하단 바에서 프레임·크기·움직임 변경, 끌어서 이동, 떼기, 완료
 // 모든 변경은 바로 문서에 반영된다(미리보기 = 결과). 모바일·데스크탑이 같은 훅을 쓴다.
-import { useRef, useState } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
 import type { InvitationDoc, Sticker } from '../../types/invitation';
 import type { EditorAction } from '../../store/editorReducer';
 import { DEFAULT_CROP, KINDS, MAX_STICKERS_PER_SECTION, MOTIONS, SHAPES, SIZES, stickersIn } from '../../lib/stickers';
@@ -23,12 +23,14 @@ const TABS: { value: Tab; label: string }[] = [
   { value: 'motion', label: '움직임' },
 ];
 
-export function useStickerFlow(
-  doc: InvitationDoc,
-  dispatch: (a: EditorAction) => void,
-  /** 새로 붙인 스티커의 섹션을 화면 가운데로 */
-  onAttached?: (sectionId: string) => void,
-) {
+interface FlowOptions {
+  /** 새로 붙인 직후 (모바일: 해당 섹션을 화면 가운데로) */
+  onAttached?: (sectionId: string) => void;
+  /** 스티커가 선택될 때 (데스크탑: 그 섹션의 편집 패널로) */
+  onSelected?: (sectionId: string) => void;
+}
+
+export function useStickerFlow(doc: InvitationDoc, dispatch: (a: EditorAction) => void, { onAttached, onSelected }: FlowOptions = {}) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [tab, setTab] = useState<Tab>('shape');
   const [adjusting, setAdjusting] = useState(false);
@@ -43,7 +45,10 @@ export function useStickerFlow(
   const select = (id: string | null) => {
     setSelectedId(id);
     setAdjusting(false);
-    if (id) setTab('shape');
+    if (!id) return;
+    setTab('shape');
+    const st = doc.stickers.find((s) => s.id === id);
+    if (st) onSelected?.(st.sectionId);
   };
 
   // [붙이기]: 버튼을 누른 그 자리에서 기기 사진 선택 창을 연다 (사용자 동작 안에서 호출해야 함)
@@ -76,6 +81,7 @@ export function useStickerFlow(
     dispatch({ type: 'ADD_STICKER', sticker });
     setSelectedId(sticker.id);
     setTab('shape');
+    onSelected?.(sectionId);
     onAttached?.(sectionId);
   };
 
@@ -90,6 +96,56 @@ export function useStickerFlow(
     toast('스티커를 뗐어요');
   };
 
+  /** 탭별 옵션 버튼 (모바일 바·데스크탑 패널 공용) */
+  const options = (t: Tab) => {
+    if (!selected || !imgSrc) return null;
+    const opt = (key: string, on: boolean, label: string, onClick: () => void, art: ReactNode) => (
+      <button
+        key={key}
+        type="button"
+        role="radio"
+        aria-checked={on}
+        className={`sticker-option${on ? ' is-on' : ''}`}
+        onClick={onClick}
+      >
+        {art}
+        {label}
+      </button>
+    );
+    const artOf = (st: Parameters<typeof StickerArt>[0]['sticker']) => (
+      <span className="sticker-option-art">
+        <StickerArt sticker={st} src={imgSrc} aspect={aspect} />
+      </span>
+    );
+    switch (t) {
+      case 'shape':
+        return SHAPES.map((s) =>
+          opt(s.value, selected.shape === s.value, s.label, () => update({ shape: s.value }), artOf({ shape: s.value, motion: 'none', kind: 'plain', crop: selected.crop })),
+        );
+      case 'kind':
+        return KINDS.map((k) =>
+          opt(k.value, selected.kind === k.value, k.label, () => update({ kind: k.value }), artOf({ shape: selected.shape, motion: 'none', kind: k.value, crop: selected.crop })),
+        );
+      case 'size':
+        return SIZES.map((s) =>
+          opt(
+            s.value,
+            selected.size === s.value,
+            s.label,
+            () => update({ size: s.value }),
+            <span className="sticker-option-art size-dot" aria-hidden>
+              <i style={{ width: `${s.pct * 1.4}%` }} />
+            </span>,
+          ),
+        );
+      case 'motion':
+        return MOTIONS.map((m) =>
+          opt(m.value, selected.motion === m.value, m.label, () => update({ motion: m.value }), artOf({ ...selected, motion: m.value })),
+        );
+    }
+  };
+
+  // 모바일: 화면 아래 떠 있는 바 (탭으로 한 종류씩)
   const bar = selected && imgSrc && (
     <div className="placement-bar sticker-bar" role="toolbar" aria-label="선택한 스티커">
       <p className="placement-hint">끌거나 섹션 안을 눌러 위치를 옮길 수 있어요</p>
@@ -107,80 +163,43 @@ export function useStickerFlow(
           </button>
         ))}
       </div>
-
       <div className="sticker-options" role="radiogroup" aria-label={TABS.find((t) => t.value === tab)?.label}>
-        {tab === 'shape' &&
-          SHAPES.map((s) => (
-            <button
-              key={s.value}
-              type="button"
-              role="radio"
-              aria-checked={selected.shape === s.value}
-              className={`sticker-option${selected.shape === s.value ? ' is-on' : ''}`}
-              onClick={() => update({ shape: s.value })}
-            >
-              <span className="sticker-option-art">
-                <StickerArt sticker={{ shape: s.value, motion: 'none', kind: 'plain', crop: selected.crop }} src={imgSrc} aspect={aspect} />
-              </span>
-              {s.label}
-            </button>
-          ))}
-        {tab === 'kind' &&
-          KINDS.map((k) => (
-            <button
-              key={k.value}
-              type="button"
-              role="radio"
-              aria-checked={selected.kind === k.value}
-              className={`sticker-option${selected.kind === k.value ? ' is-on' : ''}`}
-              onClick={() => update({ kind: k.value })}
-            >
-              <span className="sticker-option-art">
-                <StickerArt sticker={{ shape: selected.shape, motion: 'none', kind: k.value, crop: selected.crop }} src={imgSrc} aspect={aspect} />
-              </span>
-              {k.label}
-            </button>
-          ))}
-        {tab === 'size' &&
-          SIZES.map((s) => (
-            <button
-              key={s.value}
-              type="button"
-              role="radio"
-              aria-checked={selected.size === s.value}
-              className={`sticker-option${selected.size === s.value ? ' is-on' : ''}`}
-              onClick={() => update({ size: s.value })}
-            >
-              <span className="sticker-option-art size-dot" aria-hidden>
-                <i style={{ width: `${s.pct * 1.4}%` }} />
-              </span>
-              {s.label}
-            </button>
-          ))}
-        {tab === 'motion' &&
-          MOTIONS.map((m) => (
-            <button
-              key={m.value}
-              type="button"
-              role="radio"
-              aria-checked={selected.motion === m.value}
-              className={`sticker-option${selected.motion === m.value ? ' is-on' : ''}`}
-              onClick={() => update({ motion: m.value })}
-            >
-              <span className="sticker-option-art">
-                <StickerArt sticker={{ ...selected, motion: m.value }} src={imgSrc} aspect={aspect} />
-              </span>
-              {m.label}
-            </button>
-          ))}
+        {options(tab)}
       </div>
-
       <div className="placement-row">
         <button type="button" className="btn btn-ghost sm sticker-remove" onClick={remove}>
           떼기
         </button>
         <button type="button" className="btn btn-primary sm sticker-done" onClick={() => select(null)}>
           완료
+        </button>
+      </div>
+    </div>
+  );
+
+  // 데스크탑: 편집 패널(타이틀 아래)을 이 내용으로 교체 — 넓으니 모든 종류를 한 번에 (§4.10)
+  const panel = selected && imgSrc && (
+    <div className="panel-body sticker-panel">
+      <p className="notice sticker-panel-hint">오른쪽 미리보기에서 스티커를 끌거나 섹션 안을 눌러 위치를 옮길 수 있어요.</p>
+      {TABS.map((t) => (
+        <section key={t.value} className="panel-section">
+          <header>
+            <h3>{t.label}</h3>
+          </header>
+          <div className="sticker-options is-wrap" role="radiogroup" aria-label={t.label}>
+            {options(t.value)}
+          </div>
+        </section>
+      ))}
+      <div className="sticker-panel-actions">
+        <button type="button" className="btn btn-ghost" onClick={() => setAdjusting(true)}>
+          사진 조정
+        </button>
+        <button type="button" className="btn btn-ghost sticker-remove" onClick={remove}>
+          떼기
+        </button>
+        <button type="button" className="btn btn-primary sticker-done" onClick={() => select(null)}>
+          붙이기 완료
         </button>
       </div>
     </div>
@@ -217,17 +236,19 @@ export function useStickerFlow(
     startNew,
     /** 붙은 스티커 누르기 → 선택 */
     openExisting: (id: string) => select(id),
+    /** 선택 해제 (= 붙이기 완료) */
+    deselect: () => select(null),
     /** 스티커를 선택(이동·꾸미기) 중인지 */
     placing: !!selected,
     picker,
     stickerEdit: selected
       ? { sticker: selected, onMove: (x: number, y: number) => update({ x, y }), onAdjust: () => setAdjusting(true) }
       : null,
-    placementBar: (
-      <>
-        {bar}
-        {adjustEditor}
-      </>
-    ),
+    /** 모바일용 떠 있는 바 */
+    placementBar: bar,
+    /** 데스크탑용 편집 패널 내용 */
+    panel,
+    /** 사진 조정 에디터(포털) — 편집기 어딘가에 렌더 */
+    adjustEditor,
   };
 }
