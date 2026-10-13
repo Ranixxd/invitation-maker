@@ -40,6 +40,13 @@ export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
             ))}
           </h1>
           {date && <p className="hero-date">{formatDot(date)}</p>}
+          {/* 이름 아래 예식 일시·장소 (에디토리얼 계열에서 표시) */}
+          {(date || venue) && (
+            <div className="hero-info">
+              {date && <p>{formatKo(date)}</p>}
+              {venue && <p>{venue}</p>}
+            </div>
+          )}
         </div>
       </div>
     );

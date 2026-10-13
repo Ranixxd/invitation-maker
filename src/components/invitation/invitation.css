@@ -92,6 +92,7 @@
 .hero-names > span { display: inline-block; }
 .hero-sep { display: inline-block; margin: 0 0.25em; }
 .hero-heart { display: none; }
+.hero-info { display: none; }
 .hero-amp { font-style: normal; font-size: 14px; color: var(--inv-muted); margin: 0 10px; font-weight: 400; }
 
 /* ---- 인사말 ---- */
@@ -705,7 +706,10 @@
   background: linear-gradient(to top, var(--inv-bg) 0%, color-mix(in srgb, var(--inv-bg) 82%, transparent) 38%, transparent 100%);
   text-shadow: none;
 }
-.inv--fam-editorial .hero--full .hero-date { order: -1; margin: 0 0 8px; font-size: 13px; font-weight: 500; }
+.inv--fam-editorial .hero--full .hero-date { display: none; }
+/* 이름 아래: 예식 일시 · 장소 */
+.inv--fam-editorial .hero--full .hero-info { display: grid; gap: 2px; margin-top: 10px; }
+.inv--fam-editorial .hero--full .hero-info p { margin: 0; font-size: 14px; font-weight: 400; line-height: 1.6; }
 /* 이름 사이: 예식 일자의 손그림 하트를 이름보다 크게 */
 .inv--fam-editorial .hero--full .hero-names { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; }
 .inv--fam-editorial .hero--full .hero-names .hero-name-part { display: contents; }
