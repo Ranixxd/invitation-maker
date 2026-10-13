@@ -51,7 +51,7 @@ export function MobileEditor({ doc, dispatch }: Props) {
   }, []);
   const close = useCallback(() => setOpen(false), []);
 
-  // 붙이기 (§4.10): 위치 정하기 들어갈 때 해당 섹션을 화면 가운데로
+  // 붙이기 (§4.10): 새로 붙이면 해당 섹션을 화면 가운데로
   const sticker = useStickerFlow(doc, dispatch, (sectionId) => {
     document
       .querySelector<HTMLElement>(`.m-editor [data-section-id="${sectionId}"]`)
@@ -114,7 +114,7 @@ export function MobileEditor({ doc, dispatch }: Props) {
         selectedSectionId={activeId}
         onSectionClick={setActiveId}
         stickerEdit={sticker.stickerEdit}
-        onStickerClick={sticker.placing ? undefined : sticker.openExisting}
+        onStickerClick={sticker.openExisting}
         renderOverlay={(s) =>
           // 꾸미기 2축: [섹션 편집] + [붙이기]. 위치 정하는 동안은 숨김 (§6.5-3, §4.10)
           !sticker.placing &&
@@ -204,9 +204,6 @@ export function MobileEditor({ doc, dispatch }: Props) {
         )}
       </BottomSheet>
 
-      <BottomSheet open={sticker.sheet.open} title={sticker.sheet.title} onClose={sticker.sheet.onClose}>
-        {sticker.sheet.body}
-      </BottomSheet>
     </div>
   );
 }

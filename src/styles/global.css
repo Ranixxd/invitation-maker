@@ -664,42 +664,7 @@ a.choice-card:hover, button.choice-card:hover { border-color: var(--primary); tr
 }
 
 /* ---------- 붙이기(스티커) 흐름 (§4.10) ---------- */
-.sticker-wizard { display: grid; gap: 16px; padding-bottom: 4px; }
-.wizard-steps { display: flex; gap: 6px; list-style: none; margin: 0; padding: 0; font-size: 12px; color: var(--muted); }
-.wizard-steps li { padding: 4px 10px; border-radius: 999px; background: #ececf1; }
-.wizard-steps li.is-current { background: var(--primary-soft); color: var(--primary); font-weight: 700; }
-.wizard-steps li.is-done { color: var(--text); }
-.wizard-steps li.is-done::after { content: ' ✓'; color: var(--primary); }
-.sticker-stage {
-  display: grid;
-  place-items: center;
-  height: 168px;
-  border-radius: 16px;
-  background: repeating-conic-gradient(#f1f1f5 0% 25%, #fafafc 0% 50%) 50% / 20px 20px;
-}
-.sticker-stage-art { display: block; width: 132px; aspect-ratio: 1; filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.18)); }
-.sticker-stage-empty { font-size: 13px; color: var(--muted); }
-.pick-item.is-on { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-soft); }
-.motion-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-.choice-cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
-.motion-card {
-  display: grid;
-  justify-items: center;
-  gap: 8px;
-  padding: 14px 6px 10px;
-  border: 1.5px solid var(--line);
-  border-radius: 14px;
-  background: #fff;
-  font-size: 13px;
-  cursor: pointer;
-}
-.motion-card.is-on { border-color: var(--primary); color: var(--primary); font-weight: 700; background: var(--primary-soft); }
-.motion-card-art { display: block; width: 56px; aspect-ratio: 1; filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.15)); }
-.wizard-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
-.wizard-actions .btn { flex: 1 1 0; min-width: 0; max-width: 200px; padding: 0 12px; }
-.sticker-delete { justify-self: center; }
-
-/* 위치 정하기 바: 모바일은 화면 아래 떠 있고, 데스크탑은 휴대폰 미리보기 아래 */
+/* 선택한 스티커 바(프레임·크기·움직임 / 떼기·완료): 모바일은 화면 아래 떠 있고, 데스크탑은 휴대폰 미리보기 아래 */
 .placement-bar {
   position: fixed;
   left: 12px;
@@ -718,9 +683,6 @@ a.choice-card:hover, button.choice-card:hover { border-color: var(--primary); tr
 }
 .placement-hint { margin: 0; font-size: 12px; text-align: center; opacity: 0.85; }
 .placement-row { display: flex; align-items: center; gap: 6px; }
-.placement-size { flex: 1; background: rgba(255, 255, 255, 0.12); }
-.placement-size button { color: rgba(255, 255, 255, 0.8); min-height: 34px; }
-.placement-size button.is-on { background: #fff; color: var(--text); }
 .placement-bar .btn-ghost { background: transparent; border-color: rgba(255, 255, 255, 0.3); color: #fff; }
 .editor-preview .placement-bar {
   position: static;
@@ -731,6 +693,43 @@ a.choice-card:hover, button.choice-card:hover { border-color: var(--primary); tr
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
   backdrop-filter: none;
 }
-.editor-preview .placement-size { background: #ededf0; }
-.editor-preview .placement-size button { color: var(--muted); }
 .editor-preview .placement-bar .btn-ghost { border-color: var(--line); color: var(--text); }
+
+/* 선택한 스티커 바 내용 (§4.10) */
+.sticker-tabs { background: rgba(255, 255, 255, 0.12); }
+.sticker-tabs button { color: rgba(255, 255, 255, 0.8); min-height: 34px; }
+.sticker-tabs button.is-on { background: #fff; color: var(--text); }
+.sticker-options {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 2px;
+}
+.sticker-options::-webkit-scrollbar { display: none; }
+.sticker-option {
+  flex: 1 0 56px;
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 8px 4px 6px;
+  border: 1.5px solid transparent;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  color: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.sticker-option.is-on { border-color: #fff; background: rgba(255, 255, 255, 0.18); font-weight: 700; }
+.sticker-option-art { display: block; width: 36px; aspect-ratio: 1; }
+.size-dot { display: grid; place-items: center; }
+.size-dot i { display: block; aspect-ratio: 1; border-radius: 50%; background: currentColor; opacity: 0.85; }
+.sticker-bar .placement-row { justify-content: space-between; }
+.sticker-bar .sticker-remove { color: #ff8a8f; border-color: rgba(255, 138, 143, 0.5); }
+.sticker-bar .sticker-done { min-width: 88px; }
+.editor-preview .sticker-tabs { background: #ededf0; }
+.editor-preview .sticker-tabs button { color: var(--muted); }
+.editor-preview .sticker-tabs button.is-on { color: var(--text); }
+.editor-preview .sticker-option { background: #f4f4f7; }
+.editor-preview .sticker-option.is-on { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); }
+.editor-preview .sticker-bar .sticker-remove { color: var(--danger); border-color: var(--line); }

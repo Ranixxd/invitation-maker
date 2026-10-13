@@ -52,7 +52,7 @@ function DesktopEditor({ doc, dispatch }: { doc: InvitationDoc; dispatch: (a: Ed
   const [publishOpen, setPublishOpen] = useState(false);
   const closePublish = useCallback(() => setPublishOpen(false), []);
 
-  // 붙이기 (§4.10): 위치는 오른쪽 휴대폰 미리보기 안에서 정한다
+  // 붙이기 (§4.10): 붙이기·선택·이동은 오른쪽 휴대폰 미리보기 안에서
   const sticker = useStickerFlow(doc, dispatch, (sectionId) => {
     document
       .querySelector<HTMLElement>(`.editor-preview [data-section-id="${sectionId}"]`)
@@ -118,7 +118,7 @@ function DesktopEditor({ doc, dispatch }: { doc: InvitationDoc; dispatch: (a: Ed
             selectedSectionId={section?.id ?? null}
             onSectionClick={sticker.placing ? undefined : select}
             stickerEdit={sticker.stickerEdit}
-            onStickerClick={sticker.placing ? undefined : sticker.openExisting}
+            onStickerClick={sticker.openExisting}
           />
         </PhoneFrame>
         {sticker.placementBar ?? <p className="field-hint preview-hint">미리보기에서 섹션을 누르면 바로 편집할 수 있어요</p>}
@@ -130,9 +130,6 @@ function DesktopEditor({ doc, dispatch }: { doc: InvitationDoc; dispatch: (a: Ed
         </div>
       </BottomSheet>
       {sticker.picker}
-      <BottomSheet open={sticker.sheet.open} title={sticker.sheet.title} onClose={sticker.sheet.onClose}>
-        {sticker.sheet.body}
-      </BottomSheet>
     </div>
   );
 }

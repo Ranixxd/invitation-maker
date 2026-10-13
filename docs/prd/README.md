@@ -19,5 +19,6 @@
 | [PRD-0007](./PRD-0007-template-preview-gallery.md) | 템플릿 미리보기 화면 · 갤러리 항상 표시 | 2026-10-13 | 확정 |
 | [PRD-0008](./PRD-0008-section-lineup.md) | 청첩장 구성 13개로 재편 | 2026-10-13 | 확정 |
 | [PRD-0009](./PRD-0009-stickers.md) | 붙이기: 내 사진 스티커로 꾸미기 | 2026-10-13 | 일부 대체됨 → PRD-0010 (흐름 단계), PRD-0011 (D1 섹션 경계) |
-| [PRD-0010](./PRD-0010-sticker-flow-steps.md) | 붙이기 흐름 단계 분리 | 2026-10-13 | 확정 |
+| [PRD-0010](./PRD-0010-sticker-flow-steps.md) | 붙이기 흐름 단계 분리 | 2026-10-13 | 대체됨 → PRD-0012 |
 | [PRD-0011](./PRD-0011-sticker-overlay.md) | 스티커를 최상단 레이어로 (섹션 크롭 해제) | 2026-10-13 | 확정 |
+| [PRD-0012](./PRD-0012-sticker-instant-attach.md) | 붙이기: 바로 붙이고, 눌러서 꾸미기 | 2026-10-13 | 확정 |
