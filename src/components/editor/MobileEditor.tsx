@@ -158,6 +158,7 @@ export function MobileEditor({ doc, dispatch }: Props) {
       />
 
       {sticker.placementBar}
+      {sticker.picker}
 
       <nav className="m-toolbar" aria-label="편집 도구" hidden={sticker.placing}>
         <button type="button" onClick={() => show('list')}>

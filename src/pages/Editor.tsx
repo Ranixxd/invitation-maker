@@ -129,6 +129,7 @@ function DesktopEditor({ doc, dispatch }: { doc: InvitationDoc; dispatch: (a: Ed
           <PublishPanel doc={doc} dispatch={dispatch} />
         </div>
       </BottomSheet>
+      {sticker.picker}
       <BottomSheet open={sticker.sheet.open} title={sticker.sheet.title} onClose={sticker.sheet.onClose}>
         {sticker.sheet.body}
       </BottomSheet>
