@@ -639,20 +639,14 @@
 .cal-strip-wd { font: 400 11px 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; color: var(--inv-muted); }
 .cal-strip-num { position: relative; font: 400 22px 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; color: var(--inv-muted); }
 .cal-strip-day.is-day .cal-strip-num { font-size: 38px; font-weight: 400; color: var(--inv-text); line-height: 1.2; }
-.heart-scribble { overflow: visible; fill: none; stroke: var(--inv-accent); stroke-linecap: round; stroke-linejoin: round; }
+.inv img.heart-scribble { display: block; max-width: none; object-fit: contain; user-select: none; }
 .cal-heart {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 96px;
-  height: 88px;
-  transform: translate(-50%, -52%);
-  overflow: visible;
-  fill: none;
-  stroke: var(--inv-accent);
-  stroke-width: 2.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  width: 72px;
+  height: 72px;
+  transform: translate(-50%, -38%);
   pointer-events: none;
 }
 .save-marquee { display: grid; gap: 6px; margin: 30px -28px 0; overflow: hidden; }
@@ -714,13 +708,13 @@
 .inv--fam-editorial .hero--full .hero-names { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; }
 .inv--fam-editorial .hero--full .hero-names .hero-name-part { display: contents; }
 /* 이름과 하트는 겹치지 않게 바짝 붙인다 */
-.inv--fam-editorial .hero-sep { margin: 0 2px; }
+.inv--fam-editorial .hero-sep { margin: 0 6px; }
 .inv--fam-editorial .hero-dot { display: none; }
-.inv--fam-editorial .hero-heart { display: block; width: 50px; height: 46px; stroke-width: 4; }
+.inv--fam-editorial .hero-heart { display: block; width: 48px; height: 48px; }
 .inv--fam-editorial .hero-names {
   margin: 0;
   font-family: var(--inv-font-title);
-  font-weight: 400;
+  font-weight: 600;
   font-size: 30px;
 }
 
