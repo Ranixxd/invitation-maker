@@ -114,11 +114,15 @@ interface OverlayProps {
 
 export function StickerOverlay({ doc, mode, rootRef, edit, onStickerClick }: OverlayProps) {
   const [boxes, setBoxes] = useState<Record<string, Box>>({});
+  // 오버레이 자신의 ref로 청첩장 루트(부모)를 찾는다.
+  // 부모(InvitationView)의 ref는 자식의 layout effect보다 늦게 붙어서, 첫 렌더에 비어 있다(개발 모드 StrictMode에서는 두 번 실행돼 가려졌던 버그).
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const getRoot = () => overlayRef.current?.parentElement ?? rootRef.current;
   const sectionKey = doc.sections.map((s) => `${s.id}:${s.enabled}`).join('|');
 
   // 섹션의 레이아웃 위치를 잰다 (offset*은 등장 애니메이션 transform의 영향을 받지 않음)
   useLayoutEffect(() => {
-    const root = rootRef.current;
+    const root = getRoot();
     if (!root) return;
     const measure = () => {
       const next: Record<string, Box> = {};
@@ -132,11 +136,11 @@ export function StickerOverlay({ doc, mode, rootRef, edit, onStickerClick }: Ove
     ro.observe(root);
     root.querySelectorAll(':scope > [data-section-id]').forEach((el) => ro.observe(el));
     return () => ro.disconnect();
-  }, [rootRef, sectionKey]);
+  }, [sectionKey]);
 
   // 하객 화면: 섹션처럼 화면에 들어올 때 나타나게 (§4.10)
   useEffect(() => {
-    const root = rootRef.current;
+    const root = getRoot();
     if (mode !== 'view' || !root) return;
     const els = root.querySelectorAll('.sticker-reveal:not(.is-visible)');
     if (!('IntersectionObserver' in window)) {
@@ -155,11 +159,10 @@ export function StickerOverlay({ doc, mode, rootRef, edit, onStickerClick }: Ove
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, [mode, rootRef, boxes, doc.stickers]);
+  }, [mode, boxes, doc.stickers]);
 
   const editing = edit ?? null;
   const list = doc.stickers.filter((s) => s.id !== editing?.sticker.id && boxes[s.sectionId]);
-  if (!list.length && !(editing && boxes[editing.sticker.sectionId])) return null;
 
   const style = (s: Sticker): CSSProperties => {
     const b = boxes[s.sectionId];
@@ -171,7 +174,7 @@ export function StickerOverlay({ doc, mode, rootRef, edit, onStickerClick }: Ove
   };
 
   return (
-    <div className={`sticker-overlay${editing ? ' is-placing' : ''}`}>
+    <div ref={overlayRef} className={`sticker-overlay${editing ? ' is-placing' : ''}`}>
       {list.map((s) => {
         const img = doc.images[s.imageId];
         if (!img) return null;
