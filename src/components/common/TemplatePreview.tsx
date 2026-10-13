@@ -1,21 +1,10 @@
 // 템플릿 카드용 축소 미리보기. 실제 렌더러를 375px 폭으로 그린 뒤 카드 폭에 맞춰 축소
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { InvitationDoc } from '../../types/invitation';
-import { createDoc } from '../../data/templates';
-import { applyTemplate, sampleHeroImage, type DesignTemplate } from '../../data/designTemplates';
+import type { DesignTemplate } from '../../data/designTemplates';
+import { sampleDoc } from '../../data/sampleDoc';
 import { InvitationView } from '../invitation/InvitationView';
 
 const BASE_WIDTH = 375;
-
-export function sampleDoc(t: DesignTemplate): InvitationDoc {
-  const doc = applyTemplate(createDoc(), t);
-  const img = sampleHeroImage(t);
-  return {
-    ...doc,
-    images: { [img.id]: img },
-    sections: doc.sections.map((s) => (s.type === 'hero' ? { ...s, data: { ...s.data, imageId: img.id } } : s)),
-  };
-}
 
 export function TemplatePreview({ template }: { template: DesignTemplate }) {
   const box = useRef<HTMLDivElement>(null);

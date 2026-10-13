@@ -111,17 +111,22 @@ export function applyTemplate(doc: InvitationDoc, t: DesignTemplate): Invitation
   };
 }
 
-/** 템플릿 카드용 샘플 대표 사진 (실사진 대신 부드러운 그라데이션 SVG) */
-export function sampleHeroImage(t: DesignTemplate): ImageAsset {
+/** 샘플 사진 (실사진 대신 템플릿 색의 그라데이션 SVG). variant 0 = 대표 사진(반지 모티프) */
+export function samplePhoto(t: DesignTemplate, variant = 0): ImageAsset {
   const [top, bottom] = t.sample;
+  const angle = [0.4, 1, 0, 0.7, 0.2, 0.9, 0.5][variant % 7];
+  const light = [0.3, 0.7, 0.5, 0.2, 0.8, 0.4, 0.6][variant % 7];
+  const motif =
+    variant === 0
+      ? `<circle cx="255" cy="430" r="90" fill="none" stroke="#fff" stroke-opacity="0.7" stroke-width="10"/>
+<circle cx="345" cy="430" r="90" fill="none" stroke="#fff" stroke-opacity="0.7" stroke-width="10"/>`
+      : `<circle cx="${150 + ((variant * 97) % 300)}" cy="${250 + ((variant * 131) % 300)}" r="${60 + variant * 12}" fill="#fff" fill-opacity="0.18"/>`;
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="800" viewBox="0 0 600 800">
-<defs><linearGradient id="g" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" stop-color="${top}"/><stop offset="1" stop-color="${bottom}"/></linearGradient>
-<radialGradient id="l" cx="0.3" cy="0.25" r="0.6"><stop offset="0" stop-color="#fff" stop-opacity="0.55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
-<rect width="600" height="800" fill="url(#g)"/><rect width="600" height="800" fill="url(#l)"/>
-<circle cx="255" cy="430" r="90" fill="none" stroke="#fff" stroke-opacity="0.7" stroke-width="10"/>
-<circle cx="345" cy="430" r="90" fill="none" stroke="#fff" stroke-opacity="0.7" stroke-width="10"/></svg>`;
+<defs><linearGradient id="g" x1="0" y1="0" x2="${angle}" y2="1"><stop offset="0" stop-color="${top}"/><stop offset="1" stop-color="${bottom}"/></linearGradient>
+<radialGradient id="l" cx="${light}" cy="0.25" r="0.6"><stop offset="0" stop-color="#fff" stop-opacity="0.55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+<rect width="600" height="800" fill="url(#g)"/><rect width="600" height="800" fill="url(#l)"/>${motif}</svg>`;
   return {
-    id: `sample_${t.id}`,
+    id: `sample_${t.id}_${variant}`,
     src: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`,
     width: 600,
     height: 800,

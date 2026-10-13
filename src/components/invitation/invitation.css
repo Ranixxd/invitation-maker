@@ -269,3 +269,14 @@
 @media (prefers-reduced-motion: reduce) {
   .inv--view .inv-section:not(.inv-section--hero) { opacity: 1; transform: none; transition: none; }
 }
+
+/* 갤러리 빈 상태 (편집기 미리보기 전용) */
+.gallery-empty { display: grid; gap: 12px; }
+.gallery-ph {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  background: var(--inv-surface);
+  color: var(--inv-muted);
+  font: 300 22px 'Noto Sans KR', sans-serif;
+}

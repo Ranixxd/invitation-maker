@@ -1,61 +1,32 @@
-// 1단계: 템플릿 선택 (CONSTITUTION §1.2, §3.5)
-import { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { DESIGN_TEMPLATES, getTemplate } from '../data/designTemplates';
+// 1단계: 템플릿 목록. 카드를 누르면 미리보기(/templates/:id)로 (CONSTITUTION §1.2, §3.5)
+import { Link } from 'react-router-dom';
+import { DESIGN_TEMPLATES } from '../data/designTemplates';
 import { TemplatePreview } from '../components/common/TemplatePreview';
 import { AppHeader } from '../components/common/shared';
 
 export default function TemplateSelect() {
-  const navigate = useNavigate();
-  const [params] = useSearchParams();
-  const [selected, setSelected] = useState<string | null>(getTemplate(params.get('selected'))?.id ?? null);
-  const chosen = getTemplate(selected);
-
   return (
     <main className="tpl-page">
       <AppHeader />
 
       <div className="tpl-inner">
         <h1>템플릿을 골라주세요</h1>
-        <p className="lead">분위기와 레이아웃을 먼저 정해요.</p>
+        <p className="lead">분위기와 레이아웃을 먼저 정해요. 눌러서 미리 볼 수 있어요.</p>
 
-        <ul className="tpl-grid" role="radiogroup" aria-label="템플릿">
+        <ul className="tpl-grid">
           {DESIGN_TEMPLATES.map((t) => (
             <li key={t.id}>
-              <button
-                type="button"
-                role="radio"
-                aria-checked={selected === t.id}
-                className={`tpl-card${selected === t.id ? ' is-on' : ''}`}
-                onClick={() => setSelected(t.id)}
-                onDoubleClick={() => navigate(`/start?template=${t.id}`)}
-              >
+              <Link to={`/templates/${t.id}`} className="tpl-card" aria-label={`${t.name} 미리보기`}>
                 <TemplatePreview template={t} />
                 <span className="tpl-meta">
                   <b>{t.name}</b>
                   <span>{t.tagline}</span>
                 </span>
-                {selected === t.id && (
-                  <span className="tpl-check" aria-hidden>
-                    ✓
-                  </span>
-                )}
-              </button>
+              </Link>
             </li>
           ))}
         </ul>
       </div>
-
-      <footer className="flow-foot">
-        <button
-          type="button"
-          className="btn btn-primary btn-lg"
-          disabled={!chosen}
-          onClick={() => chosen && navigate(`/start?template=${chosen.id}`)}
-        >
-          {chosen ? '이 템플릿으로 시작하기' : '템플릿을 선택해 주세요'}
-        </button>
-      </footer>
     </main>
   );
 }

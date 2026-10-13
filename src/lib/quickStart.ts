@@ -62,7 +62,6 @@ export function buildFromQuickStart(input: QuickStartInput): InvitationDoc {
       case 'gallery':
         return {
           ...s,
-          enabled: rest.length > 0,
           data: { ...s.data, imageIds: rest.map((i) => i.id) },
         };
       case 'account':

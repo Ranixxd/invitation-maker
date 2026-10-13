@@ -21,12 +21,24 @@ export function GallerySection({ doc, section, mode }: SectionProps<SectionOf<'g
   // 편집기 미리보기에서는 라이트박스를 열지 않는다 (편집기 화면을 덮지 않도록)
   const canOpen = mode === 'view';
 
+  // 사진이 없을 때: 하객 화면에서는 섹션을 그리지 않고, 편집기에서는 자리 안내를 보여준다 (§4.6)
+  if (images.length === 0 && mode === 'view') return null;
+
   return (
     <section className="inv-block gallery">
       <p className="inv-eyebrow">GALLERY</p>
       <h2 className="inv-title">{title}</h2>
       {images.length === 0 ? (
-        <p className="inv-muted">사진을 추가해 주세요</p>
+        <div className="gallery-empty">
+          <div className="gallery-grid" aria-hidden>
+            {Array.from({ length: 6 }, (_, i) => (
+              <span key={i} className="gallery-ph">
+                +
+              </span>
+            ))}
+          </div>
+          <p className="inv-muted">갤러리 편집에서 사진을 추가해 주세요</p>
+        </div>
       ) : (
         <div className={`gallery-${layout}`}>
           {images.map((img, i) => (

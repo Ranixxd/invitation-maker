@@ -28,7 +28,7 @@ export default function StartChoice() {
 
   return (
     <main className="start">
-      <AppHeader left={<BackLink to={`/templates?selected=${template.id}`} label="템플릿 선택으로" />} />
+      <AppHeader left={<BackLink to={`/templates/${template.id}`} label="템플릿 미리보기로" />} />
 
       <div className="start-inner">
         <h1>어떻게 시작할까요?</h1>
