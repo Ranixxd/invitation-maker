@@ -63,12 +63,11 @@
 .hero-headline {
   margin: 0;
   font-size: 13px;
-  letter-spacing: 0.24em;
   text-transform: uppercase;
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
 }
-.hero-names { margin: 8px 0 0; font-size: 26px; font-weight: 600; letter-spacing: 0.04em; line-height: 1.4; }
-.hero-date { margin: 6px 0 0; letter-spacing: 0.16em; font-size: 13px; font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; }
+.hero-names { margin: 8px 0 0; font-size: 26px; font-weight: 600; line-height: 1.4; }
+.hero-date { margin: 6px 0 0; font-size: 13px; font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; }
 .hero-sub { margin: 4px 0 0; font-size: 14px; color: var(--inv-muted); }
 
 .hero--full .hero-media { aspect-ratio: 3 / 4.4; overflow: hidden; }
@@ -85,7 +84,7 @@
 
 .hero--frame, .hero--arch { padding: 56px 28px 48px; }
 .hero--frame .hero-headline, .hero--arch .hero-headline { color: var(--inv-accent); }
-.hero-date--big { font-size: 22px; letter-spacing: 0.12em; margin: 10px 0 28px; font-family: var(--inv-font); }
+.hero-date--big { font-size: 22px; margin: 10px 0 28px; font-family: var(--inv-font); }
 .hero--frame .hero-media { aspect-ratio: 4 / 5; overflow: hidden; border-radius: 4px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08); }
 .hero--arch .hero-media { aspect-ratio: 3 / 4; overflow: hidden; border-radius: 999px 999px 8px 8px; }
 .hero--frame .hero-media .hero-img--empty, .hero--arch .hero-media .hero-img--empty { aspect-ratio: auto; height: 100%; }
@@ -259,7 +258,7 @@
   white-space: pre-line;
 }
 .gb-note .gb-card-text { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
-.gb-card-date { margin-top: 6px; font-size: 9.5px; font-weight: 500; color: var(--inv-muted); letter-spacing: 0.02em; }
+.gb-card-date { margin-top: 6px; font-size: 9.5px; font-weight: 500; color: var(--inv-muted); }
 .gb-heart { flex: none; width: 10px; height: 10px; fill: var(--inv-accent); }
 .gb-heart.is-big { width: 22px; height: 22px; }
 .gb-empty { margin: 0; padding: 36px 0; font-size: 13px; color: var(--inv-muted); }
@@ -398,7 +397,7 @@
 .couple-cell { position: relative; }
 .couple-amp { position: absolute; left: -12px; top: 22px; color: var(--inv-accent); font-size: 18px; }
 .couple-person { display: grid; gap: 2px; justify-items: center; }
-.couple-role { font: 500 12px 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; color: var(--inv-accent); letter-spacing: 0.08em; }
+.couple-role { font: 500 12px 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; color: var(--inv-accent); }
 .couple-name { font-size: 22px; font-weight: 600; }
 .couple-parents { margin-top: 6px; font-size: 12px; line-height: 1.6; color: var(--inv-muted); }
 .couple-contact { margin-top: 28px; border-radius: 14px; background: var(--inv-surface); text-align: left; }
@@ -428,14 +427,13 @@
   border: 1px solid color-mix(in srgb, var(--inv-accent) 45%, transparent);
   color: var(--inv-accent);
   font: 600 12px 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  letter-spacing: 0.1em;
 }
 .profile-intro { margin: 6px 0 0; font-size: 13px; line-height: 1.6; color: var(--inv-muted); }
 .timeline { list-style: none; margin: 28px 0 0; padding: 0 0 0 4px; text-align: left; }
 .timeline li { position: relative; display: grid; gap: 2px; padding: 0 0 18px 22px; border-left: 1px solid color-mix(in srgb, var(--inv-accent) 35%, transparent); }
 .timeline li:last-child { padding-bottom: 0; border-left-color: transparent; }
 .timeline li::before { content: ''; position: absolute; left: -5px; top: 6px; width: 9px; height: 9px; border-radius: 50%; background: var(--inv-accent); }
-.timeline-date { font: 500 12px 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; color: var(--inv-accent); letter-spacing: 0.04em; }
+.timeline-date { font: 500 12px 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; color: var(--inv-accent); }
 .timeline-text { font-size: 15px; }
 
 /* ---- 예식 일자: 장소 요약 ---- */
@@ -486,7 +484,7 @@
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   text-align: center;
 }
-.inv-brand-logo { margin: 0; font-weight: 600; font-size: 14px; letter-spacing: 0.02em; }
+.inv-brand-logo { margin: 0; font-weight: 600; font-size: 14px; }
 .inv-brand-copy { margin: 0; font-size: 12px; color: var(--inv-muted); }
 .inv-brand-link { margin-top: 10px; font-size: 12px; color: var(--inv-accent); text-decoration: underline; text-underline-offset: 3px; }
 
@@ -637,7 +635,7 @@
 }
 .cal-strip-day { display: grid; justify-items: center; align-content: start; gap: 6px; padding: 10px 0 18px; }
 .cal-strip-day + .cal-strip-day { border-left: 1px solid var(--inv-text); }
-.cal-strip-wd { font: 400 11px 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; color: var(--inv-muted); letter-spacing: 0.06em; }
+.cal-strip-wd { font: 400 11px 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; color: var(--inv-muted); }
 .cal-strip-num { position: relative; font: 400 22px 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; color: var(--inv-muted); }
 .cal-strip-day.is-day .cal-strip-num { font-size: 38px; font-weight: 400; color: var(--inv-text); line-height: 1.2; }
 .heart-scribble { overflow: visible; fill: none; stroke: var(--inv-accent); stroke-linecap: round; stroke-linejoin: round; }
@@ -660,7 +658,7 @@
 .save-row { overflow: hidden; white-space: nowrap; }
 .save-track { display: inline-flex; gap: 22px; animation: save-scroll 28s linear infinite; }
 .save-row.is-reverse .save-track { animation-direction: reverse; padding-left: 70px; }
-.save-track span { font: 500 13px 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; letter-spacing: 0.08em; color: var(--inv-text); }
+.save-track span { font: 500 13px 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; color: var(--inv-text); }
 @keyframes save-scroll { to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) {
   .save-track { animation: none; }
@@ -672,7 +670,7 @@
    고딕 Pretendard(400 본문 · 500 레이블 · 600 제목) · 원본 색감 히어로 · 흑백 갤러리 · 알약 컨트롤
    ========================================================= */
 .inv--fam-editorial,
-.inv-portal.inv--fam-editorial { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; font-weight: 400; letter-spacing: -0.01em; }
+.inv-portal.inv--fam-editorial { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; font-weight: 400; }
 .inv--fam-editorial { line-height: 1.8; }
 .inv--fam-editorial b, .inv--fam-editorial strong { font-weight: 600; }
 .inv--fam-editorial .inv-block { padding: 60px 28px; }
@@ -684,7 +682,6 @@
   font-family: var(--inv-font-title);
   font-weight: 600;
   font-size: 18px;
-  letter-spacing: 0.01em;
   line-height: 1.5;
   color: var(--inv-text);
 }
@@ -708,7 +705,7 @@
   background: linear-gradient(to top, var(--inv-bg) 0%, color-mix(in srgb, var(--inv-bg) 82%, transparent) 38%, transparent 100%);
   text-shadow: none;
 }
-.inv--fam-editorial .hero--full .hero-date { order: -1; margin: 0 0 8px; font-size: 13px; font-weight: 500; letter-spacing: 0; }
+.inv--fam-editorial .hero--full .hero-date { order: -1; margin: 0 0 8px; font-size: 13px; font-weight: 500; }
 /* 이름 사이: 예식 일자의 손그림 하트를 이름보다 크게 */
 .inv--fam-editorial .hero--full .hero-names { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; }
 .inv--fam-editorial .hero--full .hero-names .hero-name-part { display: contents; }
@@ -721,7 +718,6 @@
   font-family: var(--inv-font-title);
   font-weight: 400;
   font-size: 30px;
-  letter-spacing: 0.08em;
 }
 
 /* 예식 일자 */
@@ -730,13 +726,13 @@
 /* 신랑·신부 */
 .inv--fam-editorial .couple-name { font-family: var(--inv-font-title); font-weight: 600; font-size: 21px; }
 .inv--fam-editorial .couple-amp { font-weight: 400; color: var(--inv-accent); }
-.inv--fam-editorial .couple-role { color: var(--inv-muted); letter-spacing: 0.16em; }
+.inv--fam-editorial .couple-role { color: var(--inv-muted); }
 
 /* 추가 정보: 가운데 정렬 '하루 일정' */
 .inv--fam-editorial .timeline { margin-top: 30px; padding: 0; text-align: center; }
 .inv--fam-editorial .timeline li { display: grid; justify-items: center; gap: 2px; padding: 0 0 22px; border-left: 0; }
 .inv--fam-editorial .timeline li::before { display: none; }
-.inv--fam-editorial .timeline-date { font: 400 17px 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; letter-spacing: 0.06em; color: var(--inv-text); }
+.inv--fam-editorial .timeline-date { font: 400 17px 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; color: var(--inv-text); }
 .inv--fam-editorial .timeline-text { font-size: 13px; color: var(--inv-muted); }
 
 /* 오시는 길: 짙은 띠 위 카드 */
@@ -756,7 +752,6 @@
   color: var(--inv-bg) !important;
   font-size: 13px;
   font-weight: 400;
-  letter-spacing: 0.08em;
 }
 .inv--fam-editorial .map-links a,
 .inv--fam-editorial .inv-chip,
