@@ -2,6 +2,8 @@
 import type { ImageAsset, InvitationDoc, Section, Sticker } from '../types/invitation';
 import { createDoc } from './templates';
 import { applyTemplate, samplePhoto, type DesignTemplate } from './designTemplates';
+// 샘플 웨딩 사진 (src/assets/samples/, §3.5) — 모든 템플릿의 대표(히어로) 사진
+import weddingHero01 from '../assets/samples/wedding-hero-01.jpg';
 import { DEFAULT_CROP } from '../lib/stickers';
 
 const GALLERY_COUNT = 6;
@@ -36,7 +38,15 @@ const SAMPLE_GUESTBOOK: [number, string, string][] = [
 
 export function sampleDoc(t: DesignTemplate): InvitationDoc {
   const doc = applyTemplate(createDoc(), t);
-  const hero = samplePhoto(t, 0);
+  const hero: ImageAsset = {
+    id: 'sample_wedding_hero_01',
+    src: weddingHero01,
+    width: 688,
+    height: 1031,
+    aspect: 688 / 1031,
+    luminance: 0.7,
+    color: '#d9b48a',
+  };
   const gallery: ImageAsset[] = Array.from({ length: GALLERY_COUNT }, (_, i) => samplePhoto(t, i + 1));
   const images = Object.fromEntries([hero, ...gallery].map((img) => [img.id, img]));
 

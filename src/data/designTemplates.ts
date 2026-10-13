@@ -27,7 +27,7 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
     // 1번 테마: 모던 모노 — 흑백 사진, 버건디 포인트, 매거진 같은 구성 (§3.5, PRD-0016)
     id: 'modern-mono',
     name: '모던 모노',
-    tagline: '흑백 사진과 버건디 포인트, 매거진 같은 구성',
+    tagline: '얇은 고딕과 버건디 포인트, 매거진 같은 구성',
     preset: 'mono',
     family: 'editorial',
     shape: 'round',
