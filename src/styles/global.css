@@ -12,13 +12,15 @@
   --radius: 12px;
   --top-h: 56px;
   --tabs-h: 64px; /* 모바일 하단 툴바 높이 여유 (토스트 위치용) */
-  font-family: 'Noto Sans KR', system-ui, -apple-system, sans-serif;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   color: var(--text);
   background: var(--bg);
   -webkit-text-size-adjust: 100%;
 }
 * { box-sizing: border-box; }
 html, body, #root { margin: 0; min-height: 100%; }
+/* 굵기는 400(본문)·500(레이블·캡션)·600(제목·헤딩)만 */
+h1, h2, h3, h4, h5, h6, b, strong, th { font-weight: 600; }
 body { background: var(--bg); }
 button { font: inherit; color: inherit; }
 a { color: inherit; }
@@ -199,7 +201,7 @@ textarea.input { resize: vertical; line-height: 1.6; }
 .lead { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.7; }
 
 .start { min-height: 100dvh; }
-.logo { font-weight: 700; font-size: 16px; text-decoration: none; white-space: nowrap; }
+.logo { font-weight: 600; font-size: 16px; text-decoration: none; white-space: nowrap; }
 
 /* ---------- 공통 헤더: 로고 항상 중앙 (§8) ---------- */
 .app-head {
@@ -244,7 +246,7 @@ a.choice-card:hover, button.choice-card:hover { border-color: var(--primary); tr
 .choice-card p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.7; flex: 1; }
 .choice-icon { font-size: 32px; }
 .choice-badge { position: absolute; top: 20px; right: 20px; padding: 3px 10px; border-radius: 999px; background: var(--primary); color: #fff; font-size: 12px; }
-.choice-cta { color: var(--primary); font-weight: 700; font-size: 15px; }
+.choice-cta { color: var(--primary); font-weight: 600; font-size: 15px; }
 
 /* ---------- 흐름 공통 헤더 (템플릿 → 시작 방법 → 편집) ---------- */
 .flow-foot {
@@ -507,7 +509,7 @@ a.choice-card:hover, button.choice-card:hover { border-color: var(--primary); tr
   -webkit-backdrop-filter: blur(14px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
   color: #fff;
-  font: 600 15px 'Noto Sans KR', sans-serif;
+  font: 600 15px 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   white-space: nowrap;
   cursor: pointer;
 }
@@ -544,7 +546,7 @@ a.choice-card:hover, button.choice-card:hover { border-color: var(--primary); tr
   cursor: pointer;
 }
 .m-toolbar button span { font-size: 14px; }
-.m-toolbar button.is-primary { background: var(--primary); font-weight: 700; padding: 0 18px; }
+.m-toolbar button.is-primary { background: var(--primary); font-weight: 600; padding: 0 18px; }
 
 /* ---------- 바텀시트 ---------- */
 .sheet-root { position: fixed; inset: 0; z-index: 1500; visibility: hidden; transition: visibility 0s 0.3s; }
@@ -720,7 +722,7 @@ a.choice-card:hover, button.choice-card:hover { border-color: var(--primary); tr
   font-size: 12px;
   cursor: pointer;
 }
-.sticker-option.is-on { border-color: #fff; background: rgba(255, 255, 255, 0.18); font-weight: 700; }
+.sticker-option.is-on { border-color: #fff; background: rgba(255, 255, 255, 0.18); font-weight: 600; }
 .sticker-option-art { display: block; width: 36px; aspect-ratio: 1; }
 .size-dot { display: grid; place-items: center; }
 .size-dot i { display: block; aspect-ratio: 1; border-radius: 50%; background: currentColor; opacity: 0.85; }
@@ -753,7 +755,7 @@ a.choice-card:hover, button.choice-card:hover { border-color: var(--primary); tr
 .adjust-head h2 { font-size: 16px; }
 .adjust-head .adjust-text-btn:last-child { justify-self: end; }
 .adjust-text-btn { min-height: 44px; padding: 0 12px; border: 0; background: none; color: #fff; font-size: 15px; cursor: pointer; }
-.adjust-text-btn.is-primary { color: #9aa6ff; font-weight: 700; }
+.adjust-text-btn.is-primary { color: #9aa6ff; font-weight: 600; }
 .adjust-stage {
   position: relative;
   align-self: center;
@@ -777,7 +779,7 @@ a.choice-card:hover, button.choice-card:hover { border-color: var(--primary); tr
 .panel-title { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; }
 .panel-head .panel-title h2 { flex: none; }
 .panel-sticker-btn { gap: 4px; padding: 0 12px 0 8px; }
-.panel-mode-badge { padding: 3px 10px; border-radius: 999px; background: var(--primary-soft); color: var(--primary); font-size: 12px; font-weight: 700; }
+.panel-mode-badge { padding: 3px 10px; border-radius: 999px; background: var(--primary-soft); color: var(--primary); font-size: 12px; font-weight: 600; }
 .sticker-panel-hint { margin: 0; }
 .sticker-options.is-wrap { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); overflow: visible; gap: 8px; }
 .sticker-panel .sticker-option {

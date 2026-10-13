@@ -39,9 +39,9 @@ export const FAMILY_LABELS: Record<ThemeFamily, string> = {
 };
 
 /** 계열별 글꼴 토큰 */
-const FAMILY_FONTS: Record<ThemeFamily, { title: string; hand: string }> = {
-  basic: { title: 'inherit', hand: "'Nanum Pen Script', cursive" },
-  editorial: { title: "'Noto Sans KR', sans-serif", hand: "'Nanum Pen Script', cursive" },
+const FAMILY_FONTS: Record<ThemeFamily, { title: string }> = {
+  basic: { title: 'inherit' },
+  editorial: { title: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif" },
 };
 
 /** 팔레트·모양·계열 → CSS 변수 */
@@ -63,6 +63,5 @@ export function designTokens(palette: Palette, accent: string, family: ThemeFami
     '--inv-r-paper': sh.paper,
     '--inv-r-media': sh.media,
     '--inv-font-title': f.title,
-    '--inv-font-hand': f.hand,
   } as CSSProperties;
 }

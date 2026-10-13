@@ -72,8 +72,8 @@ export const THEME_PRESETS: Record<ThemePreset, ThemePresetDef> = {
     accent: '#8e1f2f',
     band: '#161616',
     onBand: '#ffffff',
-    paper: '#f2f0eb',
-    board: '#e8e6e0',
+    paper: '#ffffff',
+    board: '#b8202f',
     font: 'sans',
   },
   romantic: {
@@ -100,7 +100,6 @@ export const WEDDING = {
   greetingTitle: '소중한 분들을 초대합니다',
   greetingBody:
     '서로가 마주보며 다져온 사랑을\n이제 함께 한 곳을 바라보며\n걸어갈 수 있는 큰 사랑으로 키우고자 합니다.\n\n저희 두 사람이 사랑의 이름으로\n지켜나갈 수 있도록\n앞날을 축복해 주시면 감사하겠습니다.',
-  coupleTitle: '신랑 & 신부',
   profileTitle: '우리 이야기',
   rsvpTitle: '참석 여부 전달',
   rsvpDescription: '원활한 예식 준비를 위해\n참석 여부를 미리 알려주시면 감사하겠습니다.',
@@ -144,7 +143,7 @@ export function createSections(hosts: HostSide[]): Section[] {
       case 'greeting':
         return { ...base, type, data: { title: WEDDING.greetingTitle, body: WEDDING.greetingBody } };
       case 'couple':
-        return { ...base, type, data: { title: WEDDING.coupleTitle, showParents: true, showContact: true } };
+        return { ...base, type, data: { showParents: true, showContact: true } };
       case 'profile':
         return {
           ...base,

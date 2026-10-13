@@ -40,13 +40,13 @@ function ContactLinks({ role, name, phone }: { role: string; name: string; phone
 }
 
 export function CoupleSection({ doc, section }: SectionProps<SectionOf<'couple'>>) {
-  const { title, showParents, showContact } = section.data;
+  const { showParents, showContact } = section.data;
   const hosts = doc.core.hosts;
   const hasContact = hosts.some((h) => h.phone || h.father.phone || h.mother.phone);
 
   return (
-    <section className="inv-block couple">
-      <h2 className="inv-title">{title}</h2>
+    // 제목 없음: 이름만 봐도 어떤 섹션인지 알 수 있다 (§4.1)
+    <section className="inv-block couple" aria-label="신랑 신부">
       <div className="couple-grid">
         {hosts.map((h, i) => (
           <div key={h.id} className="couple-cell">

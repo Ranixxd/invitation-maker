@@ -194,7 +194,6 @@ function CouplePanel({ section, dispatch, goSettings }: PanelProps<'couple'>) {
   return (
     <div className="panel-body">
       <PanelSection title="신랑·신부">
-        <TextField label="제목" value={section.data.title} onChange={(title) => set({ title })} />
         <Toggle label="혼주(부모님) 성함 표시" hint="이름 아래 작게 보여요" checked={section.data.showParents} onChange={(showParents) => set({ showParents })} />
         <Toggle label="연락하기 버튼 표시" hint="전화번호를 넣은 사람만 보여요" checked={section.data.showContact} onChange={(showContact) => set({ showContact })} />
         <SettingsLink onClick={goSettings}>이름·부모님 성함·연락처는 기본 정보에서</SettingsLink>

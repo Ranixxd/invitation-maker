@@ -76,7 +76,6 @@ export interface GreetingData {
 }
 /** 신랑·신부 소개 (혼주는 작게) */
 export interface CoupleData {
-  title: string;
   showParents: boolean;
   showContact: boolean;
 }

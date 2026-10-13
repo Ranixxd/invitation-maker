@@ -9,7 +9,7 @@ export function themeVars(doc: InvitationDoc): CSSProperties {
   const p = THEME_PRESETS[doc.theme.preset];
   return {
     ...designTokens(p, doc.theme.accent, doc.theme.family ?? 'basic', doc.theme.shape ?? 'round'),
-    '--inv-font': doc.theme.font === 'serif' ? "'Gowun Batang', serif" : "'Noto Sans KR', sans-serif",
+    '--inv-font': doc.theme.font === 'serif' ? "'Gowun Batang', serif" : "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif",
   } as CSSProperties;
 }
 

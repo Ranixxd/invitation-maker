@@ -23,14 +23,13 @@ function load(docId: string): GuestMessage[] {
   }
 }
 
-/** 쪽지마다 일정한(새로고침해도 같은) 기울기·클립 여부 */
+/** 쪽지마다 일정한(새로고침해도 같은) 기울기 */
 function hash(s: string) {
   let h = 0;
   for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
   return Math.abs(h);
 }
 const tiltOf = (id: string) => ((hash(id) % 7) - 3) * 0.9; // -2.7° ~ 2.7°
-const hasClip = (id: string) => hash(id) % 3 === 0;
 
 const fmtDate = (t: number) => {
   const d = new Date(t);
@@ -45,11 +44,17 @@ function Heart({ className = '' }: { className?: string }) {
   );
 }
 
-function Clip() {
+/** 쪽지 카드 내용: 작성자+하트 / 본문 / 날짜 (목록·크게 보기 공통) */
+function CardBody({ message, big = false }: { message: GuestMessage; big?: boolean }) {
   return (
-    <svg className="gb-clip" viewBox="0 0 16 44" aria-hidden>
-      <path d="M11 13V33a4.5 4.5 0 0 1-9 0V8a6 6 0 0 1 12 0v24a3 3 0 0 1-6 0V13" />
-    </svg>
+    <>
+      <span className="gb-card-from">
+        {message.name}
+        <Heart className={big ? 'is-big' : ''} />
+      </span>
+      <span className="gb-card-text">{message.text}</span>
+      <span className="gb-card-date">{fmtDate(message.at)}</span>
+    </>
   );
 }
 
@@ -130,18 +135,12 @@ export function GuestbookSection({ doc, section, mode }: SectionProps<SectionOf<
               <li key={m.id}>
                 <button
                   type="button"
-                  className="gb-note"
+                  className="gb-card gb-note"
                   style={{ transform: `rotate(${tiltOf(m.id)}deg)` }}
                   onClick={() => setOpened(m)}
                   aria-label={`${m.name}님의 메시지 보기`}
                 >
-                  {hasClip(m.id) && <Clip />}
-                  <span className="gb-note-to">
-                    {fmtDate(m.at)}
-                    <Heart />
-                  </span>
-                  <span className="gb-note-text">{m.text}</span>
-                  <span className="gb-note-from">— {m.name}</span>
+                  <CardBody message={m} />
                 </button>
               </li>
             ))}
@@ -215,7 +214,7 @@ function useEscape(onClose: () => void) {
   }, [onClose]);
 }
 
-/** 쪽지 크게 보기 (레퍼런스: LOVE NOTE 카드) + 비밀번호로 지우기 */
+/** 쪽지 크게 보기: 목록 쪽지와 같은 디자인 + 비밀번호로 지우기 */
 function NoteModal({ message, onClose, onDelete }: { message: GuestMessage; onClose: () => void; onDelete: () => void }) {
   useEscape(onClose);
   const [deleting, setDeleting] = useState(false);
@@ -236,27 +235,9 @@ function NoteModal({ message, onClose, onDelete }: { message: GuestMessage; onCl
   };
 
   return (
-    <div className="gb-modal-root" role="dialog" aria-modal="true" aria-label="축하 쪽지" onClick={onClose}>
-      <article className="gb-paper" onClick={(e) => e.stopPropagation()}>
-        <Clip />
-        <header className="gb-paper-head">
-          <h3>축하 쪽지</h3>
-          <Heart className="is-big" />
-        </header>
-        <dl className="gb-paper-row">
-          <div>
-            <dt>보내는 사람</dt>
-            <dd>{message.name}</dd>
-          </div>
-        </dl>
-        <p className="gb-paper-text">{message.text}</p>
-        <p className="gb-paper-sign">— {message.name}</p>
-        <dl className="gb-paper-row is-foot">
-          <div>
-            <dt>남긴 날</dt>
-            <dd>{fmtDate(message.at)}</dd>
-          </div>
-        </dl>
+    <div className="gb-modal-root" role="dialog" aria-modal="true" aria-label={`${message.name}님의 메시지`} onClick={onClose}>
+      <article className="gb-paper gb-card gb-detail" onClick={(e) => e.stopPropagation()}>
+        <CardBody message={message} big />
         {deleting ? (
           <form className="gb-delete" onSubmit={confirmDelete}>
             <input
@@ -291,7 +272,7 @@ function NoteModal({ message, onClose, onDelete }: { message: GuestMessage; onCl
             <button type="button" className="inv-btn is-ghost" onClick={() => setDeleting(true)}>
               지우기
             </button>
-            <button type="button" className="inv-btn" onClick={onClose}>
+            <button type="button" className="inv-btn is-ghost" onClick={onClose}>
               닫기
             </button>
           </div>

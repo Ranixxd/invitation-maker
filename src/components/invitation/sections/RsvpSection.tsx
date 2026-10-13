@@ -119,12 +119,16 @@ export function RsvpSection({ doc, section }: SectionProps<SectionOf<'rsvp'>>) {
             <div className="rsvp-row">
               <span className="rsvp-label">참석 인원 (본인 포함)</span>
               <div className="stepper-input">
-                <button type="button" aria-label="인원 줄이기" onClick={() => setCount((c) => Math.max(1, c - 1))}>
-                  −
+                <button type="button" aria-label="인원 줄이기" disabled={count <= 1} onClick={() => setCount((c) => Math.max(1, c - 1))}>
+                  <svg viewBox="0 0 16 16" aria-hidden>
+                    <path d="M3 8h10" />
+                  </svg>
                 </button>
                 <output aria-live="polite">{count}명</output>
-                <button type="button" aria-label="인원 늘리기" onClick={() => setCount((c) => Math.min(COUNT_MAX, c + 1))}>
-                  +
+                <button type="button" aria-label="인원 늘리기" disabled={count >= COUNT_MAX} onClick={() => setCount((c) => Math.min(COUNT_MAX, c + 1))}>
+                  <svg viewBox="0 0 16 16" aria-hidden>
+                    <path d="M3 8h10M8 3v10" />
+                  </svg>
                 </button>
               </div>
             </div>
