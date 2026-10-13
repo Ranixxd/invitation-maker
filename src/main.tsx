@@ -9,7 +9,8 @@ const Router = import.meta.env.VITE_ROUTER === 'memory' ? MemoryRouter : Browser
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Router>
+    {/* GitHub Pages(--mode pages)에서는 /invitation-maker/ 하위에서 동작하므로 basename 지정 (§9.6) */}
+    <Router basename={import.meta.env.VITE_ROUTER === 'memory' ? undefined : import.meta.env.BASE_URL}>
       <App />
     </Router>
   </StrictMode>,

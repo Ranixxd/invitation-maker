@@ -2,9 +2,10 @@
 import type { InvitationDoc } from '../types/invitation';
 import { WEDDING } from '../data/templates';
 
-/** 링크 경로: <현재 사이트>/i/<slug> (발행 서버 연동 전까지는 표시용) */
+/** 링크 경로: <현재 사이트 + 배포 경로>/i/<slug> (발행 서버 연동 전까지는 표시용) */
 export function linkPrefix(): string {
-  return `${window.location.host}/i/`;
+  const base = import.meta.env.BASE_URL.startsWith('/') ? import.meta.env.BASE_URL : '/';
+  return `${window.location.host}${base}i/`;
 }
 
 /** 제목을 비워두면 신랑·신부 이름으로 자동 생성 */

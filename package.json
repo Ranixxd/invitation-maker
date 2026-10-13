@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "typecheck": "tsc -b",
-    "build:share": "tsc -b && vite build --mode share && node scripts/to-artifact.mjs"
+    "build:share": "tsc -b && vite build --mode share && node scripts/to-artifact.mjs",
+    "build:pages": "tsc -b && vite build --mode pages && node scripts/spa-fallback.mjs"
   },
   "dependencies": {
     "react": "18.3.1",
