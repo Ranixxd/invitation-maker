@@ -1,6 +1,7 @@
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
 import { formatDot, formatKo, parseLocal } from '../../../lib/date';
+import { HeartScribble } from '../HeartScribble';
 
 export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
   const { imageId, layout, headline } = section.data;
@@ -23,7 +24,21 @@ export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
         <div className="hero-media">{photo}</div>
         <div className="hero-overlay">
           {headline && <p className="hero-headline">{headline}</p>}
-          <h1 className="hero-names">{names.join(' · ')}</h1>
+          <h1 className="hero-names">
+            {names.map((n, i) => (
+              <span key={i} className="hero-name-part">
+                {i > 0 && (
+                  <span className="hero-sep">
+                    <span className="hero-dot" aria-hidden>
+                      ·
+                    </span>
+                    <HeartScribble className="hero-heart" />
+                  </span>
+                )}
+                {n}
+              </span>
+            ))}
+          </h1>
           {date && <p className="hero-date">{formatDot(date)}</p>}
         </div>
       </div>

@@ -1,19 +1,12 @@
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
+import { HeartScribble } from '../HeartScribble';
 import { dday, formatKo, monthMatrix, parseLocal, weekdayKo } from '../../../lib/date';
 
 const HEAD = ['일', '월', '화', '수', '목', '금', '토'];
 const MARQUEE_REPEAT = 6;
 
 /** 손으로 그린 듯한 하트 동그라미 (3일 띠의 예식일 표시) */
-function HeartScribble() {
-  return (
-    <svg className="cal-heart" viewBox="0 0 120 110" aria-hidden>
-      <path d="M60 101C26 76 8 55 14 32 19 12 44 6 58 28 66 6 92 1 104 20 116 42 98 70 57 103" />
-      <path d="M52 98C80 82 108 60 106 34" />
-    </svg>
-  );
-}
 
 /** 앞뒤 하루를 포함한 3일 띠 + SAVE THE DATE 흐르는 글자 (템플릿 calendarStyle = 'strip') */
 function DayStrip({ date }: { date: Date }) {
@@ -31,7 +24,7 @@ function DayStrip({ date }: { date: Date }) {
             <span className="cal-strip-wd">{weekdayKo(d)}요일</span>
             <span className="cal-strip-num">
               {d.getDate()}
-              {off === 0 && <HeartScribble />}
+              {off === 0 && <HeartScribble className="cal-heart" />}
             </span>
           </div>
         ))}

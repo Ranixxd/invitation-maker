@@ -91,6 +91,8 @@
 .hero--frame .hero-media .hero-img--empty, .hero--arch .hero-media .hero-img--empty { aspect-ratio: auto; height: 100%; }
 .hero--frame .hero-names, .hero--arch .hero-names { margin-top: 28px; font-size: 22px; }
 .hero-names > span { display: inline-block; }
+.hero-sep { display: inline-block; margin: 0 0.25em; }
+.hero-heart { display: none; }
 .hero-amp { font-style: normal; font-size: 14px; color: var(--inv-muted); margin: 0 10px; font-weight: 400; }
 
 /* ---- 인사말 ---- */
@@ -638,6 +640,7 @@
 .cal-strip-wd { font: 400 11px 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; color: var(--inv-muted); letter-spacing: 0.06em; }
 .cal-strip-num { position: relative; font: 400 22px 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; color: var(--inv-muted); }
 .cal-strip-day.is-day .cal-strip-num { font-size: 38px; font-weight: 400; color: var(--inv-text); line-height: 1.2; }
+.heart-scribble { overflow: visible; fill: none; stroke: var(--inv-accent); stroke-linecap: round; stroke-linejoin: round; }
 .cal-heart {
   position: absolute;
   left: 50%;
@@ -694,18 +697,24 @@
 .inv--fam-editorial .snap-grid img,
 .inv--fam-editorial .lightbox img { filter: grayscale(1) contrast(1.05); }
 
-/* 히어로: 꽉 찬 사진 위 작은 날짜 + 이름 (필터·그라데이션 없음, 글자 그림자로만 가독성) */
+/* 히어로: 꽉 찬 사진(원본 색감) 하단에 위로 옅어지는 흰 그라데이션 + 검정 글자(그림자 없음) */
 .inv--fam-editorial .hero--full .hero-media { aspect-ratio: 3 / 4.4; }
 .inv--fam-editorial .hero--full .hero-overlay {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 120px 24px 44px;
-  background: none;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 2px 18px rgba(0, 0, 0, 0.3);
+  padding: 150px 24px 40px;
+  color: var(--inv-text);
+  background: linear-gradient(to top, var(--inv-bg) 0%, color-mix(in srgb, var(--inv-bg) 82%, transparent) 38%, transparent 100%);
+  text-shadow: none;
 }
-.inv--fam-editorial .hero--full:has(.hero-img--empty) .hero-overlay { text-shadow: none; }
-.inv--fam-editorial .hero--full .hero-date { order: -1; margin: 0 0 6px; font-size: 12px; font-weight: 400; letter-spacing: 0.3em; }
+.inv--fam-editorial .hero--full .hero-date { order: -1; margin: 0 0 8px; font-size: 12px; font-weight: 500; letter-spacing: 0.3em; }
+/* 이름 사이: 예식 일자의 손그림 하트를 이름보다 크게 */
+.inv--fam-editorial .hero--full .hero-names { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; }
+.inv--fam-editorial .hero--full .hero-names .hero-name-part { display: contents; }
+.inv--fam-editorial .hero-sep { margin: 0 0.2em; }
+.inv--fam-editorial .hero-dot { display: none; }
+.inv--fam-editorial .hero-heart { display: block; width: 50px; height: 46px; stroke-width: 4; }
 .inv--fam-editorial .hero-names {
   margin: 0;
   font-family: var(--inv-font-title);
