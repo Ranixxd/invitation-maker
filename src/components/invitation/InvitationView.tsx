@@ -1,7 +1,7 @@
 // 초대장 렌더러. 편집기 미리보기와 /view가 공용으로 사용 (CONSTITUTION §6.3)
-import { useEffect, useRef, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import type { InvitationDoc, Section } from '../../types/invitation';
-import { THEME_PRESETS } from '../../data/templates';
+import { InvitationEnv, themeClasses, themeVars } from './theme';
 import { HeroSection } from './sections/HeroSection';
 import { GreetingSection } from './sections/GreetingSection';
 import { CoupleSection } from './sections/CoupleSection';
@@ -58,17 +58,7 @@ function renderSection(doc: InvitationDoc, section: Section, mode: RenderMode) {
   }
 }
 
-export function themeVars(doc: InvitationDoc): CSSProperties {
-  const p = THEME_PRESETS[doc.theme.preset];
-  return {
-    '--inv-bg': p.bg,
-    '--inv-surface': p.surface,
-    '--inv-text': p.text,
-    '--inv-muted': p.muted,
-    '--inv-accent': doc.theme.accent,
-    '--inv-font': doc.theme.font === 'serif' ? "'Gowun Batang', serif" : "'Noto Sans KR', sans-serif",
-  } as CSSProperties;
-}
+export { themeVars } from './theme';
 
 interface Props {
   doc: InvitationDoc;
@@ -81,6 +71,8 @@ interface Props {
   renderOverlay?: (section: Section) => ReactNode;
   /** 붙이기: 위치 정하기 중인 스티커 */
   stickerEdit?: StickerEdit | null;
+  /** 떠 있는 버튼(방명록 남기기 등) 허용 — 실제 하객 화면(/view)에서만 true */
+  floatingActions?: boolean;
   /** 편집기에서 붙어 있는 스티커를 눌렀을 때 */
   onStickerClick?: (stickerId: string) => void;
 }
@@ -94,6 +86,7 @@ export function InvitationView({
   renderOverlay,
   stickerEdit,
   onStickerClick,
+  floatingActions = false,
 }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -127,7 +120,8 @@ export function InvitationView({
   }, [mode, doc.sections]);
 
   return (
-    <div ref={rootRef} className={`inv inv--${mode} inv--${doc.theme.preset}`} style={themeVars(doc)}>
+    <InvitationEnv.Provider value={{ floatingActions }}>
+    <div ref={rootRef} className={`inv inv--${mode} ${themeClasses(doc)}`} style={themeVars(doc)}>
       {doc.sections
         .filter((s) => s.enabled)
         .map((s) => (
@@ -147,5 +141,6 @@ export function InvitationView({
       {/* 스티커는 섹션에 잘리지 않도록 최상단 레이어에 (§4.10) */}
       <StickerOverlay doc={doc} mode={mode} rootRef={rootRef} edit={stickerEdit} onStickerClick={onStickerClick} />
     </div>
+    </InvitationEnv.Provider>
   );
 }

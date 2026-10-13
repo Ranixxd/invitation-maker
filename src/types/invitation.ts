@@ -6,10 +6,17 @@ export type EventType = 'wedding';
 export type ThemePreset = 'classic' | 'modern' | 'romantic' | 'mono';
 export type ThemeFont = 'serif' | 'sans';
 
+/** 디자인 시스템 (§3.6): 스타일 계열 · 모양 */
+export type ThemeFamily = 'basic' | 'editorial';
+export type ThemeShape = 'round' | 'square';
+
 export interface Theme {
+  /** 색 구성(팔레트) 키 */
   preset: ThemePreset;
   accent: string; // #rrggbb
   font: ThemeFont;
+  family: ThemeFamily;
+  shape: ThemeShape;
 }
 
 export interface Parent {
@@ -127,9 +134,19 @@ export interface AccountData {
   description: string;
   accounts: BankAccount[];
 }
+/** 방명록 메시지 */
+export interface GuestMessage {
+  id: string;
+  to: string; // hostId
+  name: string;
+  text: string;
+  at: number;
+}
 export interface GuestbookData {
   title: string;
   description: string;
+  /** 템플릿 미리보기용 예시 메시지(샘플 청첩장에만). 실제 메시지는 서버 연동 전까지 보는 사람의 브라우저에 저장 */
+  seed?: GuestMessage[];
 }
 /** 게스트 스냅: 하객이 찍은 사진 모으기 (기본 꺼짐) */
 export interface SnapData {

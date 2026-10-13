@@ -1,12 +1,16 @@
 // 디자인 템플릿 정의 (CONSTITUTION §3.5). 템플릿 = 테마 + 레이아웃 + 헤드라인의 묶음
-import type { CalendarStyle, GalleryLayout, HeroLayout, ImageAsset, InvitationDoc, ThemePreset } from '../types/invitation';
+import type { CalendarStyle, GalleryLayout, HeroLayout, ImageAsset, InvitationDoc, ThemeFamily, ThemePreset, ThemeShape } from '../types/invitation';
 import { THEME_PRESETS } from './templates';
 
 export interface DesignTemplate {
   id: string;
   name: string;
   tagline: string;
+  /** 색 구성(팔레트) */
   preset: ThemePreset;
+  /** 스타일 계열 · 모양 (디자인 시스템 §3.6, 없으면 basic · round) */
+  family?: ThemeFamily;
+  shape?: ThemeShape;
   font: 'serif' | 'sans';
   accent: string;
   heroLayout: HeroLayout;
@@ -25,6 +29,8 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
     name: '모던 모노',
     tagline: '흑백 사진과 버건디 포인트, 매거진 같은 구성',
     preset: 'mono',
+    family: 'editorial',
+    shape: 'round',
     font: 'sans',
     accent: THEME_PRESETS.mono.accent,
     heroLayout: 'full',
@@ -106,7 +112,7 @@ export function applyTemplate(doc: InvitationDoc, t: DesignTemplate): Invitation
   return {
     ...doc,
     templateId: t.id,
-    theme: { preset: t.preset, font: t.font, accent: t.accent },
+    theme: { preset: t.preset, font: t.font, accent: t.accent, family: t.family ?? 'basic', shape: t.shape ?? 'round' },
     sections: doc.sections.map((s) => {
       if (s.type === 'hero') return { ...s, data: { ...s.data, layout: t.heroLayout, headline: t.headline } };
       if (s.type === 'gallery') return { ...s, data: { ...s.data, layout: t.galleryLayout } };

@@ -1,5 +1,6 @@
 // 청첩장 기본값의 유일한 정의 위치. CONSTITUTION §1.3, §3.4
 import type { HostSide, InvitationDoc, Section, SectionType, Theme, ThemePreset } from '../types/invitation';
+import type { Palette } from './designSystem';
 import { uid } from '../lib/id';
 import { defaultSlug } from '../lib/slug';
 
@@ -30,13 +31,8 @@ export const isPinned = (t: SectionType) => t === PINNED_FIRST || t === PINNED_L
 /** 처음에 꺼져 있는 섹션 (필요한 사람만 켬) */
 const OFF_BY_DEFAULT: SectionType[] = ['snap'];
 
-export interface ThemePresetDef {
-  label: string;
-  bg: string;
-  surface: string;
-  text: string;
-  muted: string;
-  accent: string;
+/** 팔레트(디자인 시스템 Palette) + 기본 글꼴 */
+export interface ThemePresetDef extends Palette {
   font: Theme['font'];
 }
 
@@ -48,6 +44,10 @@ export const THEME_PRESETS: Record<ThemePreset, ThemePresetDef> = {
     text: '#3d3a36',
     muted: '#8b847b',
     accent: '#8a6d4b',
+    band: '#3d3a36',
+    onBand: '#fbf8f3',
+    paper: '#fffdf8',
+    board: '#f3ede3',
     font: 'serif',
   },
   modern: {
@@ -57,6 +57,10 @@ export const THEME_PRESETS: Record<ThemePreset, ThemePresetDef> = {
     text: '#1d1d1f',
     muted: '#86868b',
     accent: '#2f2f33',
+    band: '#1d1d1f',
+    onBand: '#ffffff',
+    paper: '#ffffff',
+    board: '#f4f4f5',
     font: 'sans',
   },
   mono: {
@@ -66,6 +70,10 @@ export const THEME_PRESETS: Record<ThemePreset, ThemePresetDef> = {
     text: '#151515',
     muted: '#6e6e6e',
     accent: '#8e1f2f',
+    band: '#161616',
+    onBand: '#ffffff',
+    paper: '#f2f0eb',
+    board: '#e8e6e0',
     font: 'sans',
   },
   romantic: {
@@ -75,6 +83,10 @@ export const THEME_PRESETS: Record<ThemePreset, ThemePresetDef> = {
     text: '#4a3a3d',
     muted: '#a08c8f',
     accent: '#b9687a',
+    band: '#4a3a3d',
+    onBand: '#fff7f6',
+    paper: '#fffafa',
+    board: '#fbeceb',
     font: 'serif',
   },
 };
@@ -202,7 +214,7 @@ export function createDoc(): InvitationDoc {
     slug: defaultSlug(datetime),
     createdAt: now,
     updatedAt: now,
-    theme: { preset, accent: THEME_PRESETS[preset].accent, font: THEME_PRESETS[preset].font },
+    theme: { preset, accent: THEME_PRESETS[preset].accent, font: THEME_PRESETS[preset].font, family: 'basic', shape: 'round' },
     core: {
       hosts,
       datetime,
