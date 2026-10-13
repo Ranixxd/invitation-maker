@@ -14,7 +14,7 @@ export function ProfileSection({ doc, section, mode }: SectionProps<SectionOf<'p
     if (mode === 'view') return null;
     return (
       <section className="inv-block profile">
-        <p className="inv-eyebrow">ABOUT US</p>
+        <p className="inv-eyebrow">About Us</p>
         <h2 className="inv-title">{title}</h2>
         <p className="inv-muted">MBTI, 한 줄 소개, 우리의 타임라인을 채워 주세요</p>
       </section>
@@ -23,7 +23,7 @@ export function ProfileSection({ doc, section, mode }: SectionProps<SectionOf<'p
 
   return (
     <section className="inv-block profile">
-      <p className="inv-eyebrow">ABOUT US</p>
+      <p className="inv-eyebrow">About Us</p>
       <h2 className="inv-title">{title}</h2>
       {filledPeople.length > 0 && (
         <div className="profile-cards">

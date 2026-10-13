@@ -3,7 +3,7 @@
 /** v0.2부터 결혼식 전용 (CONSTITUTION §1.3). 확장 여지를 위해 필드는 유지 */
 export type EventType = 'wedding';
 
-export type ThemePreset = 'classic' | 'modern' | 'romantic';
+export type ThemePreset = 'classic' | 'modern' | 'romantic' | 'warm';
 export type ThemeFont = 'serif' | 'sans';
 
 export interface Theme {
@@ -53,7 +53,7 @@ export interface ImageAsset {
 
 // ---- 섹션 ----
 
-export type HeroLayout = 'full' | 'frame' | 'arch';
+export type HeroLayout = 'full' | 'frame' | 'arch' | 'polaroid';
 export type GalleryLayout = 'grid' | 'slide';
 
 export interface HeroData {

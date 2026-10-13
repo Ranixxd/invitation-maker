@@ -27,7 +27,7 @@ export function GallerySection({ doc, section, mode }: SectionProps<SectionOf<'g
 
   return (
     <section className="inv-block gallery">
-      <p className="inv-eyebrow">GALLERY</p>
+      <p className="inv-eyebrow">Gallery</p>
       <h2 className="inv-title">{title}</h2>
       {images.length === 0 ? (
         <div className="gallery-empty">

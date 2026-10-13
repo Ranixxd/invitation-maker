@@ -59,6 +59,15 @@ export const THEME_PRESETS: Record<ThemePreset, ThemePresetDef> = {
     accent: '#2f2f33',
     font: 'sans',
   },
+  warm: {
+    label: '웜',
+    bg: '#f8f3e5',
+    surface: '#efe7d3',
+    text: '#2b2520',
+    muted: '#857a6d',
+    accent: '#6d5e53',
+    font: 'serif',
+  },
   romantic: {
     label: '로맨틱',
     bg: '#fff7f6',

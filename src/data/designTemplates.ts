@@ -18,16 +18,17 @@ export interface DesignTemplate {
 
 export const DESIGN_TEMPLATES: DesignTemplate[] = [
   {
-    id: 'classic-full',
-    name: '클래식 풀스크린',
-    tagline: '사진을 화면 가득, 단정한 명조',
-    preset: 'classic',
+    // 1번 테마: 버터 크림 바탕, 흑백 폴라로이드, 영문 손글씨 제목 (§3.5)
+    id: 'warm-polaroid',
+    name: '웜 폴라로이드',
+    tagline: '크림 톤 위 흑백 폴라로이드와 손글씨',
+    preset: 'warm',
     font: 'serif',
-    accent: THEME_PRESETS.classic.accent,
-    heroLayout: 'full',
+    accent: THEME_PRESETS.warm.accent,
+    heroLayout: 'polaroid',
     galleryLayout: 'grid',
-    headline: 'We are getting married',
-    sample: ['#d8c3a5', '#6b5640'],
+    headline: 'Wedding Day',
+    sample: ['#e4e0d9', '#4a4643'],
   },
   {
     id: 'classic-frame',

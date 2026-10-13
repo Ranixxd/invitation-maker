@@ -46,7 +46,7 @@ export function CoupleSection({ doc, section }: SectionProps<SectionOf<'couple'>
 
   return (
     <section className="inv-block couple">
-      <p className="inv-eyebrow">BRIDE &amp; GROOM</p>
+      <p className="inv-eyebrow">Bride &amp; Groom</p>
       <h2 className="inv-title">{title}</h2>
       <div className="couple-grid">
         {hosts.map((h, i) => (

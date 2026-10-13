@@ -60,7 +60,7 @@ export function GuestbookSection({ doc, section }: SectionProps<SectionOf<'guest
 
   return (
     <section className="inv-block guestbook">
-      <p className="inv-eyebrow">MESSAGE</p>
+      <p className="inv-eyebrow">Message</p>
       <h2 className="inv-title">{title}</h2>
       {description && <p className="inv-desc">{description}</p>}
       <form className="gb-form" onSubmit={submit}>

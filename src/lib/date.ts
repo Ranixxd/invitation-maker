@@ -20,6 +20,12 @@ export function formatDot(d: Date): string {
   return `${d.getFullYear()}. ${pad(d.getMonth() + 1)}. ${pad(d.getDate())}. ${WEEK_EN[d.getDay()].slice(0, 3)}`;
 }
 
+/** 2027.01.16 */
+export function formatDotCompact(d: Date): string {
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())}`;
+}
+
 export function weekdayEn(d: Date) {
   return WEEK_EN[d.getDay()];
 }

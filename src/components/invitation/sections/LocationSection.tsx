@@ -23,7 +23,7 @@ export function LocationSection({ doc, section }: SectionProps<SectionOf<'locati
 
   return (
     <section className="inv-block location">
-      <p className="inv-eyebrow">LOCATION</p>
+      <p className="inv-eyebrow">Location</p>
       <h2 className="inv-title">{title}</h2>
       {v.name ? (
         <p className="venue-name">
