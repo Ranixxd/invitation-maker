@@ -6,7 +6,6 @@ export function GreetingSection({ section }: SectionProps<SectionOf<'greeting'>>
   const { title, body } = section.data;
   return (
     <section className="inv-block greeting">
-      <p className="inv-eyebrow">Invitation</p>
       <h2 className="inv-title">{title}</h2>
       <p className="greeting-body">{body}</p>
     </section>

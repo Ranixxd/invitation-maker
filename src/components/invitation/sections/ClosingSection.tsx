@@ -7,7 +7,6 @@ export function ClosingSection({ doc, section }: SectionProps<SectionOf<'closing
   const names = doc.core.hosts.map((h) => `${h.label} ${h.name || ''}`.trim());
   return (
     <section className="inv-block closing">
-      <p className="inv-eyebrow">Thank You</p>
       <p className="closing-body">{body}</p>
       {showNames && <p className="closing-names">{names.join(' · ')} 드림</p>}
     </section>

@@ -22,7 +22,6 @@ export function CalendarSection({ doc, section }: SectionProps<SectionOf<'calend
 
   return (
     <section className="inv-block calendar">
-      <p className="inv-eyebrow">Wedding Day</p>
       <h2 className="inv-title cal-title">{formatKo(date)}</h2>
       {venue && <p className="cal-venue">{venue}</p>}
       {showCalendar && (

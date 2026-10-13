@@ -83,7 +83,6 @@ export function RsvpSection({ doc, section }: SectionProps<SectionOf<'rsvp'>>) {
 
   return (
     <section className="inv-block rsvp">
-      <p className="inv-eyebrow">R.S.V.P.</p>
       <h2 className="inv-title">{title}</h2>
       {description && <p className="inv-desc">{description}</p>}
 

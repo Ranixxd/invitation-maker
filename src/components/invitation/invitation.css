@@ -17,14 +17,6 @@
 
 .inv-block { padding: 64px 28px; text-align: center; }
 .inv-section + .inv-section .inv-block { border-top: 1px solid color-mix(in srgb, var(--inv-text) 7%, transparent); }
-.inv-eyebrow {
-  margin: 0 0 6px;
-  text-transform: uppercase;
-  font-family: 'Noto Sans KR', sans-serif;
-  font-size: 11px;
-  letter-spacing: 0.32em;
-  color: var(--inv-accent);
-}
 .inv-title { margin: 0 0 24px; font-size: 19px; font-weight: 700; line-height: 1.5; }
 .inv-desc { white-space: pre-line; color: var(--inv-muted); font-size: 14px; margin: -8px 0 24px; }
 .inv-muted { color: var(--inv-muted); font-size: 14px; }
@@ -492,22 +484,13 @@
 
 /* =========================================================
    1번 테마: 웜 폴라로이드 (.inv--warm)  — CONSTITUTION §3.5
-   버터 크림 바탕 · 흑백 폴라로이드 · 영문 손글씨(Great Vibes) 제목 + 한글 명조
+   버터 크림 바탕 · 흑백 폴라로이드 · 한글 명조 제목
    콘덴스드 산세리프(Oswald)로 WEDDING DAY·날짜·이름 · 섹션 사이 가지 장식 · 토프 버튼
    ========================================================= */
 .inv--warm { line-height: 1.8; }
 .inv--warm .inv-block { padding: 56px 30px; }
 .inv--warm .inv-section + .inv-section .inv-block { border-top: 0; }
-.inv--warm .inv-eyebrow {
-  margin: 0 0 2px;
-  font-family: 'Great Vibes', 'Gowun Batang', cursive;
-  font-size: 40px;
-  line-height: 1.15;
-  letter-spacing: 0;
-  text-transform: none;
-  color: var(--inv-text);
-}
-.inv--warm .inv-title { margin: 0 0 22px; font-size: 14px; font-weight: 400; letter-spacing: 0.04em; color: var(--inv-muted); }
+.inv--warm .inv-title { margin: 0 0 22px; font-size: 20px; font-weight: 700; letter-spacing: 0.02em; color: var(--inv-text); }
 .inv--warm .inv-desc { font-size: 14px; }
 
 /* 섹션 사이 가지 장식 (얇은 선 그림) */

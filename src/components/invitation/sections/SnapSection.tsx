@@ -25,7 +25,6 @@ export function SnapSection({ section }: SectionProps<SectionOf<'snap'>>) {
 
   return (
     <section className="inv-block snap">
-      <p className="inv-eyebrow">Guest Snap</p>
       <h2 className="inv-title">{title}</h2>
       {description && <p className="inv-desc">{description}</p>}
       <input ref={input} type="file" accept="image/*" multiple hidden onChange={(e) => onFiles(e.target.files)} />

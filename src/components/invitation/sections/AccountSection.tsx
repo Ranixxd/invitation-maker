@@ -11,7 +11,6 @@ export function AccountSection({ doc, section }: SectionProps<SectionOf<'account
 
   return (
     <section className="inv-block account">
-      <p className="inv-eyebrow">Account</p>
       <h2 className="inv-title">{title}</h2>
       {description && <p className="inv-desc">{description}</p>}
       {groups.length === 0 ? (
