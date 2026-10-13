@@ -111,7 +111,7 @@ export function InvitationView({ doc, mode = 'view', selectedSectionId, onSectio
             {renderOverlay?.(s)}
           </div>
         ))}
-      <footer className="inv-footer">초대장 메이커로 만들었어요</footer>
+      <footer className="inv-footer">청첩장 메이커로 만들었어요</footer>
     </div>
   );
 }

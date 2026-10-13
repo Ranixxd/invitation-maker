@@ -12,7 +12,7 @@ export default function View() {
   useEffect(() => {
     if (doc) document.title = resolveTitle(doc);
     return () => {
-      document.title = '초대장 메이커';
+      document.title = '청첩장 메이커';
     };
   }, [doc]);
 

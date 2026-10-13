@@ -204,7 +204,7 @@ textarea.input { resize: vertical; line-height: 1.6; }
 /* ---------- 공통 헤더: 로고 항상 중앙 (§8) ---------- */
 .app-head {
   position: sticky;
-  top: 0;
+  top: env(safe-area-inset-top, 0px);
   z-index: 60;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
