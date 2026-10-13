@@ -165,6 +165,24 @@ export type Section = {
 
 export type SectionOf<K extends SectionType> = Extract<Section, { type: K }>;
 
+// ---- 붙이기(스티커) ---- (CONSTITUTION §4.10)
+
+export type StickerShape = 'circle' | 'heart' | 'star' | 'clover';
+export type StickerMotion = 'none' | 'bounce' | 'float' | 'spin' | 'pulse' | 'wiggle';
+export type StickerSize = 'sm' | 'md' | 'lg';
+
+/** 내 사진을 프레임 모양으로 잘라 섹션 위에 붙인 스티커. 위치는 섹션 안 비율(%) */
+export interface Sticker {
+  id: string;
+  sectionId: string;
+  imageId: string;
+  shape: StickerShape;
+  motion: StickerMotion;
+  size: StickerSize;
+  x: number; // 0~100, 섹션 너비 기준 중심 x
+  y: number; // 0~100, 섹션 높이 기준 중심 y
+}
+
 export interface InvitationDoc {
   id: string;
   version: number;
@@ -181,4 +199,5 @@ export interface InvitationDoc {
   core: Core;
   images: Record<string, ImageAsset>;
   sections: Section[];
+  stickers: Sticker[];
 }

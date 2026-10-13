@@ -12,6 +12,7 @@ import { SectionList } from './SectionList';
 import { SectionPanel } from './SectionPanels';
 import { SettingsPanel } from './SettingsPanel';
 import { PublishPanel } from './PublishPanel';
+import { useStickerFlow } from './useStickerFlow';
 
 /** 모바일 [섹션 편집] 버튼 문구. 브랜드 소개는 편집 불가라 버튼 없음 (§4.9) */
 const EDIT_LABELS: Record<SectionType, string | null> = {
@@ -49,6 +50,13 @@ export function MobileEditor({ doc, dispatch }: Props) {
     setOpen(true);
   }, []);
   const close = useCallback(() => setOpen(false), []);
+
+  // 붙이기 (§4.10): 위치 정하기 들어갈 때 해당 섹션을 화면 가운데로
+  const sticker = useStickerFlow(doc, dispatch, (sectionId) => {
+    document
+      .querySelector<HTMLElement>(`.m-editor [data-section-id="${sectionId}"]`)
+      ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
 
   // 화면 중앙선에 걸친 섹션 = 활성 섹션 (§6.5-1)
   const enabledKey = doc.sections.map((s) => `${s.id}:${s.enabled}`).join('|');
@@ -105,26 +113,53 @@ export function MobileEditor({ doc, dispatch }: Props) {
         autoScroll={false}
         selectedSectionId={activeId}
         onSectionClick={setActiveId}
+        stickerEdit={sticker.stickerEdit}
+        onStickerClick={sticker.placing ? undefined : sticker.openExisting}
         renderOverlay={(s) =>
+          // 꾸미기 2축: [섹션 편집] + [붙이기]. 위치 정하는 동안은 숨김 (§6.5-3, §4.10)
+          !sticker.placing &&
           EDIT_LABELS[s.type] && (
-          <div className={`sec-edit-layer${s.id === activeId ? ' is-active' : ''}`}>
-            <button
-              type="button"
-              className="sec-edit-btn"
-              tabIndex={s.id === activeId ? 0 : -1}
-              onClick={(e) => {
-                e.stopPropagation();
-                show({ sectionId: s.id });
-              }}
-            >
-              {EDIT_LABELS[s.type]}
-            </button>
-          </div>
+            <div className={`sec-edit-layer${s.id === activeId ? ' is-active' : ''}`}>
+              <div className="sec-edit-actions">
+                <button
+                  type="button"
+                  className="sec-edit-btn"
+                  tabIndex={s.id === activeId ? 0 : -1}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    show({ sectionId: s.id });
+                  }}
+                >
+                  {EDIT_LABELS[s.type]}
+                </button>
+                <button
+                  type="button"
+                  className="sec-edit-btn is-sub"
+                  tabIndex={s.id === activeId ? 0 : -1}
+                  aria-label={`${SECTION_LABELS[s.type]}에 사진 붙이기`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    sticker.startNew(s.id);
+                  }}
+                >
+                  <svg className="btn-icon" viewBox="0 0 24 24" aria-hidden width="20" height="20">
+                    <path d="M20 12a8 8 0 1 1-8-8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                    <path d="M8.5 14.5c.9 1.2 2.1 1.8 3.5 1.8s2.6-.6 3.5-1.8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                    <circle cx="9" cy="10" r="1.2" fill="currentColor" />
+                    <circle cx="15" cy="10" r="1.2" fill="currentColor" />
+                    <path d="M19 2v6M16 5h6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                  </svg>
+                  붙이기
+                </button>
+              </div>
+            </div>
           )
         }
       />
 
-      <nav className="m-toolbar" aria-label="편집 도구">
+      {sticker.placementBar}
+
+      <nav className="m-toolbar" aria-label="편집 도구" hidden={sticker.placing}>
         <button type="button" onClick={() => show('list')}>
           <span aria-hidden>☰</span>구성
         </button>
@@ -166,6 +201,10 @@ export function MobileEditor({ doc, dispatch }: Props) {
             <SectionPanel doc={doc} section={section} dispatch={dispatch} goSettings={() => show('settings')} />
           </>
         )}
+      </BottomSheet>
+
+      <BottomSheet open={sticker.sheet.open} title={sticker.sheet.title} onClose={sticker.sheet.onClose}>
+        {sticker.sheet.body}
       </BottomSheet>
     </div>
   );

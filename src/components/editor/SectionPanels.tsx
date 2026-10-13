@@ -169,9 +169,11 @@ function GalleryPanel({ doc, section, dispatch }: PanelProps<'gallery'>) {
                   className="icon-btn sm danger"
                   aria-label="사진 삭제"
                   onClick={() => {
-                    // §3.3: 다른 섹션(히어로)이 참조 중이면 갤러리에서만 빼고, 아니면 이미지 자체를 삭제
-                    const usedByHero = doc.sections.some((s) => s.type === 'hero' && s.data.imageId === id);
-                    if (usedByHero) set({ imageIds: ids.filter((x) => x !== id) });
+                    // §3.3: 히어로나 스티커가 쓰는 사진이면 갤러리에서만 빼고, 아니면 이미지 자체를 삭제
+                    const usedElsewhere =
+                      doc.sections.some((s) => s.type === 'hero' && s.data.imageId === id) ||
+                      doc.stickers.some((st) => st.imageId === id);
+                    if (usedElsewhere) set({ imageIds: ids.filter((x) => x !== id) });
                     else dispatch({ type: 'REMOVE_IMAGE', imageId: id });
                   }}
                 >

@@ -201,6 +201,7 @@ export function createDoc(): InvitationDoc {
     },
     images: {},
     sections: createSections(hosts),
+    stickers: [],
   };
 }
 

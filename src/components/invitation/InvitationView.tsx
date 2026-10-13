@@ -15,6 +15,7 @@ import { LocationSection } from './sections/LocationSection';
 import { SnapSection } from './sections/SnapSection';
 import { ClosingSection } from './sections/ClosingSection';
 import { BrandSection } from './sections/BrandSection';
+import { StickerLayer, type StickerEdit } from './StickerLayer';
 import './invitation.css';
 
 export type RenderMode = 'view' | 'preview';
@@ -78,9 +79,22 @@ interface Props {
   autoScroll?: boolean;
   /** 섹션 위에 겹쳐 그릴 편집 UI (모바일 [섹션 편집] 버튼) */
   renderOverlay?: (section: Section) => ReactNode;
+  /** 붙이기: 위치 정하기 중인 스티커 */
+  stickerEdit?: StickerEdit | null;
+  /** 편집기에서 붙어 있는 스티커를 눌렀을 때 */
+  onStickerClick?: (stickerId: string) => void;
 }
 
-export function InvitationView({ doc, mode = 'view', selectedSectionId, onSectionClick, autoScroll = true, renderOverlay }: Props) {
+export function InvitationView({
+  doc,
+  mode = 'view',
+  selectedSectionId,
+  onSectionClick,
+  autoScroll = true,
+  renderOverlay,
+  stickerEdit,
+  onStickerClick,
+}: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
 
   // 편집기에서 섹션을 고르면 미리보기도 그 섹션으로 스크롤
@@ -120,10 +134,13 @@ export function InvitationView({ doc, mode = 'view', selectedSectionId, onSectio
           <div
             key={s.id}
             data-section-id={s.id}
-            className={`inv-section inv-section--${s.type}${selectedSectionId === s.id ? ' is-selected' : ''}`}
+            className={`inv-section inv-section--${s.type}${selectedSectionId === s.id ? ' is-selected' : ''}${
+              stickerEdit?.sticker.sectionId === s.id ? ' is-placing' : ''
+            }`}
             onClickCapture={onSectionClick ? () => onSectionClick(s.id) : undefined}
           >
             {renderSection(doc, s, mode)}
+            <StickerLayer doc={doc} sectionId={s.id} mode={mode} edit={stickerEdit} onStickerClick={onStickerClick} />
             {renderOverlay?.(s)}
           </div>
         ))}

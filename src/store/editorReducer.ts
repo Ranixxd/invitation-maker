@@ -1,5 +1,6 @@
 // 모든 문서 변경은 이 리듀서를 거친다. 섹션 규칙(§4.2)을 여기서 강제한다. CONSTITUTION §6.4
 import type {
+  Sticker,
   Core,
   HostSide,
   ImageAsset,
@@ -11,6 +12,7 @@ import type {
 } from '../types/invitation';
 import { MAX_IMAGES_PER_DOC } from '../lib/image';
 import { isPinned, PINNED_FIRST, PINNED_LAST } from '../data/templates';
+import { MAX_STICKERS_PER_SECTION } from '../lib/stickers';
 
 export type EditorAction =
   | { type: 'LOAD'; doc: InvitationDoc }
@@ -21,8 +23,12 @@ export type EditorAction =
   | { type: 'UPDATE_SECTION'; sectionType: SectionType; patch: Partial<SectionDataMap[SectionType]> }
   | { type: 'TOGGLE_SECTION'; sectionId: string }
   | { type: 'REORDER_SECTION'; sectionId: string; toIndex: number }
-  | { type: 'ADD_IMAGES'; images: ImageAsset[]; target: 'hero' | 'gallery' }
-  | { type: 'REMOVE_IMAGE'; imageId: string };
+  /** target 'pool': 섹션에 넣지 않고 올린 사진 목록에만 추가 (스티커용) */
+  | { type: 'ADD_IMAGES'; images: ImageAsset[]; target: 'hero' | 'gallery' | 'pool' }
+  | { type: 'REMOVE_IMAGE'; imageId: string }
+  | { type: 'ADD_STICKER'; sticker: Sticker }
+  | { type: 'UPDATE_STICKER'; stickerId: string; patch: Partial<Omit<Sticker, 'id'>> }
+  | { type: 'REMOVE_STICKER'; stickerId: string };
 
 export type EditorState = InvitationDoc | null;
 
@@ -50,7 +56,8 @@ export function normalizeSections(sections: Section[]): Section[] {
 }
 
 export function editorReducer(state: EditorState, action: EditorAction): EditorState {
-  if (action.type === 'LOAD') return { ...action.doc, sections: normalizeSections(action.doc.sections) };
+  if (action.type === 'LOAD')
+    return { ...action.doc, sections: normalizeSections(action.doc.sections), stickers: action.doc.stickers ?? [] };
   if (!state) return state;
   const doc = state;
 
@@ -122,7 +129,26 @@ export function editorReducer(state: EditorState, action: EditorAction): EditorS
           return { ...s, data: { ...s.data, imageIds: s.data.imageIds.filter((id) => id !== action.imageId) } };
         return s;
       });
-      return touch(doc, { images, sections });
+      // 이 사진을 쓰는 스티커도 함께 제거 (§4.10)
+      const stickers = doc.stickers.filter((st) => st.imageId !== action.imageId);
+      return touch(doc, { images, sections, stickers });
     }
+
+    case 'ADD_STICKER': {
+      const { sticker } = action;
+      const section = doc.sections.find((s) => s.id === sticker.sectionId);
+      // 브랜드 소개에는 붙일 수 없고, 섹션당 최대 개수 제한 (§4.10)
+      if (!section || section.type === PINNED_LAST || !doc.images[sticker.imageId]) return state;
+      if (doc.stickers.filter((st) => st.sectionId === sticker.sectionId).length >= MAX_STICKERS_PER_SECTION) return state;
+      return touch(doc, { stickers: [...doc.stickers, sticker] });
+    }
+
+    case 'UPDATE_STICKER':
+      return touch(doc, {
+        stickers: doc.stickers.map((st) => (st.id === action.stickerId ? { ...st, ...action.patch } : st)),
+      });
+
+    case 'REMOVE_STICKER':
+      return touch(doc, { stickers: doc.stickers.filter((st) => st.id !== action.stickerId) });
   }
 }
