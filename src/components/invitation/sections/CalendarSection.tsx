@@ -59,7 +59,19 @@ export function CalendarSection({ doc, section }: SectionProps<SectionOf<'calend
   const { showCalendar, showCountdown, style = 'month' } = section.data;
   const rows = monthMatrix(date.getFullYear(), date.getMonth());
   const left = dday(date);
-  const names = doc.core.hosts.map((h) => h.name || h.label).join(' ♥ ');
+  // 이름 사이 하트: 기본 계열 '♥' 글자, 에디토리얼 계열은 크레용 하트 이미지 (CSS로 전환)
+  const names = doc.core.hosts.map((h, i) => (
+    <span key={h.id}>
+      {i > 0 && (
+        <>
+          {' '}
+          <span className="countdown-heart-text">♥</span>
+          <HeartScribble className="countdown-heart" />{' '}
+        </>
+      )}
+      {h.name || h.label}
+    </span>
+  ));
   // 예식 일자: 장소 요약·날짜·시간·D-day (§4.1)
   const venue = [doc.core.venue.name, doc.core.venue.hall].filter(Boolean).join(' ');
 

@@ -109,6 +109,7 @@
 .cal td.is-day span { background: var(--inv-accent); color: #fff; font-weight: 600; }
 .countdown { margin: 28px 0 0; font-size: 14px; color: var(--inv-muted); }
 .countdown b { color: var(--inv-accent); }
+.inv .countdown img.countdown-heart { display: none; }
 
 /* ---- 갤러리 ---- */
 .gallery-item { display: block; padding: 0; border: 0; background: var(--inv-surface); cursor: pointer; overflow: hidden; }
@@ -720,6 +721,8 @@
 
 /* 예식 일자 */
 .inv--fam-editorial .countdown b { color: var(--inv-accent); font-weight: 500; }
+.inv--fam-editorial .countdown-heart-text { display: none; }
+.inv--fam-editorial .countdown img.countdown-heart { display: inline-block; width: 18px; height: 18px; vertical-align: -4px; }
 
 /* 신랑·신부 */
 .inv--fam-editorial .couple-name { font-family: var(--inv-font-title); font-weight: 600; font-size: 21px; }
