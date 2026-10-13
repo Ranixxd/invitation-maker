@@ -712,9 +712,8 @@
 /* 이름 사이: 예식 일자의 손그림 하트를 이름보다 크게 */
 .inv--fam-editorial .hero--full .hero-names { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; }
 .inv--fam-editorial .hero--full .hero-names .hero-name-part { display: contents; }
-/* 이름과 하트가 살짝 겹치도록 음수 여백, 하트는 글자 뒤로 */
-.inv--fam-editorial .hero--full .hero-overlay { isolation: isolate; }
-.inv--fam-editorial .hero-sep { position: relative; z-index: -1; margin: 0 -10px; }
+/* 이름과 하트는 겹치지 않게 바짝 붙인다 */
+.inv--fam-editorial .hero-sep { margin: 0 2px; }
 .inv--fam-editorial .hero-dot { display: none; }
 .inv--fam-editorial .hero-heart { display: block; width: 50px; height: 46px; stroke-width: 4; }
 .inv--fam-editorial .hero-names {
