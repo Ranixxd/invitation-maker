@@ -137,10 +137,11 @@ export interface AccountData {
 /** 방명록 메시지 */
 export interface GuestMessage {
   id: string;
-  to: string; // hostId
   name: string;
   text: string;
   at: number;
+  /** 비밀번호 해시(작성·삭제용, lib/guestbook.ts) */
+  pw?: string;
 }
 export interface GuestbookData {
   title: string;

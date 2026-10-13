@@ -1,13 +1,14 @@
-// 방명록: 남겨진 쪽지를 보드에 먼저 보여주고(9개씩), [남기기]로만 작성 (CONSTITUTION §4.4)
+// 방명록: 남겨진 쪽지를 보드에 먼저 보여주고(9개씩), [남기기]로만 작성. 작성·지우기는 비밀번호 필수 (CONSTITUTION §4.4)
 // - 하객 화면(/view): 섹션이 화면에 보이는 동안 하단에 떠 있는 [남기기] 버튼
 // - 편집기·템플릿 미리보기: 섹션 안 [남기기] 버튼
 // 서버 연동 전 데모: 메시지는 보는 사람의 브라우저(localStorage)에만 저장
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 import { createPortal } from 'react-dom';
-import type { GuestMessage, HostSide, SectionOf } from '../../../types/invitation';
+import type { GuestMessage, SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
 import { ThemePortal, useInvitationEnv } from '../theme';
 import { toast } from '../../common/toast';
+import { checkPassword, hashPassword, PW_MAX, PW_MIN } from '../../../lib/guestbook';
 
 const NAME_MAX = 20;
 const TEXT_MAX = 300;
@@ -52,20 +53,16 @@ function Clip() {
   );
 }
 
-const toLabel = (hosts: HostSide[], id: string) => {
-  const h = hosts.find((x) => x.id === id);
-  return h ? `${h.label} ${h.name}`.trim() : '';
-};
-
 export function GuestbookSection({ doc, section, mode }: SectionProps<SectionOf<'guestbook'>>) {
   const { title, description, seed = [] } = section.data;
-  const hosts = doc.core.hosts;
   const { floatingActions } = useInvitationEnv();
   const [local, setLocal] = useState<GuestMessage[]>(() => load(doc.id));
   const [page, setPage] = useState(0);
   const [opened, setOpened] = useState<GuestMessage | null>(null);
   const [writing, setWriting] = useState(false);
   const [inView, setInView] = useState(false);
+  // 지운 예시 쪽지 (예시는 문서 데이터라 화면에서만 숨긴다)
+  const [hiddenSeeds, setHiddenSeeds] = useState<string[]>([]);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => setLocal(load(doc.id)), [doc.id]);
@@ -79,22 +76,35 @@ export function GuestbookSection({ doc, section, mode }: SectionProps<SectionOf<
   }, [floatingActions]);
 
   // 내가 남긴 것(최신순) → 예시 쪽지(최신순)
-  const messages = useMemo(() => [...local, ...[...seed].sort((a, b) => b.at - a.at)], [local, seed]);
+  const messages = useMemo(
+    () => [...local, ...seed.filter((m) => !hiddenSeeds.includes(m.id)).sort((a, b) => b.at - a.at)],
+    [local, seed, hiddenSeeds],
+  );
   const pages = Math.max(1, Math.ceil(messages.length / NOTES_PER_PAGE));
   const current = Math.min(page, pages - 1);
   const visible = messages.slice(current * NOTES_PER_PAGE, (current + 1) * NOTES_PER_PAGE);
 
-  const add = (m: GuestMessage) => {
-    const next = [m, ...local];
+  const save = (next: GuestMessage[]) => {
     setLocal(next);
     try {
       localStorage.setItem(key(doc.id), JSON.stringify(next));
     } catch {
       /* 저장 실패해도 화면에는 표시 */
     }
+  };
+
+  const add = (m: GuestMessage) => {
+    save([m, ...local]);
     setPage(0);
     setWriting(false);
     toast('마음이 전달되었어요');
+  };
+
+  const remove = (m: GuestMessage) => {
+    if (local.some((x) => x.id === m.id)) save(local.filter((x) => x.id !== m.id));
+    else setHiddenSeeds((h) => [...h, m.id]);
+    setOpened(null);
+    toast('쪽지를 지웠어요');
   };
 
   const writeButton = (
@@ -127,7 +137,7 @@ export function GuestbookSection({ doc, section, mode }: SectionProps<SectionOf<
                 >
                   {hasClip(m.id) && <Clip />}
                   <span className="gb-note-to">
-                    {toLabel(hosts, m.to) || '두 사람'}에게
+                    {fmtDate(m.at)}
                     <Heart />
                   </span>
                   <span className="gb-note-text">{m.text}</span>
@@ -177,14 +187,14 @@ export function GuestbookSection({ doc, section, mode }: SectionProps<SectionOf<
       {opened &&
         createPortal(
           <ThemePortal doc={doc}>
-            <NoteModal message={opened} hosts={hosts} onClose={() => setOpened(null)} />
+            <NoteModal message={opened} onClose={() => setOpened(null)} onDelete={() => remove(opened)} />
           </ThemePortal>,
           document.body,
         )}
       {writing &&
         createPortal(
           <ThemePortal doc={doc}>
-            <WriteModal hosts={hosts} onCancel={() => setWriting(false)} onSubmit={add} demoNote={mode === 'preview'} />
+            <WriteModal onCancel={() => setWriting(false)} onSubmit={add} demoNote={mode === 'preview'} />
           </ThemePortal>,
           document.body,
         )}
@@ -205,9 +215,26 @@ function useEscape(onClose: () => void) {
   }, [onClose]);
 }
 
-/** 쪽지 크게 보기 (레퍼런스: LOVE NOTE 카드) */
-function NoteModal({ message, hosts, onClose }: { message: GuestMessage; hosts: HostSide[]; onClose: () => void }) {
+/** 쪽지 크게 보기 (레퍼런스: LOVE NOTE 카드) + 비밀번호로 지우기 */
+function NoteModal({ message, onClose, onDelete }: { message: GuestMessage; onClose: () => void; onDelete: () => void }) {
   useEscape(onClose);
+  const [deleting, setDeleting] = useState(false);
+  const [pw, setPw] = useState('');
+  const [error, setError] = useState('');
+
+  const confirmDelete = (e: FormEvent) => {
+    e.preventDefault();
+    if (!pw) {
+      setError('비밀번호를 입력해 주세요');
+      return;
+    }
+    if (!checkPassword(message.id, pw, message.pw)) {
+      setError('비밀번호가 맞지 않아요');
+      return;
+    }
+    onDelete();
+  };
+
   return (
     <div className="gb-modal-root" role="dialog" aria-modal="true" aria-label="축하 쪽지" onClick={onClose}>
       <article className="gb-paper" onClick={(e) => e.stopPropagation()}>
@@ -221,10 +248,6 @@ function NoteModal({ message, hosts, onClose }: { message: GuestMessage; hosts: 
             <dt>보내는 사람</dt>
             <dd>{message.name}</dd>
           </div>
-          <div>
-            <dt>받는 사람</dt>
-            <dd>{toLabel(hosts, message.to) || '두 사람'}</dd>
-          </div>
         </dl>
         <p className="gb-paper-text">{message.text}</p>
         <p className="gb-paper-sign">— {message.name}</p>
@@ -234,29 +257,63 @@ function NoteModal({ message, hosts, onClose }: { message: GuestMessage; hosts: 
             <dd>{fmtDate(message.at)}</dd>
           </div>
         </dl>
-        <button type="button" className="inv-btn gb-paper-close" onClick={onClose}>
-          닫기
-        </button>
+        {deleting ? (
+          <form className="gb-delete" onSubmit={confirmDelete}>
+            <input
+              type="password"
+              value={pw}
+              maxLength={PW_MAX}
+              onChange={(e) => {
+                setPw(e.target.value);
+                setError('');
+              }}
+              placeholder="작성할 때 정한 비밀번호"
+              aria-label="비밀번호"
+              autoComplete="off"
+              autoFocus
+            />
+            {error && (
+              <p className="gb-error" role="alert">
+                {error}
+              </p>
+            )}
+            <div className="gb-write-actions">
+              <button type="button" className="inv-btn is-ghost" onClick={() => setDeleting(false)}>
+                취소
+              </button>
+              <button type="submit" className="inv-btn">
+                지우기
+              </button>
+            </div>
+          </form>
+        ) : (
+          <div className="gb-write-actions">
+            <button type="button" className="inv-btn is-ghost" onClick={() => setDeleting(true)}>
+              지우기
+            </button>
+            <button type="button" className="inv-btn" onClick={onClose}>
+              닫기
+            </button>
+          </div>
+        )}
       </article>
     </div>
   );
 }
 
-/** 남기기: 종이 위에 쓰는 느낌의 작성 카드 */
+/** 남기기: 종이 위에 쓰는 느낌의 작성 카드 (비밀번호 필수) */
 function WriteModal({
-  hosts,
   onCancel,
   onSubmit,
   demoNote,
 }: {
-  hosts: HostSide[];
   onCancel: () => void;
   onSubmit: (m: GuestMessage) => void;
   demoNote: boolean;
 }) {
   useEscape(onCancel);
-  const [to, setTo] = useState(hosts[0]?.id ?? '');
   const [name, setName] = useState('');
+  const [pw, setPw] = useState('');
   const [text, setText] = useState('');
 
   const submit = (e: FormEvent) => {
@@ -265,7 +322,12 @@ function WriteModal({
       toast('이름과 메시지를 입력해 주세요');
       return;
     }
-    onSubmit({ id: `gb_${Date.now()}`, to, name: name.trim(), text: text.trim(), at: Date.now() });
+    if (pw.length < PW_MIN) {
+      toast(`비밀번호를 ${PW_MIN}자 이상 입력해 주세요`);
+      return;
+    }
+    const id = `gb_${Date.now()}`;
+    onSubmit({ id, name: name.trim(), text: text.trim(), at: Date.now(), pw: hashPassword(id, pw) });
   };
 
   return (
@@ -275,23 +337,18 @@ function WriteModal({
           <h3>마음 남기기</h3>
           <Heart className="is-big" />
         </header>
-        {hosts.length > 1 && (
-          <div className="gb-to" role="radiogroup" aria-label="받는 사람">
-            {hosts.map((h) => (
-              <button
-                key={h.id}
-                type="button"
-                role="radio"
-                aria-checked={to === h.id}
-                className={to === h.id ? 'is-on' : ''}
-                onClick={() => setTo(h.id)}
-              >
-                {h.label}에게
-              </button>
-            ))}
-          </div>
-        )}
-        <input value={name} maxLength={NAME_MAX} onChange={(e) => setName(e.target.value)} placeholder="이름" aria-label="이름" autoFocus />
+        <div className="gb-write-who">
+          <input value={name} maxLength={NAME_MAX} onChange={(e) => setName(e.target.value)} placeholder="이름" aria-label="이름" autoFocus />
+          <input
+            type="password"
+            value={pw}
+            maxLength={PW_MAX}
+            onChange={(e) => setPw(e.target.value)}
+            placeholder="비밀번호"
+            aria-label={`비밀번호 (${PW_MIN}자 이상, 지울 때 필요)`}
+            autoComplete="new-password"
+          />
+        </div>
         <textarea
           className="gb-write-text"
           value={text}
@@ -302,7 +359,7 @@ function WriteModal({
           rows={5}
         />
         <p className="gb-count">
-          {text.length}/{TEXT_MAX}
+          비밀번호는 {PW_MIN}자 이상, 지울 때 필요해요 · {text.length}/{TEXT_MAX}
         </p>
         {demoNote && <p className="gb-demo-note">미리보기에서 남긴 메시지는 이 브라우저에만 저장돼요</p>}
         <div className="gb-write-actions">
