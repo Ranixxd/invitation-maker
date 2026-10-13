@@ -2,6 +2,7 @@
 import type { ImageAsset, InvitationDoc, Section, Sticker } from '../types/invitation';
 import { createDoc } from './templates';
 import { applyTemplate, samplePhoto, type DesignTemplate } from './designTemplates';
+import { DEFAULT_CROP } from '../lib/stickers';
 
 const GALLERY_COUNT = 6;
 const SAMPLE_PROFILE = [
@@ -71,7 +72,7 @@ export function sampleDoc(t: DesignTemplate): InvitationDoc {
   // 붙이기 예시: 신랑·신부 섹션 오른쪽 위에 하트 스티커 (§4.10)
   const couple = sections.find((x) => x.type === 'couple');
   const stickers: Sticker[] = couple
-    ? [{ id: 'sample_sticker', sectionId: couple.id, imageId: gallery[0].id, shape: 'heart', motion: 'bounce', size: 'sm', x: 86, y: 16 }]
+    ? [{ id: 'sample_sticker', sectionId: couple.id, imageId: gallery[0].id, shape: 'heart', kind: 'sticker', crop: DEFAULT_CROP, motion: 'bounce', size: 'sm', x: 86, y: 16 }]
     : [];
 
   return {

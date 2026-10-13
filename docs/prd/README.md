@@ -22,3 +22,4 @@
 | [PRD-0010](./PRD-0010-sticker-flow-steps.md) | 붙이기 흐름 단계 분리 | 2026-10-13 | 대체됨 → PRD-0012 |
 | [PRD-0011](./PRD-0011-sticker-overlay.md) | 스티커를 최상단 레이어로 (섹션 크롭 해제) | 2026-10-13 | 확정 |
 | [PRD-0012](./PRD-0012-sticker-instant-attach.md) | 붙이기: 바로 붙이고, 눌러서 꾸미기 | 2026-10-13 | 확정 |
+| [PRD-0013](./PRD-0013-sticker-kinds-adjust.md) | 스티커 종류·사진 조정·네모 프레임 | 2026-10-13 | 확정 |

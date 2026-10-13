@@ -4,25 +4,73 @@
 // - 위치 정하기 중에는 섹션 안 PlacingHitArea를 눌러도 그 자리로 옮길 수 있다
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type RefObject } from 'react';
 import type { InvitationDoc, Sticker } from '../../types/invitation';
-import { clampPos, shapeMask, sizePct } from '../../lib/stickers';
+import { clampPos, coverSize, DEFAULT_CROP, shapeMask, sizePct } from '../../lib/stickers';
 import type { RenderMode } from './InvitationView';
 
 export interface StickerEdit {
   sticker: Sticker;
   onMove: (x: number, y: number) => void;
+  /** 선택 박스의 [사진 조정] 버튼 */
+  onAdjust?: () => void;
 }
 
-export function StickerArt({ sticker, src }: { sticker: Pick<Sticker, 'shape' | 'motion'>; src: string }) {
-  const mask = shapeMask(sticker.shape);
+type ArtProps = {
+  sticker: Pick<Sticker, 'shape' | 'motion'> & Partial<Pick<Sticker, 'kind' | 'crop'>>;
+  src: string;
+  /** 사진 가로/세로 비율 (사진 조정 계산용) */
+  aspect: number;
+};
+
+/** 프레임 모양으로 잘린 사진. 사진 조정(crop)은 프레임 안에서의 확대·이동 */
+export function StickerPhoto({ shape, crop, src, aspect }: { shape: Sticker['shape']; crop: Sticker['crop']; src: string; aspect: number }) {
+  const mask = shapeMask(shape);
+  const { w, h } = coverSize(aspect);
   return (
-    <span className={`sticker-motion motion-${sticker.motion}`}>
+    <span className="sticker-shape" style={{ maskImage: mask, WebkitMaskImage: mask } as CSSProperties}>
       <img
         className="sticker-img"
         src={src}
         alt=""
         draggable={false}
-        style={{ maskImage: mask, WebkitMaskImage: mask } as CSSProperties}
+        style={{
+          width: `${w}%`,
+          height: `${h}%`,
+          left: `${50 + crop.ox}%`,
+          top: `${50 + crop.oy}%`,
+          transform: `translate(-50%, -50%) scale(${crop.scale})`,
+        }}
       />
+    </span>
+  );
+}
+
+/** 스티커 한 장: 움직임 + 종류(재질) + 프레임 사진 (CONSTITUTION §4.10) */
+export function StickerArt({ sticker, src, aspect }: ArtProps) {
+  const kind = sticker.kind ?? 'plain';
+  const crop = sticker.crop ?? DEFAULT_CROP;
+  const photo = <StickerPhoto shape={sticker.shape} crop={crop} src={src} aspect={aspect} />;
+  const mask = shapeMask(sticker.shape);
+  return (
+    <span className={`sticker-motion motion-${sticker.motion} sticker-kind is-kind-${kind}`}>
+      {kind === 'cardboard' ? (
+        // 골판지: 같은 모양의 골판지 판 위에 사진
+        <span className="kind-cardboard-back" style={{ maskImage: mask, WebkitMaskImage: mask } as CSSProperties}>
+          <span className="kind-inset">{photo}</span>
+        </span>
+      ) : kind === 'polaroid' ? (
+        // 폴라로이드: 흰 카드(아래 여백이 넓음) 안에 사진
+        <span className="kind-polaroid-card">
+          <span className="kind-polaroid-photo">{photo}</span>
+        </span>
+      ) : (
+        photo
+      )}
+      {kind === 'tape' && (
+        <>
+          <i className="kind-tape tape-a" aria-hidden />
+          <i className="kind-tape tape-b" aria-hidden />
+        </>
+      )}
     </span>
   );
 }
@@ -140,22 +188,40 @@ export function StickerOverlay({ doc, mode, rootRef, edit, onStickerClick }: Ove
               onStickerClick(s.id);
             }}
           >
-            <StickerArt sticker={s} src={img.src} />
+            <StickerArt sticker={s} src={img.src} aspect={img.aspect} />
           </button>
         ) : (
           <span key={s.id} className={`sticker${mode === 'view' ? ' sticker-reveal' : ''}`} style={style(s)} aria-hidden>
-            <StickerArt sticker={s} src={img.src} />
+            <StickerArt sticker={s} src={img.src} aspect={img.aspect} />
           </span>
         );
       })}
       {editing && boxes[editing.sticker.sectionId] && doc.images[editing.sticker.imageId] && (
-        <DraftSticker edit={editing} rootRef={rootRef} style={style(editing.sticker)} src={doc.images[editing.sticker.imageId].src} />
+        <DraftSticker
+          edit={editing}
+          rootRef={rootRef}
+          style={style(editing.sticker)}
+          src={doc.images[editing.sticker.imageId].src}
+          aspect={doc.images[editing.sticker.imageId].aspect}
+        />
       )}
     </div>
   );
 }
 
-function DraftSticker({ edit, rootRef, style, src }: { edit: StickerEdit; rootRef: RefObject<HTMLDivElement>; style: CSSProperties; src: string }) {
+function DraftSticker({
+  edit,
+  rootRef,
+  style,
+  src,
+  aspect,
+}: {
+  edit: StickerEdit;
+  rootRef: RefObject<HTMLDivElement>;
+  style: CSSProperties;
+  src: string;
+  aspect: number;
+}) {
   const dragging = useRef(false);
   const move = (clientX: number, clientY: number) => {
     const p = toSectionPct(rootRef.current, edit.sticker.sectionId, clientX, clientY);
@@ -192,7 +258,21 @@ function DraftSticker({ edit, rootRef, style, src }: { edit: StickerEdit; rootRe
         edit.onMove(clampPos(x + d[0]), clampPos(y + d[1]));
       }}
     >
-      <StickerArt sticker={edit.sticker} src={src} />
+      <StickerArt sticker={edit.sticker} src={src} aspect={aspect} />
+      {edit.onAdjust && (
+        // 선택 박스 테두리 아래 [사진 조정] (§4.10). 끌기와 겹치지 않게 포인터 이벤트를 막는다
+        <button
+          type="button"
+          className="sticker-adjust-chip"
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+            edit.onAdjust?.();
+          }}
+        >
+          사진 조정
+        </button>
+      )}
     </span>
   );
 }

@@ -5,18 +5,20 @@
 import { useRef, useState } from 'react';
 import type { InvitationDoc, Sticker } from '../../types/invitation';
 import type { EditorAction } from '../../store/editorReducer';
-import { MAX_STICKERS_PER_SECTION, MOTIONS, SHAPES, SIZES, stickersIn } from '../../lib/stickers';
+import { DEFAULT_CROP, KINDS, MAX_STICKERS_PER_SECTION, MOTIONS, SHAPES, SIZES, stickersIn } from '../../lib/stickers';
+import { PhotoAdjust } from './PhotoAdjust';
 import { filesToAssets, MAX_IMAGES_PER_DOC } from '../../lib/image';
 import { uid } from '../../lib/id';
 import { toast } from '../common/toast';
 import { StickerArt } from '../invitation/StickerLayer';
 
-/** 새로 붙일 때 기본값: 섹션 가운데, 하트, 뿅뿅, 보통 */
-const NEW_DEFAULTS = { shape: 'heart', motion: 'bounce', size: 'md', x: 50, y: 50 } as const;
+/** 새로 붙일 때 기본값: 섹션 가운데, 하트, 스티커(흰 테두리), 뿅뿅, 보통, 사진 조정 없음 */
+const NEW_DEFAULTS = { shape: 'heart', kind: 'sticker', motion: 'bounce', size: 'md', x: 50, y: 50 } as const;
 
-type Tab = 'shape' | 'size' | 'motion';
+type Tab = 'shape' | 'kind' | 'size' | 'motion';
 const TABS: { value: Tab; label: string }[] = [
   { value: 'shape', label: '프레임' },
+  { value: 'kind', label: '종류' },
   { value: 'size', label: '크기' },
   { value: 'motion', label: '움직임' },
 ];
@@ -29,14 +31,18 @@ export function useStickerFlow(
 ) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [tab, setTab] = useState<Tab>('shape');
+  const [adjusting, setAdjusting] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
   const pickFor = useRef<string | null>(null); // 사진을 붙일 섹션 id
 
   const selected = selectedId ? doc.stickers.find((s) => s.id === selectedId) ?? null : null;
-  const imgSrc = selected ? doc.images[selected.imageId]?.src : undefined;
+  const image = selected ? doc.images[selected.imageId] : undefined;
+  const imgSrc = image?.src;
+  const aspect = image?.aspect ?? 1;
 
   const select = (id: string | null) => {
     setSelectedId(id);
+    setAdjusting(false);
     if (id) setTab('shape');
   };
 
@@ -66,7 +72,7 @@ export function useStickerFlow(
       return;
     }
     dispatch({ type: 'ADD_IMAGES', images: [asset], target: 'pool' });
-    const sticker: Sticker = { id: uid('st'), sectionId, imageId: asset.id, ...NEW_DEFAULTS };
+    const sticker: Sticker = { id: uid('st'), sectionId, imageId: asset.id, ...NEW_DEFAULTS, crop: DEFAULT_CROP };
     dispatch({ type: 'ADD_STICKER', sticker });
     setSelectedId(sticker.id);
     setTab('shape');
@@ -114,9 +120,25 @@ export function useStickerFlow(
               onClick={() => update({ shape: s.value })}
             >
               <span className="sticker-option-art">
-                <StickerArt sticker={{ shape: s.value, motion: 'none' }} src={imgSrc} />
+                <StickerArt sticker={{ shape: s.value, motion: 'none', kind: 'plain', crop: selected.crop }} src={imgSrc} aspect={aspect} />
               </span>
               {s.label}
+            </button>
+          ))}
+        {tab === 'kind' &&
+          KINDS.map((k) => (
+            <button
+              key={k.value}
+              type="button"
+              role="radio"
+              aria-checked={selected.kind === k.value}
+              className={`sticker-option${selected.kind === k.value ? ' is-on' : ''}`}
+              onClick={() => update({ kind: k.value })}
+            >
+              <span className="sticker-option-art">
+                <StickerArt sticker={{ shape: selected.shape, motion: 'none', kind: k.value, crop: selected.crop }} src={imgSrc} aspect={aspect} />
+              </span>
+              {k.label}
             </button>
           ))}
         {tab === 'size' &&
@@ -146,7 +168,7 @@ export function useStickerFlow(
               onClick={() => update({ motion: m.value })}
             >
               <span className="sticker-option-art">
-                <StickerArt sticker={{ shape: selected.shape, motion: m.value }} src={imgSrc} />
+                <StickerArt sticker={{ ...selected, motion: m.value }} src={imgSrc} aspect={aspect} />
               </span>
               {m.label}
             </button>
@@ -162,6 +184,19 @@ export function useStickerFlow(
         </button>
       </div>
     </div>
+  );
+
+  // [사진 조정] 에디터: 취소하면 그대로, 완료하면 반영
+  const adjustEditor = selected && image && adjusting && (
+    <PhotoAdjust
+      sticker={selected}
+      image={image}
+      onCancel={() => setAdjusting(false)}
+      onDone={(crop) => {
+        update({ crop });
+        setAdjusting(false);
+      }}
+    />
   );
 
   /** 편집기 어딘가에 한 번 렌더해야 하는 숨은 사진 선택 입력 */
@@ -186,8 +221,13 @@ export function useStickerFlow(
     placing: !!selected,
     picker,
     stickerEdit: selected
-      ? { sticker: selected, onMove: (x: number, y: number) => update({ x, y }) }
+      ? { sticker: selected, onMove: (x: number, y: number) => update({ x, y }), onAdjust: () => setAdjusting(true) }
       : null,
-    placementBar: bar,
+    placementBar: (
+      <>
+        {bar}
+        {adjustEditor}
+      </>
+    ),
   };
 }

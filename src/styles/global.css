@@ -733,3 +733,42 @@ a.choice-card:hover, button.choice-card:hover { border-color: var(--primary); tr
 .editor-preview .sticker-option { background: #f4f4f7; }
 .editor-preview .sticker-option.is-on { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); }
 .editor-preview .sticker-bar .sticker-remove { color: var(--danger); border-color: var(--line); }
+
+/* ---------- 사진 조정 에디터 (§4.10) ---------- */
+.adjust-root {
+  position: fixed;
+  inset: 0;
+  z-index: 1900;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  background: #0b0b0d;
+  color: #fff;
+}
+.adjust-head {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: calc(6px + env(safe-area-inset-top, 0px)) 8px 6px;
+}
+.adjust-head h2 { font-size: 16px; }
+.adjust-head .adjust-text-btn:last-child { justify-self: end; }
+.adjust-text-btn { min-height: 44px; padding: 0 12px; border: 0; background: none; color: #fff; font-size: 15px; cursor: pointer; }
+.adjust-text-btn.is-primary { color: #9aa6ff; font-weight: 700; }
+.adjust-stage {
+  position: relative;
+  align-self: center;
+  justify-self: center;
+  width: min(100vw, 480px, 70dvh);
+  aspect-ratio: 1;
+  overflow: hidden;
+  touch-action: none;
+  cursor: grab;
+}
+.adjust-stage:active { cursor: grabbing; }
+.adjust-frame-box { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); aspect-ratio: 1; }
+.adjust-photo { position: absolute; max-width: none; pointer-events: none; user-select: none; -webkit-user-select: none; }
+.adjust-dim { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.72); pointer-events: none; }
+.adjust-controls { display: grid; justify-items: center; gap: 10px; padding: 12px 16px calc(16px + env(safe-area-inset-bottom, 0px)); }
+.adjust-hint { margin: 0; font-size: 12px; opacity: 0.75; text-align: center; }
+.adjust-zoom { display: flex; align-items: center; gap: 10px; width: min(100%, 360px); }
+.adjust-zoom input { flex: 1; accent-color: #9aa6ff; }
