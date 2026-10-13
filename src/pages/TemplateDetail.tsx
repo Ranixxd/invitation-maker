@@ -23,7 +23,6 @@ export default function TemplateDetail() {
         <div className="tpl-detail-info">
           <h1>{template.name}</h1>
           <p className="lead">{template.tagline}</p>
-          <p className="field-hint">샘플 사진과 이름으로 보여드려요. 내 정보는 다음 단계에서 넣어요.</p>
         </div>
         <div className="tpl-detail-preview">
           <PhoneFrame>
