@@ -482,129 +482,135 @@
   .inv--view .sticker-reveal { opacity: 1; transition: none; }
 }
 
-/* =========================================================
-   1번 테마: 웜 폴라로이드 (.inv--warm)  — CONSTITUTION §3.5
-   버터 크림 바탕 · 흑백 폴라로이드 · 한글 명조 제목
-   콘덴스드 산세리프(Oswald)로 WEDDING DAY·날짜·이름 · 섹션 사이 가지 장식 · 토프 버튼
-   ========================================================= */
-.inv--warm { line-height: 1.8; }
-.inv--warm .inv-block { padding: 56px 30px; }
-.inv--warm .inv-section + .inv-section .inv-block { border-top: 0; }
-.inv--warm .inv-title { margin: 0 0 22px; font-size: 20px; font-weight: 700; letter-spacing: 0.02em; color: var(--inv-text); }
-.inv--warm .inv-desc { font-size: 14px; }
-
-/* 섹션 사이 가지 장식 (얇은 선 그림) */
-.inv--warm .inv-section--greeting .inv-block::after,
-.inv--warm .inv-section--location .inv-block::after,
-.inv--warm .inv-section--guestbook .inv-block::after {
-  content: '';
-  display: block;
-  width: 34px;
-  height: 54px;
-  margin: 32px auto 0;
-  background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 64' fill='none' stroke='%23a3978a' stroke-width='1.1' stroke-linecap='round'%3E%3Cpath d='M20 62C20 44 18 30 22 14'/%3E%3Cpath d='M21 38c6-3 10-8 10-12-5 1-9 5-10 12z'/%3E%3Cpath d='M20 47c-6-2-10-7-10-11 5 1 9 5 10 11z'/%3E%3Cpath d='M21 28c4-2 6-5 6-8-3 1-5 4-6 8z'/%3E%3Cpath d='M22 4c3 3 3 7 0 10-3-3-3-7 0-10z'/%3E%3Cpath d='M13 10c4-1 8 1 9 4-4 2-8 0-9-4z'/%3E%3Cpath d='M31 10c-4-1-8 1-9 4 4 2 8 0 9-4z'/%3E%3C/svg%3E")
-    center / contain no-repeat;
+/* ---- 예식 일자: 3일 띠 + SAVE THE DATE 흐르는 글자 (calendarStyle 'strip') ---- */
+.cal-strip {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr 1fr;
+  margin: 8px -6px 0;
+  border-top: 1px solid var(--inv-text);
+  border-bottom: 1px solid var(--inv-text);
 }
-
-/* ---- 히어로: 폴라로이드 ---- */
-.hero--polaroid { padding: 50px 22px 44px; }
-.hero--polaroid .hero-headline {
-  font-family: 'Oswald', 'Noto Sans KR', sans-serif;
-  font-weight: 300;
-  font-size: 34px;
-  letter-spacing: 0.05em;
-  line-height: 1.2;
-  text-transform: uppercase;
-  color: var(--inv-text);
-}
-.polaroid-stage { position: relative; width: 70%; margin: 22px auto 0; }
-.polaroid {
-  margin: 0;
-  padding: 9px 9px 0;
-  background: #fff;
-  transform: rotate(-2.5deg);
-  box-shadow: 0 12px 26px rgba(70, 52, 34, 0.18), 0 1px 2px rgba(0, 0, 0, 0.08);
-}
-.polaroid-photo { aspect-ratio: 1 / 1.02; overflow: hidden; background: #eee; }
-.polaroid-photo .hero-img { filter: grayscale(1) contrast(1.06); }
-.polaroid-photo .hero-img--empty { aspect-ratio: auto; height: 100%; filter: none; }
-.polaroid-names {
-  padding: 12px 4px 16px;
-  font-family: 'Oswald', 'Noto Sans KR', sans-serif;
-  font-weight: 500;
-  font-size: 15px;
-  letter-spacing: 0.12em;
-  text-align: center;
-  color: var(--inv-text);
-}
-.polaroid-arc {
+.cal-strip-day { display: grid; justify-items: center; align-content: start; gap: 6px; padding: 10px 0 18px; }
+.cal-strip-day + .cal-strip-day { border-left: 1px solid var(--inv-text); }
+.cal-strip-wd { font: 400 11px 'Noto Sans KR', sans-serif; color: var(--inv-muted); letter-spacing: 0.06em; }
+.cal-strip-num { position: relative; font: 300 22px 'Noto Sans KR', sans-serif; color: var(--inv-muted); }
+.cal-strip-day.is-day .cal-strip-num { font-size: 38px; font-weight: 400; color: var(--inv-text); line-height: 1.2; }
+.cal-heart {
   position: absolute;
-  top: 6%;
-  width: 24%;
-  height: 88%;
-  overflow: visible;
-  fill: var(--inv-text);
-  font-family: 'Oswald', sans-serif;
-  font-weight: 300;
-  font-size: 13px;
-  letter-spacing: 0.16em;
-}
-.polaroid-arc.is-left { left: -27%; }
-.polaroid-arc.is-right { right: -27%; }
-.hero-date-bold {
-  margin: 34px 0 0;
-  font-family: 'Oswald', 'Noto Sans KR', sans-serif;
-  font-weight: 600;
-  font-size: 28px;
-  letter-spacing: 0.08em;
-  color: var(--inv-text);
-}
-.hero--polaroid .hero-sub { margin-top: 2px; font-size: 13px; }
-
-/* ---- 신랑·신부 ---- */
-.inv--warm .couple-role { font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 11px; letter-spacing: 0.2em; color: var(--inv-muted); }
-.inv--warm .couple-amp { font-family: 'Great Vibes', cursive; font-size: 30px; top: 12px; color: var(--inv-muted); }
-.inv--warm .couple-name { font-size: 21px; }
-
-/* ---- 추가 정보: 타임라인을 '하루 일정'처럼 가운데 세로 연결선으로 ---- */
-.inv--warm .profile-card { border-radius: 6px; }
-.inv--warm .profile-mbti { border-color: color-mix(in srgb, var(--inv-text) 25%, transparent); color: var(--inv-text); }
-.inv--warm .timeline { margin-top: 34px; padding: 0; text-align: center; }
-.inv--warm .timeline li { display: grid; justify-items: center; gap: 0; padding: 0; border-left: 0; }
-.inv--warm .timeline li + li { padding-top: 44px; }
-.inv--warm .timeline li::before { display: none; }
-.inv--warm .timeline li + li::after {
-  content: '';
-  position: absolute;
-  top: 8px;
   left: 50%;
-  width: 1px;
-  height: 28px;
-  background: color-mix(in srgb, var(--inv-text) 30%, transparent);
+  top: 50%;
+  width: 96px;
+  height: 88px;
+  transform: translate(-50%, -52%);
+  overflow: visible;
+  fill: none;
+  stroke: var(--inv-accent);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
 }
-.inv--warm .timeline-date { font-family: var(--inv-font); font-size: 20px; letter-spacing: 0; color: var(--inv-text); }
-.inv--warm .timeline-text { font-size: 14px; color: var(--inv-text); }
+.save-marquee { display: grid; gap: 6px; margin: 30px -28px 0; overflow: hidden; }
+.save-row { overflow: hidden; white-space: nowrap; }
+.save-track { display: inline-flex; gap: 22px; animation: save-scroll 28s linear infinite; }
+.save-row.is-reverse .save-track { animation-direction: reverse; padding-left: 70px; }
+.save-track span { font: 500 13px 'Noto Sans KR', sans-serif; letter-spacing: 0.08em; color: var(--inv-text); }
+@keyframes save-scroll { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+  .save-track { animation: none; }
+}
 
-/* ---- 공통 카드·버튼: 평평한 크림 카드, 토프 버튼 ---- */
-.inv--warm .account-group,
-.inv--warm .couple-contact,
-.inv--warm .gb-list li,
-.inv--warm .rsvp-done,
-.inv--warm .map-links a { border-radius: 6px; }
-.inv--warm .gallery-grid { gap: 6px; margin: 0; }
-.inv--warm .gb-form input,
-.inv--warm .gb-form textarea,
-.inv--warm .stepper-input { background: #fffdf7; border-color: color-mix(in srgb, var(--inv-text) 14%, transparent); border-radius: 6px; }
-.inv--warm .gb-to button { border-radius: 6px; }
-.inv--warm .inv-btn {
+/* =========================================================
+   1번 테마: 모던 모노 (.inv--mono) — CONSTITUTION §3.5, PRD-0016
+   흰 바탕 · 흑백 사진 · 고대비 명조 제목(Nanum Myeongjo) + 산세리프 본문 · 버건디 포인트
+   ========================================================= */
+.inv--mono { line-height: 1.75; }
+.inv--mono .inv-block { padding: 60px 28px; }
+.inv--mono .inv-section + .inv-section .inv-block { border-top: 0; }
+.inv--mono .inv-title {
+  margin: 0 0 18px;
+  font-family: 'Nanum Myeongjo', 'Gowun Batang', serif;
+  font-weight: 800;
+  font-size: 26px;
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+  color: var(--inv-text);
+}
+.inv--mono .inv-desc,
+.inv--mono .greeting-body { font-size: 14px; color: var(--inv-text); }
+
+/* 모든 사진은 흑백 */
+.inv--mono .hero-img,
+.inv--mono .gallery-item img,
+.inv--mono .snap-grid img,
+.inv--mono .lightbox img { filter: grayscale(1) contrast(1.05); }
+
+/* 히어로: 꽉 찬 흑백 사진 위 작은 날짜 + 큰 이름 */
+.inv--mono .hero--full .hero-media { aspect-ratio: 3 / 4.4; }
+.inv--mono .hero--full .hero-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120px 24px 44px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0.18) 55%, transparent);
+}
+/* 사진이 없을 때는 그라데이션 없이 (빈 자리 위 어두운 글자 대비 확보) */
+.inv--mono .hero--full:has(.hero-img--empty) .hero-overlay { background: none; }
+.inv--mono .hero--full .hero-date { order: -1; margin: 0 0 6px; font-size: 12px; letter-spacing: 0.3em; }
+.inv--mono .hero--full .hero-names {
+  margin: 0;
+  font-family: 'Nanum Myeongjo', 'Gowun Batang', serif;
+  font-weight: 400;
+  font-size: 32px;
+  letter-spacing: 0.06em;
+}
+
+/* 예식 일자 */
+.inv--mono .cal-title { font-size: 18px; font-weight: 700; letter-spacing: 0.02em; }
+.inv--mono .countdown b { color: var(--inv-accent); }
+
+/* 신랑·신부 */
+.inv--mono .couple-name { font-family: 'Nanum Myeongjo', serif; font-weight: 700; font-size: 22px; }
+.inv--mono .couple-amp { font-family: 'Nanum Myeongjo', serif; color: var(--inv-accent); }
+.inv--mono .couple-role { color: var(--inv-muted); letter-spacing: 0.16em; }
+
+/* 추가 정보: 타임라인을 가운데 정렬 '하루 일정'처럼 (날짜 — 내용) */
+.inv--mono .profile-card { border-radius: 0; }
+.inv--mono .timeline { margin-top: 30px; padding: 0; text-align: center; }
+.inv--mono .timeline li { display: grid; justify-items: center; gap: 2px; padding: 0 0 22px; border-left: 0; }
+.inv--mono .timeline li::before { display: none; }
+.inv--mono .timeline-date { font: 500 18px 'Noto Sans KR', sans-serif; letter-spacing: 0.06em; color: var(--inv-text); }
+.inv--mono .timeline-text { font-size: 13px; color: var(--inv-muted); }
+
+/* 오시는 길: 짙은 바탕 위 흰 카드 */
+.inv--mono .inv-section--location { padding: 40px 22px; background: #161616; }
+.inv--mono .inv-section--location .inv-block { padding: 40px 22px 34px; background: #fff; }
+.inv--mono .map-links a { border-radius: 999px; background: #1c1c1c; color: #fff; }
+
+/* 버튼·카드: 짙은 알약 버튼, 각진 카드 */
+.inv--mono .inv-btn {
   justify-self: center;
   width: auto;
   min-width: 180px;
   min-height: 44px;
   padding: 0 28px;
-  border-radius: 12px;
+  border-radius: 999px;
+  background: #1c1c1c;
   font-size: 13px;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.06em;
 }
-.inv--warm .cal td.is-day span { background: var(--inv-text); }
-.inv--warm .closing-body { font-size: 15px; }
+.inv--mono .account-group,
+.inv--mono .couple-contact,
+.inv--mono .gb-list li,
+.inv--mono .rsvp-done { border-radius: 0; }
+.inv--mono .gb-form input,
+.inv--mono .gb-form textarea,
+.inv--mono .stepper-input,
+.inv--mono .gb-to button { border-radius: 0; }
+.inv--mono .gb-to button.is-on { border-color: var(--inv-text); color: var(--inv-text); }
+.inv--mono .inv-chip { border-color: var(--inv-text); color: var(--inv-text) !important; }
+.inv--mono .gallery-grid { gap: 3px; margin: 0 -12px; }
+
+/* 마무리: 버건디 서명 */
+.inv--mono .closing-body { font-size: 14px; }
+.inv--mono .closing-names { color: var(--inv-accent); font-family: 'Nanum Myeongjo', serif; font-size: 15px; }

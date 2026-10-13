@@ -59,14 +59,14 @@ export const THEME_PRESETS: Record<ThemePreset, ThemePresetDef> = {
     accent: '#2f2f33',
     font: 'sans',
   },
-  warm: {
-    label: '웜',
-    bg: '#f8f3e5',
-    surface: '#efe7d3',
-    text: '#2b2520',
-    muted: '#857a6d',
-    accent: '#6d5e53',
-    font: 'serif',
+  mono: {
+    label: '모노',
+    bg: '#ffffff',
+    surface: '#f3f3f1',
+    text: '#151515',
+    muted: '#6e6e6e',
+    accent: '#8e1f2f',
+    font: 'sans',
   },
   romantic: {
     label: '로맨틱',
@@ -92,7 +92,7 @@ export const WEDDING = {
   profileTitle: '우리 이야기',
   rsvpTitle: '참석 여부 전달',
   rsvpDescription: '원활한 예식 준비를 위해\n참석 여부를 미리 알려주시면 감사하겠습니다.',
-  snapTitle: 'Guest Snap',
+  snapTitle: '게스트 스냅',
   snapDescription: '예식 날 찍은 사진을 올려주세요.\n저희에게 소중한 선물이 됩니다.',
   closingBody: '바쁘신 와중에도 저희의 시작을 축하해 주셔서 감사합니다.\n\n서로 아끼고 배려하며\n예쁘게 잘 살겠습니다.',
   accountTitle: '마음 전하실 곳',
@@ -140,9 +140,9 @@ export function createSections(hosts: HostSide[]): Section[] {
           data: { title: WEDDING.profileTitle, people: hosts.map((h) => ({ hostId: h.id, mbti: '', intro: '' })), timeline: [] },
         };
       case 'calendar':
-        return { ...base, type, data: { showCalendar: true, showCountdown: true } };
+        return { ...base, type, data: { showCalendar: true, showCountdown: true, style: 'month' } };
       case 'gallery':
-        return { ...base, type, data: { title: 'Gallery', imageIds: [], layout: 'grid' } };
+        return { ...base, type, data: { title: '갤러리', imageIds: [], layout: 'grid' } };
       case 'rsvp':
         return {
           ...base,

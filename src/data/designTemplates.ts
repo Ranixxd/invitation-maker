@@ -1,5 +1,5 @@
 // 디자인 템플릿 정의 (CONSTITUTION §3.5). 템플릿 = 테마 + 레이아웃 + 헤드라인의 묶음
-import type { GalleryLayout, HeroLayout, ImageAsset, InvitationDoc, ThemePreset } from '../types/invitation';
+import type { CalendarStyle, GalleryLayout, HeroLayout, ImageAsset, InvitationDoc, ThemePreset } from '../types/invitation';
 import { THEME_PRESETS } from './templates';
 
 export interface DesignTemplate {
@@ -11,6 +11,8 @@ export interface DesignTemplate {
   accent: string;
   heroLayout: HeroLayout;
   galleryLayout: GalleryLayout;
+  /** 예식 일자 표시 방식 (없으면 월 달력) */
+  calendarStyle?: CalendarStyle;
   headline: string;
   /** 템플릿 카드 미리보기용 샘플 사진 색 [위, 아래] */
   sample: [string, string];
@@ -18,17 +20,18 @@ export interface DesignTemplate {
 
 export const DESIGN_TEMPLATES: DesignTemplate[] = [
   {
-    // 1번 테마: 버터 크림 바탕, 흑백 폴라로이드, 영문 손글씨 제목 (§3.5)
-    id: 'warm-polaroid',
-    name: '웜 폴라로이드',
-    tagline: '크림 톤 위 흑백 폴라로이드와 손글씨',
-    preset: 'warm',
-    font: 'serif',
-    accent: THEME_PRESETS.warm.accent,
-    heroLayout: 'polaroid',
+    // 1번 테마: 모던 모노 — 흑백 사진, 버건디 포인트, 매거진 같은 구성 (§3.5, PRD-0016)
+    id: 'modern-mono',
+    name: '모던 모노',
+    tagline: '흑백 사진과 버건디 포인트, 매거진 같은 구성',
+    preset: 'mono',
+    font: 'sans',
+    accent: THEME_PRESETS.mono.accent,
+    heroLayout: 'full',
     galleryLayout: 'grid',
-    headline: 'Wedding Day',
-    sample: ['#e4e0d9', '#4a4643'],
+    calendarStyle: 'strip',
+    headline: '',
+    sample: ['#d6d6d6', '#262626'],
   },
   {
     id: 'classic-frame',
@@ -107,6 +110,7 @@ export function applyTemplate(doc: InvitationDoc, t: DesignTemplate): Invitation
     sections: doc.sections.map((s) => {
       if (s.type === 'hero') return { ...s, data: { ...s.data, layout: t.heroLayout, headline: t.headline } };
       if (s.type === 'gallery') return { ...s, data: { ...s.data, layout: t.galleryLayout } };
+      if (s.type === 'calendar') return { ...s, data: { ...s.data, style: t.calendarStyle ?? 'month' } };
       return s;
     }),
   };

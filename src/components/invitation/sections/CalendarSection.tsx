@@ -1,8 +1,58 @@
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
-import { dday, formatKo, monthMatrix, parseLocal } from '../../../lib/date';
+import { dday, formatKo, monthMatrix, parseLocal, weekdayKo } from '../../../lib/date';
 
 const HEAD = ['일', '월', '화', '수', '목', '금', '토'];
+const MARQUEE_REPEAT = 6;
+
+/** 손으로 그린 듯한 하트 동그라미 (3일 띠의 예식일 표시) */
+function HeartScribble() {
+  return (
+    <svg className="cal-heart" viewBox="0 0 120 110" aria-hidden>
+      <path d="M60 101C26 76 8 55 14 32 19 12 44 6 58 28 66 6 92 1 104 20 116 42 98 70 57 103" />
+      <path d="M52 98C80 82 108 60 106 34" />
+    </svg>
+  );
+}
+
+/** 앞뒤 하루를 포함한 3일 띠 + SAVE THE DATE 흐르는 글자 (템플릿 calendarStyle = 'strip') */
+function DayStrip({ date }: { date: Date }) {
+  const days = [-1, 0, 1].map((off) => {
+    const d = new Date(date);
+    d.setDate(d.getDate() + off);
+    return { off, d };
+  });
+  const row = Array.from({ length: MARQUEE_REPEAT }, (_, i) => <span key={i}>SAVE THE DATE</span>);
+  return (
+    <>
+      <div className="cal-strip" role="img" aria-label={`${date.getMonth() + 1}월 ${date.getDate()}일 ${weekdayKo(date)}요일`}>
+        {days.map(({ off, d }) => (
+          <div key={off} className={`cal-strip-day${off === 0 ? ' is-day' : ''}`}>
+            <span className="cal-strip-wd">{weekdayKo(d)}요일</span>
+            <span className="cal-strip-num">
+              {d.getDate()}
+              {off === 0 && <HeartScribble />}
+            </span>
+          </div>
+        ))}
+      </div>
+      <div className="save-marquee" aria-hidden>
+        <div className="save-row">
+          <div className="save-track">
+            {row}
+            {row}
+          </div>
+        </div>
+        <div className="save-row is-reverse">
+          <div className="save-track">
+            {row}
+            {row}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
 
 export function CalendarSection({ doc, section }: SectionProps<SectionOf<'calendar'>>) {
   const date = parseLocal(doc.core.datetime);
@@ -13,7 +63,7 @@ export function CalendarSection({ doc, section }: SectionProps<SectionOf<'calend
       </section>
     );
   }
-  const { showCalendar, showCountdown } = section.data;
+  const { showCalendar, showCountdown, style = 'month' } = section.data;
   const rows = monthMatrix(date.getFullYear(), date.getMonth());
   const left = dday(date);
   const names = doc.core.hosts.map((h) => h.name || h.label).join(' ♥ ');
@@ -21,10 +71,11 @@ export function CalendarSection({ doc, section }: SectionProps<SectionOf<'calend
   const venue = [doc.core.venue.name, doc.core.venue.hall].filter(Boolean).join(' ');
 
   return (
-    <section className="inv-block calendar">
+    <section className={`inv-block calendar is-${style}`}>
       <h2 className="inv-title cal-title">{formatKo(date)}</h2>
       {venue && <p className="cal-venue">{venue}</p>}
-      {showCalendar && (
+      {showCalendar && style === 'strip' && <DayStrip date={date} />}
+      {showCalendar && style === 'month' && (
         <table className="cal" aria-label={`${date.getFullYear()}년 ${date.getMonth() + 1}월 달력`}>
           <caption>{date.getMonth() + 1}월</caption>
           <thead>

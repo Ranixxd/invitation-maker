@@ -3,7 +3,7 @@
 /** v0.2부터 결혼식 전용 (CONSTITUTION §1.3). 확장 여지를 위해 필드는 유지 */
 export type EventType = 'wedding';
 
-export type ThemePreset = 'classic' | 'modern' | 'romantic' | 'warm';
+export type ThemePreset = 'classic' | 'modern' | 'romantic' | 'mono';
 export type ThemeFont = 'serif' | 'sans';
 
 export interface Theme {
@@ -53,7 +53,9 @@ export interface ImageAsset {
 
 // ---- 섹션 ----
 
-export type HeroLayout = 'full' | 'frame' | 'arch' | 'polaroid';
+export type HeroLayout = 'full' | 'frame' | 'arch';
+/** 예식 일자 표시 방식: 월 달력 / 앞뒤 하루를 포함한 3일 띠(하트 표시) — 템플릿이 결정 */
+export type CalendarStyle = 'month' | 'strip';
 export type GalleryLayout = 'grid' | 'slide';
 
 export interface HeroData {
@@ -91,6 +93,7 @@ export interface ProfileData {
 export interface CalendarData {
   showCalendar: boolean;
   showCountdown: boolean;
+  style: CalendarStyle;
 }
 export interface GalleryData {
   title: string;
