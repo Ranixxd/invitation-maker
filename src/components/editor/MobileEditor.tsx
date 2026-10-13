@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { InvitationDoc, SectionType } from '../../types/invitation';
 import type { EditorAction } from '../../store/editorReducer';
-import { SECTION_LABELS } from '../../data/templates';
+import { isPinned, SECTION_LABELS } from '../../data/templates';
 import { InvitationView } from '../invitation/InvitationView';
 import { BottomSheet } from '../common/BottomSheet';
 import { AppHeader } from '../common/shared';
@@ -13,15 +13,21 @@ import { SectionPanel } from './SectionPanels';
 import { SettingsPanel } from './SettingsPanel';
 import { PublishPanel } from './PublishPanel';
 
-const EDIT_LABELS: Record<SectionType, string> = {
+/** 모바일 [섹션 편집] 버튼 문구. 브랜드 소개는 편집 불가라 버튼 없음 (§4.9) */
+const EDIT_LABELS: Record<SectionType, string | null> = {
   hero: '대표 사진 편집',
-  greeting: '인사말 편집',
-  calendar: '날짜 편집',
+  greeting: '시작 멘트 편집',
+  couple: '신랑·신부 편집',
+  profile: '추가 정보 편집',
+  calendar: '예식 일자 편집',
   gallery: '갤러리 편집',
-  parents: '혼주 편집',
-  location: '오시는 길 편집',
-  account: '계좌번호 편집',
+  rsvp: '참석 여부 편집',
+  account: '계좌 편집',
   guestbook: '방명록 편집',
+  location: '오시는 길 편집',
+  snap: '게스트 스냅 편집',
+  closing: '마무리 멘트 편집',
+  brand: null,
 };
 
 type SheetKind = 'list' | 'settings' | 'publish' | { sectionId: string };
@@ -99,7 +105,8 @@ export function MobileEditor({ doc, dispatch }: Props) {
         autoScroll={false}
         selectedSectionId={activeId}
         onSectionClick={setActiveId}
-        renderOverlay={(s) => (
+        renderOverlay={(s) =>
+          EDIT_LABELS[s.type] && (
           <div className={`sec-edit-layer${s.id === activeId ? ' is-active' : ''}`}>
             <button
               type="button"
@@ -113,7 +120,8 @@ export function MobileEditor({ doc, dispatch }: Props) {
               {EDIT_LABELS[s.type]}
             </button>
           </div>
-        )}
+          )
+        }
       />
 
       <nav className="m-toolbar" aria-label="편집 도구">
@@ -145,7 +153,7 @@ export function MobileEditor({ doc, dispatch }: Props) {
         )}
         {section && (
           <>
-            {section.type !== 'hero' && (
+            {!isPinned(section.type) && (
               <div className="sheet-pad sheet-visibility">
                 <Toggle
                   label="초대장에 표시"

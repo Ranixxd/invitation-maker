@@ -282,6 +282,9 @@ a.choice-card:hover, button.choice-card:hover { border-color: var(--primary); tr
   transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
 }
 .tpl-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); }
+.tpl-card:focus-within { border-color: var(--primary); }
+.tpl-link { color: inherit; text-decoration: none; outline: none; }
+.tpl-link::after { content: ''; position: absolute; inset: 0; border-radius: inherit; z-index: 1; }
 .tpl-preview { position: relative; aspect-ratio: 375 / 600; overflow: hidden; border-radius: 12px; background: #eee; pointer-events: none; }
 .tpl-preview-inner { position: absolute; top: 0; left: 0; transform-origin: top left; }
 .tpl-meta { display: grid; gap: 2px; padding: 0 4px; }
@@ -408,6 +411,7 @@ a.choice-card:hover, button.choice-card:hover { border-color: var(--primary); tr
 .gallery-edit img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
 .gallery-edit-actions { display: flex; justify-content: space-between; padding: 2px; }
 .account-edit { display: grid; gap: 6px; padding: 14px; border-radius: 12px; background: #f8f8fa; }
+.timeline-edit { grid-template-columns: 120px minmax(0, 1fr); gap: 10px; }
 .preset-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .preset-card {
   display: grid;
@@ -588,6 +592,7 @@ a.choice-card:hover, button.choice-card:hover { border-color: var(--primary); tr
 @media (max-width: 767px) {
   .panel-section { padding: 16px; }
   .form-grid.two, .parent-fields { grid-template-columns: 1fr; }
+  .timeline-edit { grid-template-columns: 1fr; }
 
   .choice-grid { grid-template-columns: 1fr; }
   .tpl-detail-body { grid-template-columns: 1fr; gap: 16px; padding: 20px 0 0; }

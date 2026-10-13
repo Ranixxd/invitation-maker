@@ -17,11 +17,14 @@ export function CalendarSection({ doc, section }: SectionProps<SectionOf<'calend
   const rows = monthMatrix(date.getFullYear(), date.getMonth());
   const left = dday(date);
   const names = doc.core.hosts.map((h) => h.name || h.label).join(' ♥ ');
+  // 예식 일자: 장소 요약·날짜·시간·D-day (§4.1)
+  const venue = [doc.core.venue.name, doc.core.venue.hall].filter(Boolean).join(' ');
 
   return (
     <section className="inv-block calendar">
       <p className="inv-eyebrow">WEDDING DAY</p>
-      <h2 className="inv-title">{formatKo(date)}</h2>
+      <h2 className="inv-title cal-title">{formatKo(date)}</h2>
+      {venue && <p className="cal-venue">{venue}</p>}
       {showCalendar && (
         <table className="cal" aria-label={`${date.getFullYear()}년 ${date.getMonth() + 1}월 달력`}>
           <caption>{date.getMonth() + 1}월</caption>

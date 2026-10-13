@@ -10,6 +10,7 @@ import type {
   Theme,
 } from '../types/invitation';
 import { MAX_IMAGES_PER_DOC } from '../lib/image';
+import { isPinned, PINNED_FIRST, PINNED_LAST } from '../data/templates';
 
 export type EditorAction =
   | { type: 'LOAD'; doc: InvitationDoc }
@@ -34,12 +35,18 @@ function mapSection(doc: InvitationDoc, type: SectionType, fn: (s: Section) => S
 }
 
 /** 히어로는 항상 0번 (§4.2-2). 로드된 문서도 보정한다. */
+/** 고정 섹션 보정: 히어로는 맨 앞, 브랜드 소개는 맨 뒤, 둘 다 항상 켜짐 (§4.2). 로드된 문서도 보정한다. */
 export function normalizeSections(sections: Section[]): Section[] {
   const seen = new Set<SectionType>();
   const unique = sections.filter((s) => (seen.has(s.type) ? false : (seen.add(s.type), true)));
-  const hero = unique.find((s) => s.type === 'hero');
-  const rest = unique.filter((s) => s.type !== 'hero');
-  return hero ? [{ ...hero, enabled: true }, ...rest] : rest;
+  const first = unique.find((s) => s.type === PINNED_FIRST);
+  const last = unique.find((s) => s.type === PINNED_LAST);
+  const middle = unique.filter((s) => !isPinned(s.type));
+  return [
+    ...(first ? [{ ...first, enabled: true }] : []),
+    ...middle,
+    ...(last ? [{ ...last, enabled: true }] : []),
+  ];
 }
 
 export function editorReducer(state: EditorState, action: EditorAction): EditorState {
@@ -73,15 +80,18 @@ export function editorReducer(state: EditorState, action: EditorAction): EditorS
     case 'TOGGLE_SECTION':
       return touch(doc, {
         sections: doc.sections.map((s) =>
-          s.id === action.sectionId && s.type !== 'hero' ? { ...s, enabled: !s.enabled } : s,
+          s.id === action.sectionId && !isPinned(s.type) ? { ...s, enabled: !s.enabled } : s,
         ),
       });
 
     case 'REORDER_SECTION': {
       const from = doc.sections.findIndex((s) => s.id === action.sectionId);
-      // 히어로 이동 금지, 히어로 자리(0)로 이동 금지 (§4.2-2)
-      const to = Math.min(Math.max(action.toIndex, 1), doc.sections.length - 1);
-      if (from <= 0 || from === to) return state;
+      // 고정 섹션은 이동 금지, 고정 자리(맨 앞·맨 뒤)로도 이동 금지 (§4.2-2)
+      if (from < 0 || isPinned(doc.sections[from].type)) return state;
+      const lo = doc.sections[0]?.type === PINNED_FIRST ? 1 : 0;
+      const hi = doc.sections.length - 1 - (doc.sections[doc.sections.length - 1]?.type === PINNED_LAST ? 1 : 0);
+      const to = Math.min(Math.max(action.toIndex, lo), hi);
+      if (from === to) return state;
       const next = [...doc.sections];
       const [moved] = next.splice(from, 1);
       next.splice(to, 0, moved);

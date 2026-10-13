@@ -64,8 +64,30 @@ export interface HeroData {
 export interface GreetingData {
   title: string;
   body: string;
-  showSignature: boolean;
 }
+/** 신랑·신부 소개 (혼주는 작게) */
+export interface CoupleData {
+  title: string;
+  showParents: boolean;
+  showContact: boolean;
+}
+export interface ProfilePerson {
+  hostId: string;
+  mbti: string;
+  intro: string;
+}
+export interface TimelineItem {
+  id: string;
+  date: string; // 자유 형식 (예: 2019.03)
+  text: string;
+}
+/** 신랑·신부 추가 정보: MBTI·한 줄 소개·타임라인 */
+export interface ProfileData {
+  title: string;
+  people: ProfilePerson[];
+  timeline: TimelineItem[];
+}
+/** 예식 일자: 장소 요약·날짜·시간·D-day */
 export interface CalendarData {
   showCalendar: boolean;
   showCountdown: boolean;
@@ -75,9 +97,12 @@ export interface GalleryData {
   imageIds: string[];
   layout: GalleryLayout;
 }
-export interface ParentsData {
+/** 참석 여부(RSVP) */
+export interface RsvpData {
   title: string;
-  showContact: boolean;
+  description: string;
+  askCount: boolean;
+  askMeal: boolean;
 }
 export interface LocationData {
   title: string;
@@ -103,16 +128,33 @@ export interface GuestbookData {
   title: string;
   description: string;
 }
+/** 게스트 스냅: 하객이 찍은 사진 모으기 (기본 꺼짐) */
+export interface SnapData {
+  title: string;
+  description: string;
+}
+/** 마무리 멘트 */
+export interface ClosingData {
+  body: string;
+  showNames: boolean;
+}
+/** 브랜드 소개: 편집할 값 없음, 항상 마지막·숨김 불가 (§4.9) */
+export type BrandData = Record<string, never>;
 
 export interface SectionDataMap {
   hero: HeroData;
   greeting: GreetingData;
+  couple: CoupleData;
+  profile: ProfileData;
   calendar: CalendarData;
   gallery: GalleryData;
-  parents: ParentsData;
-  location: LocationData;
+  rsvp: RsvpData;
   account: AccountData;
   guestbook: GuestbookData;
+  location: LocationData;
+  snap: SnapData;
+  closing: ClosingData;
+  brand: BrandData;
 }
 
 export type SectionType = keyof SectionDataMap;

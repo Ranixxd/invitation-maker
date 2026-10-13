@@ -1,6 +1,15 @@
 // 섹션별 내용 편집 폼 (CONSTITUTION §4). 디자인(레이아웃·테마)은 템플릿이 결정하므로 다루지 않는다(§6.2)
 import { useState } from 'react';
-import type { BankAccount, InvitationDoc, Section, SectionDataMap, SectionOf, SectionType } from '../../types/invitation';
+import type {
+  BankAccount,
+  InvitationDoc,
+  ProfilePerson,
+  Section,
+  SectionDataMap,
+  SectionOf,
+  SectionType,
+  TimelineItem,
+} from '../../types/invitation';
 import type { EditorAction } from '../../store/editorReducer';
 import { PanelSection, TextArea, TextField, Toggle } from '../common/fields';
 import { PhotoDrop } from '../common/shared';
@@ -82,7 +91,7 @@ const GREETING_SAMPLES = [
   '평생을 같이하고 싶은 사람을 만났습니다.\n\n서로 아껴주고 이해하며\n사랑 베풀며 살고 싶습니다.\n\n오셔서 축복해 주시면 큰 기쁨이겠습니다.',
 ];
 
-function GreetingPanel({ section, dispatch, goSettings }: PanelProps<'greeting'>) {
+function GreetingPanel({ section, dispatch }: PanelProps<'greeting'>) {
   const set = useUpdate('greeting', dispatch);
   return (
     <div className="panel-body">
@@ -98,25 +107,16 @@ function GreetingPanel({ section, dispatch, goSettings }: PanelProps<'greeting'>
           ))}
         </div>
       </PanelSection>
-      <PanelSection title="서명">
-        <Toggle
-          label="이름 서명 표시"
-          hint="예) 김OO · 박OO의 아들 민준"
-          checked={section.data.showSignature}
-          onChange={(showSignature) => set({ showSignature })}
-        />
-        <SettingsLink onClick={goSettings}>이름·부모님 성함은 기본 정보에서</SettingsLink>
-      </PanelSection>
     </div>
   );
 }
 
 // ---------------- calendar ----------------
-function CalendarPanel({ doc, section, dispatch }: PanelProps<'calendar'>) {
+function CalendarPanel({ doc, section, dispatch, goSettings }: PanelProps<'calendar'>) {
   const set = useUpdate('calendar', dispatch);
   return (
     <div className="panel-body">
-      <PanelSection title="날짜">
+      <PanelSection title="예식 일자">
         <TextField
           label="일시"
           type="datetime-local"
@@ -124,6 +124,7 @@ function CalendarPanel({ doc, section, dispatch }: PanelProps<'calendar'>) {
           onChange={(datetime) => dispatch({ type: 'UPDATE_CORE', patch: { datetime } })}
           hint="히어로에도 함께 반영돼요"
         />
+        <SettingsLink onClick={goSettings}>장소는 기본 정보에서 수정</SettingsLink>
       </PanelSection>
       <PanelSection title="표시">
         <Toggle label="달력 보이기" checked={section.data.showCalendar} onChange={(showCalendar) => set({ showCalendar })} />
@@ -185,16 +186,172 @@ function GalleryPanel({ doc, section, dispatch }: PanelProps<'gallery'>) {
   );
 }
 
-// ---------------- parents ----------------
-function ParentsPanel({ section, dispatch, goSettings }: PanelProps<'parents'>) {
-  const set = useUpdate('parents', dispatch);
+// ---------------- couple ----------------
+function CouplePanel({ section, dispatch, goSettings }: PanelProps<'couple'>) {
+  const set = useUpdate('couple', dispatch);
   return (
     <div className="panel-body">
-      <PanelSection title="혼주 · 연락처">
+      <PanelSection title="신랑·신부">
         <TextField label="제목" value={section.data.title} onChange={(title) => set({ title })} />
-        <Toggle label="전화·문자 버튼 표시" checked={section.data.showContact} onChange={(showContact) => set({ showContact })} />
-        <SettingsLink onClick={goSettings}>성함·연락처는 기본 정보에서 수정</SettingsLink>
+        <Toggle label="혼주(부모님) 성함 표시" hint="이름 아래 작게 보여요" checked={section.data.showParents} onChange={(showParents) => set({ showParents })} />
+        <Toggle label="연락하기 버튼 표시" hint="전화번호를 넣은 사람만 보여요" checked={section.data.showContact} onChange={(showContact) => set({ showContact })} />
+        <SettingsLink onClick={goSettings}>이름·부모님 성함·연락처는 기본 정보에서</SettingsLink>
       </PanelSection>
+    </div>
+  );
+}
+
+// ---------------- profile ----------------
+const MBTI_MAX = 4;
+const TIMELINE_MAX = 10;
+
+function ProfilePanel({ doc, section, dispatch }: PanelProps<'profile'>) {
+  const set = useUpdate('profile', dispatch);
+  const { people, timeline } = section.data;
+  const person = (hostId: string) => people.find((p) => p.hostId === hostId) ?? { hostId, mbti: '', intro: '' };
+  const setPerson = (hostId: string, patch: Partial<ProfilePerson>) => {
+    const exists = people.some((p) => p.hostId === hostId);
+    const next = exists
+      ? people.map((p) => (p.hostId === hostId ? { ...p, ...patch } : p))
+      : [...people, { ...person(hostId), ...patch }];
+    set({ people: next });
+  };
+  const setItem = (id: string, patch: Partial<TimelineItem>) =>
+    set({ timeline: timeline.map((t) => (t.id === id ? { ...t, ...patch } : t)) });
+
+  return (
+    <div className="panel-body">
+      <PanelSection title="섹션">
+        <TextField label="제목" value={section.data.title} onChange={(title) => set({ title })} />
+      </PanelSection>
+      {doc.core.hosts.map((h) => {
+        const p = person(h.id);
+        return (
+          <PanelSection key={h.id} title={`${h.label} ${h.name}`.trim()}>
+            <TextField
+              label="MBTI"
+              placeholder="예) ENFP"
+              value={p.mbti}
+              maxLength={MBTI_MAX}
+              autoCapitalize="characters"
+              onChange={(mbti) => setPerson(h.id, { mbti: mbti.toUpperCase().replace(/[^A-Z]/g, '') })}
+            />
+            <TextArea
+              label="한 줄 소개"
+              rows={2}
+              maxLength={80}
+              placeholder="예) 주말마다 빵집 투어하는 사람"
+              value={p.intro}
+              onChange={(intro) => setPerson(h.id, { intro })}
+            />
+          </PanelSection>
+        );
+      })}
+      <PanelSection
+        title="타임라인"
+        aside={
+          timeline.length < TIMELINE_MAX && (
+            <button
+              type="button"
+              className="btn btn-ghost sm"
+              onClick={() => set({ timeline: [...timeline, { id: uid('tl'), date: '', text: '' }] })}
+            >
+              + 추가
+            </button>
+          )
+        }
+      >
+        {timeline.length === 0 && <p className="field-hint">처음 만난 날, 연애 시작, 프러포즈 같은 순간을 적어 보세요.</p>}
+        {timeline.map((t) => (
+          <div key={t.id} className="account-edit">
+            <div className="form-grid timeline-edit">
+              <TextField label="날짜" placeholder="예) 2019.03" value={t.date} maxLength={20} onChange={(date) => setItem(t.id, { date })} />
+              <TextField label="내용" placeholder="예) 처음 만난 날" value={t.text} maxLength={60} onChange={(text) => setItem(t.id, { text })} />
+            </div>
+            <button type="button" className="link-btn danger" onClick={() => set({ timeline: timeline.filter((x) => x.id !== t.id) })}>
+              이 항목 삭제
+            </button>
+          </div>
+        ))}
+      </PanelSection>
+    </div>
+  );
+}
+
+// ---------------- rsvp ----------------
+function RsvpPanel({ section, dispatch }: PanelProps<'rsvp'>) {
+  const set = useUpdate('rsvp', dispatch);
+  return (
+    <div className="panel-body">
+      <PanelSection title="참석 여부 받기">
+        <TextField label="제목" value={section.data.title} onChange={(title) => set({ title })} />
+        <TextArea label="안내 문구" rows={2} value={section.data.description} onChange={(description) => set({ description })} />
+        <Toggle label="참석 인원 묻기" checked={section.data.askCount} onChange={(askCount) => set({ askCount })} />
+        <Toggle label="식사 여부 묻기" checked={section.data.askMeal} onChange={(askMeal) => set({ askMeal })} />
+        <p className="notice">지금은 초안 단계라 응답이 응답한 사람의 브라우저에만 저장돼요. 서버 연동 후 모아볼 수 있어요.</p>
+      </PanelSection>
+    </div>
+  );
+}
+
+// ---------------- snap ----------------
+function SnapPanel({ section, dispatch }: PanelProps<'snap'>) {
+  const set = useUpdate('snap', dispatch);
+  return (
+    <div className="panel-body">
+      <PanelSection title="게스트 스냅">
+        <TextField label="제목" value={section.data.title} onChange={(title) => set({ title })} />
+        <TextArea label="안내 문구" rows={2} value={section.data.description} onChange={(description) => set({ description })} />
+        <p className="notice">하객이 예식 사진을 올리는 공간이에요. 필요할 때만 켜 주세요. 지금은 초안 단계라 올린 사진이 저장되지 않아요.</p>
+      </PanelSection>
+    </div>
+  );
+}
+
+// ---------------- closing ----------------
+const CLOSING_SAMPLES = [
+  '바쁘신 와중에도 저희의 시작을 축하해 주셔서 감사합니다.\n\n서로 아끼고 배려하며\n예쁘게 잘 살겠습니다.',
+  '함께해 주신 모든 분들께 감사드립니다.\n\n받은 사랑 잊지 않고\n행복하게 잘 살겠습니다.',
+  '저희 두 사람의 새로운 시작을\n따뜻한 마음으로 지켜봐 주세요.\n\n고맙습니다.',
+];
+
+function ClosingPanel({ section, dispatch }: PanelProps<'closing'>) {
+  const set = useUpdate('closing', dispatch);
+  return (
+    <div className="panel-body">
+      <PanelSection title="마무리 멘트">
+        <TextArea
+          label="문구"
+          rows={6}
+          maxLength={300}
+          value={section.data.body}
+          onChange={(body) => set({ body })}
+          hint={`${section.data.body.length}/300`}
+        />
+        <div className="sample-row">
+          <span className="field-hint">예시 문구:</span>
+          {CLOSING_SAMPLES.map((s, i) => (
+            <button key={i} type="button" className="btn btn-ghost sm" onClick={() => set({ body: s })}>
+              {i + 1}
+            </button>
+          ))}
+        </div>
+        <Toggle
+          label="신랑·신부 이름 표시"
+          hint="예) 신랑 김민준 · 신부 이서연 드림"
+          checked={section.data.showNames}
+          onChange={(showNames) => set({ showNames })}
+        />
+      </PanelSection>
+    </div>
+  );
+}
+
+// ---------------- brand ----------------
+function BrandPanel() {
+  return (
+    <div className="panel-body">
+      <p className="notice">브랜드 소개는 청첩장 맨 아래에 항상 표시되며, 순서를 바꾸거나 숨기거나 편집할 수 없어요.</p>
     </div>
   );
 }
@@ -306,8 +463,18 @@ export function SectionPanel(props: { doc: InvitationDoc; section: Section; disp
       return <CalendarPanel {...props} section={section} />;
     case 'gallery':
       return <GalleryPanel {...props} section={section} />;
-    case 'parents':
-      return <ParentsPanel {...props} section={section} />;
+    case 'couple':
+      return <CouplePanel {...props} section={section} />;
+    case 'profile':
+      return <ProfilePanel {...props} section={section} />;
+    case 'rsvp':
+      return <RsvpPanel {...props} section={section} />;
+    case 'snap':
+      return <SnapPanel {...props} section={section} />;
+    case 'closing':
+      return <ClosingPanel {...props} section={section} />;
+    case 'brand':
+      return <BrandPanel />;
     case 'location':
       return <LocationPanel {...props} section={section} />;
     case 'account':

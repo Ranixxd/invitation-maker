@@ -4,12 +4,17 @@ import type { InvitationDoc, Section } from '../../types/invitation';
 import { THEME_PRESETS } from '../../data/templates';
 import { HeroSection } from './sections/HeroSection';
 import { GreetingSection } from './sections/GreetingSection';
+import { CoupleSection } from './sections/CoupleSection';
+import { ProfileSection } from './sections/ProfileSection';
 import { CalendarSection } from './sections/CalendarSection';
 import { GallerySection } from './sections/GallerySection';
-import { ParentsSection } from './sections/ParentsSection';
-import { LocationSection } from './sections/LocationSection';
+import { RsvpSection } from './sections/RsvpSection';
 import { AccountSection } from './sections/AccountSection';
 import { GuestbookSection } from './sections/GuestbookSection';
+import { LocationSection } from './sections/LocationSection';
+import { SnapSection } from './sections/SnapSection';
+import { ClosingSection } from './sections/ClosingSection';
+import { BrandSection } from './sections/BrandSection';
 import './invitation.css';
 
 export type RenderMode = 'view' | 'preview';
@@ -21,23 +26,34 @@ export interface SectionProps<S extends Section = Section> {
 }
 
 function renderSection(doc: InvitationDoc, section: Section, mode: RenderMode) {
+  const p = { doc, mode };
   switch (section.type) {
     case 'hero':
-      return <HeroSection doc={doc} section={section} mode={mode} />;
+      return <HeroSection {...p} section={section} />;
     case 'greeting':
-      return <GreetingSection doc={doc} section={section} mode={mode} />;
+      return <GreetingSection {...p} section={section} />;
+    case 'couple':
+      return <CoupleSection {...p} section={section} />;
+    case 'profile':
+      return <ProfileSection {...p} section={section} />;
     case 'calendar':
-      return <CalendarSection doc={doc} section={section} mode={mode} />;
+      return <CalendarSection {...p} section={section} />;
     case 'gallery':
-      return <GallerySection doc={doc} section={section} mode={mode} />;
-    case 'parents':
-      return <ParentsSection doc={doc} section={section} mode={mode} />;
-    case 'location':
-      return <LocationSection doc={doc} section={section} mode={mode} />;
+      return <GallerySection {...p} section={section} />;
+    case 'rsvp':
+      return <RsvpSection {...p} section={section} />;
     case 'account':
-      return <AccountSection doc={doc} section={section} mode={mode} />;
+      return <AccountSection {...p} section={section} />;
     case 'guestbook':
-      return <GuestbookSection doc={doc} section={section} mode={mode} />;
+      return <GuestbookSection {...p} section={section} />;
+    case 'location':
+      return <LocationSection {...p} section={section} />;
+    case 'snap':
+      return <SnapSection {...p} section={section} />;
+    case 'closing':
+      return <ClosingSection {...p} section={section} />;
+    case 'brand':
+      return <BrandSection {...p} section={section} />;
   }
 }
 
@@ -111,7 +127,6 @@ export function InvitationView({ doc, mode = 'view', selectedSectionId, onSectio
             {renderOverlay?.(s)}
           </div>
         ))}
-      <footer className="inv-footer">청첩장 메이커로 만들었어요</footer>
     </div>
   );
 }

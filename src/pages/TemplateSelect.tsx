@@ -13,16 +13,17 @@ export default function TemplateSelect() {
         <h1>템플릿을 골라주세요</h1>
         <p className="lead">분위기와 레이아웃을 먼저 정해요. 눌러서 미리 볼 수 있어요.</p>
 
+        {/* 미리보기 안에 링크(지도 버튼 등)가 있어 링크 안에 넣을 수 없으므로, 제목 링크를 카드 전체로 늘린다 */}
         <ul className="tpl-grid">
           {DESIGN_TEMPLATES.map((t) => (
-            <li key={t.id}>
-              <Link to={`/templates/${t.id}`} className="tpl-card" aria-label={`${t.name} 미리보기`}>
-                <TemplatePreview template={t} />
-                <span className="tpl-meta">
+            <li key={t.id} className="tpl-card">
+              <TemplatePreview template={t} />
+              <span className="tpl-meta">
+                <Link to={`/templates/${t.id}`} className="tpl-link">
                   <b>{t.name}</b>
-                  <span>{t.tagline}</span>
-                </span>
-              </Link>
+                </Link>
+                <span>{t.tagline}</span>
+              </span>
             </li>
           ))}
         </ul>

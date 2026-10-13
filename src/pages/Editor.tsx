@@ -10,7 +10,7 @@ import { InvitationView } from '../components/invitation/InvitationView';
 import { AppHeader, PhoneFrame } from '../components/common/shared';
 import { BottomSheet } from '../components/common/BottomSheet';
 import { PublishPanel } from '../components/editor/PublishPanel';
-import { SECTION_LABELS } from '../data/templates';
+import { isPinned, SECTION_LABELS } from '../data/templates';
 
 const MOBILE_QUERY = '(max-width: 767px)';
 
@@ -74,7 +74,7 @@ export default function Editor() {
       <main className="editor-panel" aria-label="편집">
         <div className="panel-head">
           <h2>{panelTitle}</h2>
-          {section && section.type !== 'hero' && (
+          {section && !isPinned(section.type) && (
             <label className="panel-visibility">
               <span>{section.enabled ? '보이는 중' : '숨김'}</span>
               <input

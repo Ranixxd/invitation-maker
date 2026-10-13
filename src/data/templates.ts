@@ -5,16 +5,30 @@ import { defaultSlug } from '../lib/slug';
 
 export const DOC_VERSION = 1;
 
+/** 기본 섹션 순서 (CONSTITUTION §4.1) */
 export const SECTION_ORDER: SectionType[] = [
   'hero',
   'greeting',
+  'couple',
+  'profile',
   'calendar',
   'gallery',
-  'parents',
-  'location',
+  'rsvp',
   'account',
   'guestbook',
+  'location',
+  'snap',
+  'closing',
+  'brand',
 ];
+
+/** 고정 섹션: 맨 앞 히어로, 맨 뒤 브랜드 소개. 순서 이동·숨김 불가 (§4.2) */
+export const PINNED_FIRST: SectionType = 'hero';
+export const PINNED_LAST: SectionType = 'brand';
+export const isPinned = (t: SectionType) => t === PINNED_FIRST || t === PINNED_LAST;
+
+/** 처음에 꺼져 있는 섹션 (필요한 사람만 켬) */
+const OFF_BY_DEFAULT: SectionType[] = ['snap'];
 
 export interface ThemePresetDef {
   label: string;
@@ -65,10 +79,16 @@ export const WEDDING = {
   greetingTitle: '소중한 분들을 초대합니다',
   greetingBody:
     '서로가 마주보며 다져온 사랑을\n이제 함께 한 곳을 바라보며\n걸어갈 수 있는 큰 사랑으로 키우고자 합니다.\n\n저희 두 사람이 사랑의 이름으로\n지켜나갈 수 있도록\n앞날을 축복해 주시면 감사하겠습니다.',
-  parentsTitle: '혼주',
+  coupleTitle: '신랑 & 신부',
+  profileTitle: '우리 이야기',
+  rsvpTitle: '참석 여부 전달',
+  rsvpDescription: '원활한 예식 준비를 위해\n참석 여부를 미리 알려주시면 감사하겠습니다.',
+  snapTitle: 'Guest Snap',
+  snapDescription: '예식 날 찍은 사진을 올려주세요.\n저희에게 소중한 선물이 됩니다.',
+  closingBody: '바쁘신 와중에도 저희의 시작을 축하해 주셔서 감사합니다.\n\n서로 아끼고 배려하며\n예쁘게 잘 살겠습니다.',
   accountTitle: '마음 전하실 곳',
   accountDescription: '참석이 어려우신 분들을 위해\n계좌번호를 기재하였습니다.\n너그러운 마음으로 양해 부탁드립니다.',
-  guestbookTitle: '신랑/신부에게 할 말',
+  guestbookTitle: '방명록',
   guestbookDescription: '두 사람에게 축하의 한마디를 남겨주세요.',
 };
 
@@ -96,18 +116,30 @@ export function defaultDatetime(now = new Date()): string {
 
 export function createSections(hosts: HostSide[]): Section[] {
   const make = (type: SectionType): Section => {
-    const base = { id: uid('sec'), enabled: true };
+    const base = { id: uid('sec'), enabled: !OFF_BY_DEFAULT.includes(type) };
     switch (type) {
       case 'hero':
-        return { ...base, type, data: { imageId: null, layout: 'full', headline: WEDDING.headline } };
+        return { ...base, type, enabled: true, data: { imageId: null, layout: 'full', headline: WEDDING.headline } };
       case 'greeting':
-        return { ...base, type, data: { title: WEDDING.greetingTitle, body: WEDDING.greetingBody, showSignature: true } };
+        return { ...base, type, data: { title: WEDDING.greetingTitle, body: WEDDING.greetingBody } };
+      case 'couple':
+        return { ...base, type, data: { title: WEDDING.coupleTitle, showParents: true, showContact: true } };
+      case 'profile':
+        return {
+          ...base,
+          type,
+          data: { title: WEDDING.profileTitle, people: hosts.map((h) => ({ hostId: h.id, mbti: '', intro: '' })), timeline: [] },
+        };
       case 'calendar':
         return { ...base, type, data: { showCalendar: true, showCountdown: true } };
       case 'gallery':
         return { ...base, type, data: { title: 'Gallery', imageIds: [], layout: 'grid' } };
-      case 'parents':
-        return { ...base, type, data: { title: WEDDING.parentsTitle, showContact: true } };
+      case 'rsvp':
+        return {
+          ...base,
+          type,
+          data: { title: WEDDING.rsvpTitle, description: WEDDING.rsvpDescription, askCount: true, askMeal: true },
+        };
       case 'location':
         return {
           ...base,
@@ -137,6 +169,12 @@ export function createSections(hosts: HostSide[]): Section[] {
           type,
           data: { title: WEDDING.guestbookTitle, description: WEDDING.guestbookDescription },
         };
+      case 'snap':
+        return { ...base, type, data: { title: WEDDING.snapTitle, description: WEDDING.snapDescription } };
+      case 'closing':
+        return { ...base, type, data: { body: WEDDING.closingBody, showNames: true } };
+      case 'brand':
+        return { ...base, type, enabled: true, data: {} };
     }
   };
   return SECTION_ORDER.map(make);
@@ -168,11 +206,16 @@ export function createDoc(): InvitationDoc {
 
 export const SECTION_LABELS: Record<SectionType, string> = {
   hero: '히어로 (맨 위)',
-  greeting: '인사말',
-  calendar: '날짜',
+  greeting: '시작 멘트',
+  couple: '신랑·신부',
+  profile: '신랑·신부 추가 정보',
+  calendar: '예식 일자',
   gallery: '갤러리',
-  parents: '혼주',
-  location: '찾아오는 길',
-  account: '계좌번호',
-  guestbook: '신랑/신부에게 할 말',
+  rsvp: '참석 여부',
+  account: '마음 전할 곳 (계좌)',
+  guestbook: '방명록',
+  location: '오시는 길',
+  snap: '게스트 스냅',
+  closing: '마무리 멘트',
+  brand: '브랜드 소개',
 };

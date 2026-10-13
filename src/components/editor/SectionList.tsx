@@ -2,7 +2,7 @@
 // HTML5 DnD는 터치에서 동작하지 않으므로 포인터 이벤트로 직접 구현한다.
 import { useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
 import type { InvitationDoc } from '../../types/invitation';
-import { SECTION_LABELS } from '../../data/templates';
+import { isPinned, PINNED_LAST, SECTION_LABELS } from '../../data/templates';
 import type { EditorAction } from '../../store/editorReducer';
 
 export type Selection = 'settings' | string; // string = section id
@@ -61,7 +61,10 @@ export function SectionList({ doc, selected, onSelect, dispatch, showBasics = tr
     rects.current.forEach((o, j) => {
       if (j !== d.from && o.top + o.height / 2 < center) to++;
     });
-    setDragBoth({ ...d, dy, to: Math.max(1, to) });
+    // 고정 섹션 자리(맨 앞 히어로, 맨 뒤 브랜드)로는 들어갈 수 없다 (§4.2)
+    const last = doc.sections.length - 1;
+    const hi = doc.sections[last]?.type === PINNED_LAST ? last - 1 : last;
+    setDragBoth({ ...d, dy, to: Math.min(Math.max(1, to), hi) });
   };
 
   const onHandleUp = () => {
@@ -104,7 +107,7 @@ export function SectionList({ doc, selected, onSelect, dispatch, showBasics = tr
       <p className="list-caption">섹션 (끌어서 순서를 바꿀 수 있어요)</p>
       <ul>
         {doc.sections.map((s, i) => {
-          const isHero = s.type === 'hero';
+          const pinned = isPinned(s.type);
           const label = SECTION_LABELS[s.type];
           const isDragged = drag?.id === s.id;
           return (
@@ -120,9 +123,9 @@ export function SectionList({ doc, selected, onSelect, dispatch, showBasics = tr
               <button type="button" className={`list-item${selected === s.id ? ' is-on' : ''}`} onClick={() => onSelect(s.id)}>
                 <span className="list-num">{i + 1}</span>
                 <span className="list-name">{label}</span>
-                {isHero && <span className="list-badge">고정</span>}
+                {pinned && <span className="list-badge">고정</span>}
               </button>
-              {!isHero && (
+              {!pinned && (
                 <span className="row-actions">
                   <input
                     type="checkbox"
