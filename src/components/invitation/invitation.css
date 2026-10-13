@@ -708,11 +708,13 @@
   background: linear-gradient(to top, var(--inv-bg) 0%, color-mix(in srgb, var(--inv-bg) 82%, transparent) 38%, transparent 100%);
   text-shadow: none;
 }
-.inv--fam-editorial .hero--full .hero-date { order: -1; margin: 0 0 8px; font-size: 12px; font-weight: 500; letter-spacing: 0.3em; }
+.inv--fam-editorial .hero--full .hero-date { order: -1; margin: 0 0 8px; font-size: 13px; font-weight: 500; letter-spacing: 0; }
 /* 이름 사이: 예식 일자의 손그림 하트를 이름보다 크게 */
 .inv--fam-editorial .hero--full .hero-names { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; }
 .inv--fam-editorial .hero--full .hero-names .hero-name-part { display: contents; }
-.inv--fam-editorial .hero-sep { margin: 0 0.2em; }
+/* 이름과 하트가 살짝 겹치도록 음수 여백, 하트는 글자 뒤로 */
+.inv--fam-editorial .hero--full .hero-overlay { isolation: isolate; }
+.inv--fam-editorial .hero-sep { position: relative; z-index: -1; margin: 0 -10px; }
 .inv--fam-editorial .hero-dot { display: none; }
 .inv--fam-editorial .hero-heart { display: block; width: 50px; height: 46px; stroke-width: 4; }
 .inv--fam-editorial .hero-names {
