@@ -191,10 +191,8 @@ export function useStickerFlow(doc: InvitationDoc, dispatch: (a: EditorAction) =
           </div>
         </section>
       ))}
+      {/* 사진 조정은 미리보기의 선택 박스 아래 버튼으로만 (패널에 중복 두지 않음) */}
       <div className="sticker-panel-actions">
-        <button type="button" className="btn btn-ghost" onClick={() => setAdjusting(true)}>
-          사진 조정
-        </button>
         <button type="button" className="btn btn-ghost sticker-remove" onClick={remove}>
           떼기
         </button>
