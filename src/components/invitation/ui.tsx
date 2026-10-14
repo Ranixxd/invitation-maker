@@ -189,6 +189,7 @@ export function Modal({
   onClose,
   children,
   bare = false,
+  className = '',
 }: {
   doc: InvitationDoc;
   label: string;
@@ -196,6 +197,8 @@ export function Modal({
   children: ReactNode;
   /** true면 카드 없이 내용만 (라이트박스) */
   bare?: boolean;
+  /** 카드에 더할 클래스 (간격 등 모달별 조정) */
+  className?: string;
 }) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
@@ -211,7 +214,7 @@ export function Modal({
   return createPortal(
     <ThemePortal doc={doc}>
       <div className="ui-modal" role="dialog" aria-modal="true" aria-label={label} onClick={onClose}>
-        <div className={bare ? 'ui-modal-bare' : 'ui-modal-card'} onClick={(e) => e.stopPropagation()}>
+        <div className={`${bare ? 'ui-modal-bare' : 'ui-modal-card'} ${className}`.trim()} onClick={(e) => e.stopPropagation()}>
           {children}
         </div>
         <p className="ui-modal-hint">배경 눌러서 닫기</p>

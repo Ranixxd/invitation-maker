@@ -190,7 +190,7 @@ function DetailModal({
   };
 
   return (
-    <Modal doc={doc} label={`${message.name}님의 방명록`} onClose={onClose}>
+    <Modal doc={doc} label={`${message.name}님의 방명록`} onClose={onClose} className="gb-detail">
       <p className="gb-detail-name">{message.name}</p>
       <Divider />
       <p className="gb-detail-text">{message.text}</p>

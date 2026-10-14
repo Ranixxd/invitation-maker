@@ -313,6 +313,10 @@
 .gb-fab .ui-btn { box-shadow: 0 8px 24px -8px var(--c-scrim); }
 @keyframes gb-fab-in { from { opacity: 0; transform: translate(-50%, 12px); } }
 /* 상세 · 작성 */
+/* 상세: 이름 · 구분선 · 본문 · 날짜는 촘촘하게(8), 삭제 영역만 조금 띄운다(16) */
+.ui-modal-card.gb-detail { gap: var(--sp-item); }
+.gb-detail .ui-form, .gb-detail > .ui-btn--chip { margin-top: var(--sp-item); }
+.gb-detail .ui-form { gap: var(--sp-title); }
 .gb-detail-name { font-size: var(--fs-title); font-weight: var(--fw-semibold); color: var(--c-accent); }
 .gb-detail-text { font-size: var(--fs-title); line-height: var(--lh-body); color: var(--c-ink); white-space: pre-line; }
 .gb-write-title { margin: 0; font-size: var(--fs-title); text-align: center; color: var(--c-ink); }
