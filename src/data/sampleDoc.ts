@@ -1,10 +1,11 @@
 // 템플릿 미리보기용 샘플 청첩장 (CONSTITUTION §3.5). 모든 섹션이 채워진 상태로 보여준다.
 import type { ImageAsset, InvitationDoc, Section } from '../types/invitation';
 import { createDoc } from './templates';
-import { applyTemplate, samplePhoto, type DesignTemplate } from './designTemplates';
+import { applyTemplate, type DesignTemplate } from './designTemplates';
 import { hashPassword, SAMPLE_PASSWORD } from '../lib/guestbook';
-// 샘플 웨딩 사진 (src/assets/samples/, §3.5) — 모든 템플릿의 대표(히어로) 사진
-import weddingHero01 from '../assets/samples/wedding-hero-01.jpg';
+// 샘플 사진 (src/assets/samples/, §3.5) — 지금은 친구와 돌려 보는 단계라 짤 한 장을 모든 자리(히어로·추가·갤러리)에 쓴다.
+// 원래 웨딩 샘플(wedding-hero-01.jpg)로 돌아가려면 이 import만 바꾸면 된다
+import samplePhoto01 from '../assets/samples/sample-meme-01.jpg';
 
 const GALLERY_COUNT = 9;
 const SAMPLE_TIMELINE = [
@@ -36,15 +37,15 @@ const SAMPLE_GUESTBOOK: [string, string][] = [
 export function sampleDoc(t: DesignTemplate): InvitationDoc {
   const doc = applyTemplate(createDoc(), t);
   const hero: ImageAsset = {
-    id: 'sample_wedding_hero_01',
-    src: weddingHero01,
-    width: 688,
-    height: 1031,
-    aspect: 688 / 1031,
-    luminance: 0.7,
-    color: '#d9b48a',
+    id: 'sample_photo_01',
+    src: samplePhoto01,
+    width: 736,
+    height: 552,
+    aspect: 736 / 552,
+    luminance: 0.6,
+    color: '#b9a39a',
   };
-  const gallery: ImageAsset[] = Array.from({ length: GALLERY_COUNT }, (_, i) => samplePhoto(t, i + 1));
+  const gallery: ImageAsset[] = Array.from({ length: GALLERY_COUNT }, (_, i) => ({ ...hero, id: `sample_gallery_${i + 1}` }));
   // 폴라로이드 추가 사진 2장: 샘플은 같은 사진(다른 id) — 실제 사진이 생기면 교체
   const heroExtras: ImageAsset[] = [1, 2].map((n) => ({ ...hero, id: `${hero.id}_${n}` }));
   const images = Object.fromEntries([hero, ...heroExtras, ...gallery].map((img) => [img.id, img]));
