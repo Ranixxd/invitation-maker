@@ -53,6 +53,7 @@
 /* ---- 히어로: 폴라로이드 (에디토리얼) ---- */
 .hero { position: relative; text-align: center; }
 .hero--polaroid {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -71,10 +72,28 @@
   white-space: pre-line;
   z-index: 2;
 }
-.hero-pol-hearts { position: absolute; right: -46px; bottom: -32px; display: flex; gap: var(--sp-1); } /* 위치는 장식 배치값 */
 .heart-cut { flex: none; fill: var(--sec-title); stroke: var(--sec-title); stroke-width: 0.6; stroke-linejoin: round; }
-.hero-pol-hearts .heart-cut { width: 19px; height: 17px; transform: rotate(-10deg); }
-.hero-pol-hearts .heart-cut:last-child { width: 13px; height: 12px; margin-top: var(--sp-3); transform: rotate(16deg); }
+/* 배경에 흩날리는 하트 (히어로만): 깊이 3단계 — 멀수록 작고·옅고·흐리고·느리다 */
+.hero-fall { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.hero--polaroid > :not(.hero-fall) { position: relative; z-index: 1; }
+.hero-fall-item {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  animation: hero-fall var(--fall-dur) linear infinite;
+  will-change: transform;
+}
+.hero-fall-item .heart-cut { display: block; width: var(--fall-size); height: auto; opacity: var(--fall-op); filter: blur(var(--fall-blur)); animation: hero-sway 4s ease-in-out infinite alternate; }
+.hero-fall-item.is-d1 { --fall-size: 8px; --fall-op: 0.14; --fall-blur: 0.8px; --fall-dur: 26s; }
+.hero-fall-item.is-d2 { --fall-size: 12px; --fall-op: 0.22; --fall-blur: 0.3px; --fall-dur: 19s; }
+.hero-fall-item.is-d3 { --fall-size: 17px; --fall-op: 0.3; --fall-blur: 0px; --fall-dur: 14s; }
+.hero-fall-item:nth-child(even) .heart-cut { animation-duration: 5s; animation-direction: alternate-reverse; }
+@keyframes hero-fall { from { transform: translateY(-4%); } to { transform: translateY(100%); } }
+@keyframes hero-sway { from { transform: translateX(-10px) rotate(-18deg); } to { transform: translateX(10px) rotate(14deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .hero-fall-item, .hero-fall-item .heart-cut { animation: none; }
+  .hero-fall-item { transform: translateY(calc(var(--fall-op) * 200%)); }
+}
 /* 폴라로이드 3장: 기울여 겹친 사진 더미 */
 /* 아래 여백: 필기체 문구가 사진에 조금만 걸치고 나머지는 사진 아래로 내려오는 자리 */
 .hero-pol-stack { position: relative; width: 100%; aspect-ratio: 295 / 380; margin-bottom: var(--sp-16); }
@@ -356,7 +375,7 @@
   height: var(--h-chip);
   padding: 0 var(--sp-2);
   border: 0;
-  border-radius: var(--r-control);
+  border-radius: 999px; /* 페이지 번호는 모양과 관계없이 원형 */
   background: transparent;
   color: var(--sec-muted) !important;
   font-family: var(--ff-sans);
@@ -393,6 +412,7 @@
 .location .ui-card-body { font-weight: var(--fw-regular); }
 /* 지도 자리 (카카오맵 연동 전): 영역만 */
 .map-preview { display: grid; place-items: center; aspect-ratio: 5 / 3; border-radius: var(--r-card); background: var(--c-ink-4); }
+.map-block { gap: var(--sp-title); }
 .map-links { display: grid; justify-items: center; gap: var(--sp-item); width: 100%; max-width: var(--w-col); }
 /* 지도 버튼 3개는 열 폭을 3등분해 같은 너비 */
 .map-links-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-item); width: 100%; }

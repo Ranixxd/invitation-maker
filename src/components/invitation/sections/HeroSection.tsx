@@ -6,6 +6,38 @@ import { MusicBar } from '../MusicBar';
 
 const DEFAULT_SCRIPT = 'Our Wedding Day';
 
+/** 히어로 배경에 흩날리는 오린 하트. depth 1(멀리: 작고 흐리고 느림) ~ 3(가까이: 크고 빠름) */
+const FALLING_HEARTS: { x: number; depth: 1 | 2 | 3; delay: number; shape: 'a' | 'b' }[] = [
+  { x: 6, depth: 1, delay: 0, shape: 'a' },
+  { x: 18, depth: 3, delay: 7, shape: 'b' },
+  { x: 27, depth: 2, delay: 12, shape: 'a' },
+  { x: 39, depth: 1, delay: 4, shape: 'b' },
+  { x: 48, depth: 2, delay: 1, shape: 'b' },
+  { x: 57, depth: 1, delay: 15, shape: 'a' },
+  { x: 66, depth: 3, delay: 2, shape: 'a' },
+  { x: 74, depth: 1, delay: 9, shape: 'b' },
+  { x: 83, depth: 2, delay: 6, shape: 'a' },
+  { x: 92, depth: 1, delay: 18, shape: 'b' },
+  { x: 12, depth: 2, delay: 16, shape: 'b' },
+  { x: 88, depth: 3, delay: 11, shape: 'b' },
+];
+
+function FallingHearts() {
+  return (
+    <div className="hero-fall" aria-hidden>
+      {FALLING_HEARTS.map((h, i) => (
+        <span
+          key={i}
+          className={`hero-fall-item is-d${h.depth}`}
+          style={{ left: `${h.x}%`, animationDelay: `-${h.delay}s` }}
+        >
+          <HeartCut shape={h.shape} />
+        </span>
+      ))}
+    </div>
+  );
+}
+
 export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
   const { imageId, layout, headline } = section.data;
   const img = imageId ? doc.images[imageId] : null;
@@ -21,7 +53,7 @@ export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
     </div>
   );
 
-  // 폴라로이드: 크림 종이 위 기울어진 폴라로이드 3장 · 작은 문구와 하트 · 영문 필기체 · 이름 · 일시·장소 (§3.5)
+  // 폴라로이드: 크림 종이 위 흩날리는 하트 · 기울어진 폴라로이드 3장 · 작은 문구 · 영문 필기체 · 이름 · 일시·장소 · 음악 (§3.5)
   if (layout === 'polaroid') {
     const extras = (section.data.extraImageIds ?? []).map((id) => doc.images[id]).filter(Boolean);
     const shots = [img, ...extras].slice(0, 3);
@@ -30,15 +62,8 @@ export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
     const scriptAsImage = script.toLowerCase() === DEFAULT_SCRIPT.toLowerCase();
     return (
       <div className={`hero hero--polaroid has-${Math.max(1, shots.length)}`}>
-        {headline && (
-          <p className="hero-pol-note">
-            {headline}
-            <span className="hero-pol-hearts" aria-hidden>
-              <HeartCut shape="a" />
-              <HeartCut shape="b" />
-            </span>
-          </p>
-        )}
+        <FallingHearts />
+        {headline && <p className="hero-pol-note">{headline}</p>}
         <div className="hero-pol-stack">
           {(shots.length ? shots : [null]).map((shot, i) => (
             <figure key={i} className={`hero-pol-card is-${i + 1}`}>

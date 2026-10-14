@@ -3,7 +3,7 @@ import type { SectionProps } from '../InvitationView';
 import { InfoCard, SectionHead } from '../ui';
 import { MapPreview } from '../MapPreview';
 
-// 장소명 · 지도 자리 그림(카카오맵 연동 전, plan.md) · 교통편 · 외부 지도 링크 (CONSTITUTION §4.5)
+// 장소명 · 지도 자리 그림(카카오맵 연동 전, plan.md) + 바로 아래 외부 지도 링크 · 교통편 (CONSTITUTION §4.5)
 function mapLinks(query: string) {
   const q = encodeURIComponent(query);
   return [
@@ -36,8 +36,20 @@ export function LocationSection({ doc, section }: SectionProps<SectionOf<'locati
         </div>
       )}
       {v.name && (
-        <div className="ui-col">
+        <div className="ui-col map-block">
           <MapPreview label={v.name} />
+          {showMapLinks && (
+            <div className="map-links">
+              <p className="ui-caption">지도로 보기</p>
+              <div className="map-links-row">
+                {mapLinks(v.address || v.name).map((l) => (
+                  <a key={l.label} className="ui-btn ui-btn--chip" href={l.href} target="_blank" rel="noreferrer">
+                    {l.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
       {transports.length > 0 && (
@@ -47,18 +59,6 @@ export function LocationSection({ doc, section }: SectionProps<SectionOf<'locati
               {t.text}
             </InfoCard>
           ))}
-        </div>
-      )}
-      {showMapLinks && (v.address || v.name) && (
-        <div className="map-links">
-          <p className="ui-caption">지도로 보기</p>
-          <div className="map-links-row">
-            {mapLinks(v.address || v.name).map((l) => (
-              <a key={l.label} className="ui-btn ui-btn--chip" href={l.href} target="_blank" rel="noreferrer">
-                {l.label}
-              </a>
-            ))}
-          </div>
         </div>
       )}
     </section>
