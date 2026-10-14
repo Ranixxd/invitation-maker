@@ -101,7 +101,7 @@
 }
 /* 폴라로이드 3장: 기울여 겹친 사진 더미 */
 /* 아래 여백: 필기체 문구가 사진에 조금만 걸치고 나머지는 사진 아래로 내려오는 자리 */
-.hero-pol-stack { position: relative; width: 100%; aspect-ratio: 295 / 380; margin-bottom: var(--sp-16); }
+.hero-pol-stack { position: relative; width: 100%; aspect-ratio: 295 / 380; margin-bottom: calc(var(--sp-16) + var(--sp-4)); }
 .hero-pol-card {
   position: absolute;
   width: 54%;
@@ -124,7 +124,7 @@
   position: absolute;
   left: -8px;
   right: -8px;
-  bottom: -60px;
+  bottom: -70px;
   z-index: 3;
   font-family: var(--ff-script);
   font-size: var(--fs-script);
@@ -139,8 +139,8 @@
 .hero-pol-script.is-image {
   left: 50%;
   right: auto;
-  bottom: -76px;
-  width: 84%;
+  bottom: -92px;
+  width: 96%;
   aspect-ratio: 720 / 336;
   background: var(--c-accent);
   -webkit-mask: url('../../assets/decor/our-wedding-day.png') center / contain no-repeat;
