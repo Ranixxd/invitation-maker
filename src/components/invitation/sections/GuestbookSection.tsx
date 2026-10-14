@@ -25,13 +25,20 @@ function load(docId: string): GuestMessage[] {
   }
 }
 
-/** 쪽지마다 일정한(새로고침해도 같은) 기울기 */
+/** 쪽지마다 일정한(새로고침해도 같은) 기울기: 크기는 id 해시(1.2°~3.8°), 방향은 이웃끼리 번갈아 */
 function hash(s: string) {
-  let h = 0;
-  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
-  return Math.abs(h);
+  let h = 0x811c9dc5; // FNV-1a: 비슷한 id(sample_gb_0, _1…)도 고르게 흩어진다
+  for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 0x01000193);
+  return h >>> 0;
 }
-const tiltOf = (id: string) => ((hash(id) % 9) - 4) * 0.9; // -3.6° ~ 3.6°
+const tiltOf = (id: string, index: number) => {
+  const h = hash(id);
+  const size = 1.2 + (h % 27) / 10; // 1.2 ~ 3.8
+  // 3열 격자에서 이웃(가로·세로)이 서로 반대로 기울도록 체크무늬 + 해시로 가끔 뒤집기
+  const checker = ((index % 3) + Math.floor(index / 3)) % 2 === 0 ? 1 : -1; // (열 + 행) 짝홀
+  const flip = (h >>> 8) % 5 === 0 ? -1 : 1;
+  return size * checker * flip;
+};
 
 const fmtDate = formatShortDot;
 
@@ -106,12 +113,12 @@ export function GuestbookSection({ doc, section, mode }: SectionProps<SectionOf<
         </p>
       ) : (
         <ul className="gb-notes">
-          {visible.map((m) => (
+          {visible.map((m, i) => (
             <li key={m.id}>
               <button
                 type="button"
                 className="gb-note"
-                style={{ transform: `rotate(${tiltOf(m.id)}deg)` }}
+                style={{ transform: `rotate(${tiltOf(m.id, i).toFixed(2)}deg)` }}
                 onClick={() => setOpened(m)}
                 aria-label={`${m.name}님의 방명록 보기`}
               >
