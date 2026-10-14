@@ -109,14 +109,14 @@ export function ProfileSection({ section, mode }: SectionProps<SectionOf<'profil
     if (mode === 'view') return null;
     return (
       <section className="inv-block profile">
-        <SectionHead heart title={title} desc="우리의 타임라인을 채워 주세요" />
+        <SectionHead title={title} desc="우리의 타임라인을 채워 주세요" />
       </section>
     );
   }
 
   return (
     <section className="inv-block profile">
-      <SectionHead heart title={title} />
+      <SectionHead title={title} />
       <ol ref={listRef} className={`story${drawn ? ' is-drawn' : ''}`}>
         {geo && (
           <svg className="story-ribbon" width={geo.w} height={geo.h} viewBox={`0 0 ${geo.w} ${geo.h}`} aria-hidden>

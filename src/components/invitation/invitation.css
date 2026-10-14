@@ -35,10 +35,6 @@
   text-align: center;
 }
 
-/* 시작 멘트 바로 뒤 신랑·신부: 한 섹션으로 이어 보인다 (§4.1) */
-.inv-section--greeting:has(+ .inv-section--couple) > .inv-block { padding-bottom: 0; }
-.inv-section--greeting + .inv-section--couple > .inv-block { padding-top: var(--sp-8); }
-
 /* 포인트 바탕 섹션 (에디토리얼 계열: 우리의 이야기·갤러리·방명록) */
 .inv--fam-editorial .inv-section--profile,
 .inv--fam-editorial .inv-section--gallery,

@@ -30,7 +30,8 @@ export function HeartMark() {
   return <HeartCut shape="a" className="ui-heart" />;
 }
 
-export function SectionHead({ title, desc, heart = false }: { title?: ReactNode; desc?: string; heart?: boolean }) {
+/** 섹션 머리: 제목 위 오린 하트(섹션 구분 표시, 기본 켬) · 제목 · 설명 */
+export function SectionHead({ title, desc, heart = true }: { title?: ReactNode; desc?: string; heart?: boolean }) {
   return (
     <header className="ui-head">
       {heart && <HeartMark />}
