@@ -3,7 +3,7 @@
 > **살아있는 마스터 문서.** 시스템 전체의 로직·정책·규칙의 *현재 유효한* 상태를 기록한다.
 > 코드와 이 문서가 다르면 **둘 중 하나가 버그**다. 정책을 바꾸는 커밋은 반드시 이 문서도 같은 커밋에서 고친다.
 >
-> - 현재 판: **v0.48** (2026-10-14)
+> - 현재 판: **v0.49** (2026-10-14)
 > - 설계의 *배경과 당시 판단*은 [PRD 스냅샷](./prd/)에 남긴다. 이 문서는 "지금 무엇이 참인가"만 다룬다.
 
 ---
@@ -126,9 +126,9 @@
   - 섹션 문맥 `--sec-bg`·`--sec-fg`·`--sec-title`·`--sec-muted`·`--sec-paper` (포인트 바탕 섹션에서 계열 CSS가 반전)
   - 글꼴·크기 `--ff-sans`·`--ff-display`·`--fs-numeral 57`·`--fs-display 32`·`--fs-headline 28`·`--fs-section 20`(섹션 제목)·`--fs-title 17`·`--fs-body 15`·`--fs-caption 13`, 줄 간격 `--lh-tight 1.3`·`--lh-body 1.5`, 굵기 400/500/600
   - 간격 `--sp-section 40`(섹션 위아래)·`--sp-hero 50`(히어로 위아래)·`--sp-gutter 40`(좌우)·`--sp-stack 20`(요소 사이)·`--sp-card 20`·`--sp-item 8`·`--sp-label 4`, 열 폭 `--w-col 320`
-  - 크기 `--h-control 40`·`--h-chip 24`, 테두리 `--bw 1`·`--bw-strong 3`(선택)·`--bw-frame 8`·`--bw-frame-sm 4`
+  - 크기 `--h-control 40`·`--h-chip 24`, 테두리 `--bw 1`·`--bw-strong 2`(선택)·`--bw-frame 8`·`--bw-frame-sm 4`
 - **컴포넌트 (`src/components/invitation/ui.tsx` + `ui.css`)** — 섹션은 이것들을 조합한다:
-  - `SectionHead`(하트·제목·설명) · `HeartMark` · `Button`(`primary` 포인트 바탕 / `inverse` 크림 바탕 / `chip` 작은 테두리) · `Field`(레이블·우측 보조·도움말/오류 + `.ui-input`/`.ui-textarea`) · `ChoiceGroup`(`pill` / `card`: 위 작은 레이블 + 이름, 선택 = 포인트 3px 테두리) · `Stepper`(− 왼쪽 · + 오른쪽, 포인트색 아이콘, 끝값 비활성) · `InfoCard`(머리 · 구분선 · 내용, 잉크 4% 바탕) · `Divider` · `Modal`(흐린 배경 + 카드 또는 맨 내용 + `배경 눌러서 닫기`) · `.ui-disclosure`(펼침 + 셰브론) · lucide 아이콘(currentColor)
+  - `SectionHead`(하트·제목·설명) · `HeartMark` · `Button`(`primary` 포인트 바탕 / `inverse` 크림 바탕 / `chip` 작은 테두리) · `Field`(레이블·우측 보조·도움말/오류 + `.ui-input`/`.ui-textarea`) · `ChoiceGroup`(`pill` / `card`: 위 작은 레이블 + 이름, 선택 = 포인트 2px 테두리: 1px 테두리 + 안쪽 그림자 1px로 그려 크기·글자 위치가 변하지 않음) · `Stepper`(− 왼쪽 · + 오른쪽, 포인트색 아이콘, 끝값 비활성) · `InfoCard`(머리 · 구분선 · 내용, 잉크 4% 바탕) · `Divider` · `Modal`(흐린 배경 + 카드 또는 맨 내용 + `배경 눌러서 닫기`) · `.ui-disclosure`(펼침 + 셰브론) · lucide 아이콘(currentColor)
 - **새 템플릿 = 팔레트만 바꾸기:** ① `THEME_PRESETS`에 팔레트 추가 ② `DESIGN_TEMPLATES`에 `preset`·`family`·`shape` 지정. CSS 추가 없음. 템플릿에 `family`/`shape`가 없으면 `basic`·`round`.
 - **포털**(모달·떠 있는 버튼)은 렌더러 루트 밖에 그려지므로 `ThemePortal`로 같은 토큰·클래스를 다시 입힌다(`.inv-portal`). `Modal`이 이를 감싼다.
 - 렌더 환경 `InvitationEnv.floatingActions`: 실제 하객 화면(`/view`)에서만 `true`. 떠 있는 버튼은 이때만 쓰고, 편집기·템플릿 미리보기에서는 섹션 안에 둔다.
@@ -506,3 +506,4 @@ Refs: PRD-XXXX, §조항
 | v0.46 | 2026-10-14 | §3.6 섹션 위아래 여백 50 → 40px(히어로는 50 유지, `--sp-hero`) | — |
 | v0.47 | 2026-10-14 | §4.9 브랜드 소개를 비우고 홍보 배너 자리 문구(`홍보 배너 영역`)만 표시 | — |
 | v0.48 | 2026-10-14 | §3.6 섹션 제목 17 → 20px(새 토큰 `--fs-section`, 예식 일자 제목 포함) | — |
+| v0.49 | 2026-10-14 | §3.6 선택 알약 테두리 3 → 2px, 테두리 두께 대신 안쪽 그림자로 그려 선택 시 흔들림 제거 | — |

@@ -83,8 +83,10 @@
   font: var(--fw-medium) var(--fs-title) var(--ff-sans);
   cursor: pointer;
 }
-/* 선택: 굵은 포인트 테두리 (글자는 가운데 정렬이라 위치가 흔들리지 않는다) */
-.ui-choice.is-on { border: var(--bw-strong) solid var(--c-accent); }
+/* 선택: 포인트 테두리 2px. 테두리 두께는 그대로(1px) 두고 안쪽 그림자로 1px을 더해
+   크기·글자 위치가 바뀌지 않게 한다(덜컹거림 없음) */
+.ui-choice { transition: border-color 0.15s ease, box-shadow 0.15s ease; }
+.ui-choice.is-on { border-color: var(--c-accent); box-shadow: inset 0 0 0 calc(var(--bw-strong) - var(--bw)) var(--c-accent); }
 .ui-choices--card .ui-choice { display: grid; place-content: center; gap: 6px; height: 80px; border-radius: var(--r-card); }
 .ui-choice-sub { font-size: var(--fs-caption); color: var(--c-accent); }
 .ui-choice-main { font-size: var(--fs-title); }
