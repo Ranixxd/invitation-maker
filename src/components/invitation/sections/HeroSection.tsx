@@ -2,6 +2,8 @@ import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
 import { formatDot, formatDotKo, formatKo, parseLocal } from '../../../lib/date';
 
+const DEFAULT_SCRIPT = 'Our Wedding Day';
+
 /** 작은 채운 하트 (폴라로이드 히어로 장식) */
 function HeartFilled() {
   return (
@@ -30,7 +32,9 @@ export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
   if (layout === 'polaroid') {
     const extras = (section.data.extraImageIds ?? []).map((id) => doc.images[id]).filter(Boolean);
     const shots = [img, ...extras].slice(0, 3);
-    const script = section.data.script?.trim() || 'Our Wedding Day';
+    const script = section.data.script?.trim() || DEFAULT_SCRIPT;
+    // 기본 문구는 손글씨 이미지(색은 포인트 토큰으로 칠함), 다른 문구는 필기체 웹폰트
+    const scriptAsImage = script.toLowerCase() === DEFAULT_SCRIPT.toLowerCase();
     return (
       <div className={`hero hero--polaroid has-${Math.max(1, shots.length)}`}>
         {headline && (
@@ -48,9 +52,13 @@ export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
               {shot ? <img src={shot.src} alt={i === 0 ? '대표 사진' : ''} /> : <div className="hero-img--empty">대표 사진을 추가해 주세요</div>}
             </figure>
           ))}
-          <p className="hero-pol-script" lang="en">
-            {script}
-          </p>
+          {scriptAsImage ? (
+            <p className="hero-pol-script is-image" role="img" aria-label={DEFAULT_SCRIPT} />
+          ) : (
+            <p className="hero-pol-script" lang="en">
+              {script}
+            </p>
+          )}
         </div>
         <h1 className="hero-pol-names">{names.join(' · ')}</h1>
         {(date || venue) && (

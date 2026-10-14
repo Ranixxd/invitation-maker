@@ -72,7 +72,8 @@
 .hero-pol-hearts svg { width: 14px; height: 13px; fill: var(--c-accent); }
 .hero-pol-hearts svg:last-child { width: 10px; height: 9px; margin-top: 10px; transform: rotate(12deg); }
 /* 폴라로이드 3장: 기울여 겹친 사진 더미 */
-.hero-pol-stack { position: relative; width: 100%; aspect-ratio: 295 / 380; }
+/* 아래 여백: 필기체 문구가 사진에 조금만 걸치고 나머지는 사진 아래로 내려오는 자리 */
+.hero-pol-stack { position: relative; width: 100%; aspect-ratio: 295 / 380; margin-bottom: 64px; }
 .hero-pol-card {
   position: absolute;
   width: 54%;
@@ -95,7 +96,7 @@
   position: absolute;
   left: -8px;
   right: -8px;
-  bottom: -6px;
+  bottom: -60px;
   z-index: 3;
   font-family: var(--ff-script);
   font-size: 54px;
@@ -105,6 +106,18 @@
   color: var(--c-accent);
   transform: rotate(-6deg);
   pointer-events: none;
+}
+/* 기본 문구 'Our Wedding Day': 손글씨 이미지를 모양 틀(마스크)로 써서 포인트색으로 칠한다 */
+.hero-pol-script.is-image {
+  left: 50%;
+  right: auto;
+  bottom: -76px;
+  width: 84%;
+  aspect-ratio: 720 / 336;
+  background: var(--c-accent);
+  -webkit-mask: url('../../assets/decor/our-wedding-day.png') center / contain no-repeat;
+  mask: url('../../assets/decor/our-wedding-day.png') center / contain no-repeat;
+  transform: translateX(-50%) rotate(-6deg);
 }
 .hero-pol-names { margin: var(--sp-title) 0 0; font-size: var(--fs-section); font-weight: var(--fw-semibold); line-height: var(--lh-tight); color: var(--c-ink); }
 .hero-pol-when { display: grid; font-size: var(--fs-title); font-weight: var(--fw-medium); line-height: var(--lh-body); color: var(--c-accent); }
