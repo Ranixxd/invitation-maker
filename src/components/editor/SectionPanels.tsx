@@ -14,7 +14,7 @@ import { HERO_EXTRA_MAX } from '../../store/editorReducer';
 import { PanelSection, TextArea, TextField, Toggle } from '../common/fields';
 import { PhotoDrop } from '../common/shared';
 import { toast } from '../common/toast';
-import { filesToAssets, MAX_IMAGES_PER_DOC } from '../../lib/image';
+import { filesToAssets, GALLERY_MAX, MAX_IMAGES_PER_DOC } from '../../lib/image';
 import { uid } from '../../lib/id';
 import { VenueFields } from './SettingsPanel';
 
@@ -204,8 +204,9 @@ function CalendarPanel({ doc, section, dispatch, goSettings }: PanelProps<'calen
 // ---------------- gallery ----------------
 function GalleryPanel({ doc, section, dispatch }: PanelProps<'gallery'>) {
   const set = useUpdate('gallery', dispatch);
-  const { busy, upload } = useImageUpload(doc, dispatch, 'gallery');
   const ids = section.data.imageIds.filter((id) => doc.images[id]);
+  const room = GALLERY_MAX - ids.length;
+  const { busy, upload } = useImageUpload(doc, dispatch, 'gallery', room);
   const move = (i: number, d: -1 | 1) => {
     const j = i + d;
     if (j < 0 || j >= ids.length) return;
@@ -218,8 +219,8 @@ function GalleryPanel({ doc, section, dispatch }: PanelProps<'gallery'>) {
       <PanelSection title="갤러리">
         <TextField label="제목" value={section.data.title} onChange={(title) => set({ title })} />
       </PanelSection>
-      <PanelSection title={`사진 ${ids.length}장`}>
-        <PhotoDrop onFiles={upload} busy={busy} compact />
+      <PanelSection title={`사진 (${ids.length}/${GALLERY_MAX})`}>
+        {room > 0 ? <PhotoDrop onFiles={upload} busy={busy} compact /> : <p className="field-hint">사진은 최대 {GALLERY_MAX}장까지 올릴 수 있어요</p>}
         <ul className="gallery-edit">
           {ids.map((id, i) => (
             <li key={id}>

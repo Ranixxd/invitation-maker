@@ -1,4 +1,5 @@
 // 쉽게 시작 v2 (규칙 기반). 디자인은 템플릿이, 사진 배치는 여기서 결정. CONSTITUTION §5
+import { GALLERY_MAX } from './image';
 import type { ImageAsset, InvitationDoc, Venue } from '../types/invitation';
 import { createDoc } from '../data/templates';
 import { defaultSlug } from './slug';
@@ -62,7 +63,7 @@ export function buildFromQuickStart(input: QuickStartInput): InvitationDoc {
       case 'gallery':
         return {
           ...s,
-          data: { ...s.data, imageIds: rest.map((i) => i.id) },
+          data: { ...s.data, imageIds: rest.slice(0, GALLERY_MAX).map((i) => i.id) },
         };
       case 'account':
         return {

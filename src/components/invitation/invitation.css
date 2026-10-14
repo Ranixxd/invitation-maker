@@ -282,12 +282,12 @@
   border-bottom: var(--bw) solid var(--c-ink);
 }
 .cal-strip-day { display: grid; justify-items: center; gap: var(--sp-label); padding: var(--sp-4) 0; color: var(--c-ink-60); }
-.cal-strip-wd { font-weight: var(--fw-medium); }
-.cal-strip-num { position: relative; display: grid; place-items: center; width: var(--h-control); height: var(--h-control); font-size: var(--fs-numeral); font-weight: var(--fw-medium); line-height: var(--lh-none); }
+.cal-strip-wd { font-weight: var(--fw-regular); }
+.cal-strip-num { position: relative; display: grid; place-items: center; width: var(--h-control); height: var(--h-control); font-size: var(--fs-numeral); font-weight: var(--fw-regular); line-height: var(--lh-none); }
 .cal-strip-n { position: relative; }
-.cal-strip-day.is-day .cal-strip-wd { color: var(--c-accent); }
+.cal-strip-day.is-day .cal-strip-wd { color: var(--c-accent); font-weight: var(--fw-medium); }
 /* 예식일: 오린 하트 위에 흰(크림) 숫자 */
-.cal-strip-day.is-day .cal-strip-n { color: var(--c-cream); font-weight: var(--fw-semibold); }
+.cal-strip-day.is-day .cal-strip-n { color: var(--c-cream); font-weight: var(--fw-medium); }
 .heart-cut.cal-heart { position: absolute; inset: calc(-1 * var(--sp-1)); width: calc(100% + 2 * var(--sp-1)); height: calc(100% + 2 * var(--sp-1)); transform: rotate(-6deg); }
 .countdown { font-weight: var(--fw-medium); color: var(--c-ink); }
 .countdown b { font-weight: var(--fw-medium); color: var(--c-accent); }
@@ -322,6 +322,24 @@
   cursor: pointer;
 }
 .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+/* 더보기: 7번째 사진부터 펼친다 */
+.gallery-more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-label);
+  height: var(--h-chip);
+  padding: 0 var(--sp-3);
+  border: var(--bw) solid var(--sec-muted);
+  border-radius: var(--r-control);
+  background: transparent;
+  color: var(--sec-fg);
+  font: var(--fw-medium) var(--fs-body) var(--ff-sans);
+  cursor: pointer;
+}
+.gallery-more .ui-icon { width: 16px; height: 16px; transition: transform 0.2s ease; }
+.gallery-more.is-open .ui-icon { transform: rotate(180deg); }
+.gallery-grid > .gallery-item:nth-child(n + 7),
+.gallery-slide > .gallery-item:nth-child(n + 7) { animation: ui-fade 0.3s ease; }
 .gallery-ph { display: grid; place-items: center; color: var(--c-ink-20); font-size: var(--fs-section); cursor: default; }
 /* 라이트박스 */
 .lightbox { display: flex; align-items: center; gap: var(--sp-2); }

@@ -7,6 +7,8 @@ export const IMAGE_MAX_EDGE = 1600;
 export const IMAGE_QUALITY = 0.82;
 export const MAX_UPLOAD_PER_BATCH = 20;
 export const MAX_IMAGES_PER_DOC = 30;
+/** 갤러리 사진 최대 장수 (§4.6) */
+export const GALLERY_MAX = 9;
 
 async function decode(file: File): Promise<ImageBitmap | HTMLImageElement> {
   if ('createImageBitmap' in window) {

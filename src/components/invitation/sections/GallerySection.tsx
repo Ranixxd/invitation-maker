@@ -1,12 +1,19 @@
 import { useEffect, useState } from 'react';
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
-import { IconChevronLeft, IconChevronRight, Modal, SectionHead } from '../ui';
+import { GALLERY_MAX } from '../../../lib/image';
+import { IconChevronDown, IconChevronLeft, IconChevronRight, Modal, SectionHead } from '../ui';
+
+/** 접힌 상태에서 보이는 사진 수 (3열 × 2줄). 더 있으면 `더보기`로 펼친다 */
+const COLLAPSED = 6;
 
 export function GallerySection({ doc, section, mode }: SectionProps<SectionOf<'gallery'>>) {
   const { title, imageIds, layout } = section.data;
-  const images = imageIds.map((id) => doc.images[id]).filter(Boolean);
+  const images = imageIds.map((id) => doc.images[id]).filter(Boolean).slice(0, GALLERY_MAX);
   const [open, setOpen] = useState<number | null>(null);
+  const [expanded, setExpanded] = useState(false);
+  const canFold = images.length > COLLAPSED;
+  const shown = canFold && !expanded ? images.slice(0, COLLAPSED) : images;
   const step = (d: number) => setOpen((i) => (i === null ? i : (i + d + images.length) % images.length));
 
   useEffect(() => {
@@ -39,7 +46,7 @@ export function GallerySection({ doc, section, mode }: SectionProps<SectionOf<'g
         </div>
       ) : (
         <div className={`gallery-${layout}`}>
-          {images.map((img, i) => (
+          {shown.map((img, i) => (
             <button
               key={img.id}
               type="button"
@@ -51,6 +58,12 @@ export function GallerySection({ doc, section, mode }: SectionProps<SectionOf<'g
             </button>
           ))}
         </div>
+      )}
+      {canFold && (
+        <button type="button" className={`gallery-more${expanded ? ' is-open' : ''}`} onClick={() => setExpanded((v) => !v)} aria-expanded={expanded}>
+          {expanded ? '접기' : `더보기`}
+          <IconChevronDown />
+        </button>
       )}
       {/* 라이트박스: 흐린 배경 위 테두리 사진 + 좌우 넘기기, 배경 눌러서 닫기 */}
       {open !== null && images[open] && (

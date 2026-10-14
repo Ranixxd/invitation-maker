@@ -10,7 +10,7 @@ import type {
   SectionType,
   Theme,
 } from '../types/invitation';
-import { MAX_IMAGES_PER_DOC } from '../lib/image';
+import { GALLERY_MAX, MAX_IMAGES_PER_DOC } from '../lib/image';
 import { isPinned, PINNED_FIRST, PINNED_LAST } from '../data/templates';
 import { MAX_STICKERS_PER_SECTION } from '../lib/stickers';
 
@@ -119,7 +119,7 @@ export function editorReducer(state: EditorState, action: EditorAction): EditorS
         if (action.target === 'hero-extra' && s.type === 'hero')
           return { ...s, data: { ...s.data, extraImageIds: [...(s.data.extraImageIds ?? []), ...added.map((a) => a.id)].slice(0, HERO_EXTRA_MAX) } };
         if (action.target === 'gallery' && s.type === 'gallery')
-          return { ...s, data: { ...s.data, imageIds: [...s.data.imageIds, ...added.map((a) => a.id)] } };
+          return { ...s, data: { ...s.data, imageIds: [...s.data.imageIds, ...added.map((a) => a.id)].slice(0, GALLERY_MAX) } };
         return s;
       });
       return touch(doc, { images, sections });

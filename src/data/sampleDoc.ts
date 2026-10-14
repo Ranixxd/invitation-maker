@@ -6,7 +6,7 @@ import { hashPassword, SAMPLE_PASSWORD } from '../lib/guestbook';
 // 샘플 웨딩 사진 (src/assets/samples/, §3.5) — 모든 템플릿의 대표(히어로) 사진
 import weddingHero01 from '../assets/samples/wedding-hero-01.jpg';
 
-const GALLERY_COUNT = 6;
+const GALLERY_COUNT = 9;
 const SAMPLE_TIMELINE = [
   { date: '2019.03', text: '동아리에서 처음 만난 날' },
   { date: '2020.05', text: '연애 시작' },
