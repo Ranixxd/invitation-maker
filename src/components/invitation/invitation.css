@@ -45,87 +45,69 @@
   --sec-paper: var(--c-cream);
 }
 
-/* ---- 히어로: 포스터 (에디토리얼) ---- */
+/* ---- 히어로: 폴라로이드 (에디토리얼) ---- */
 .hero { position: relative; text-align: center; }
-.hero--poster {
+.hero--polaroid {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--sp-stack);
-  padding: var(--sp-hero) var(--sp-gutter);
+  gap: var(--sp-title);
+  padding: var(--sp-hero) var(--sp-gutter) var(--sp-section);
   overflow: hidden;
-  /* 위는 포인트, 아래 176px는 크림 띠 (사진 아래쪽이 띠에 걸친다) */
-  background: var(--tex-paper) 0 0 / 200px 200px, linear-gradient(to bottom, var(--c-accent) calc(100% - 176px), var(--c-cream) 0);
 }
-.hero-poster-title { position: relative; display: grid; place-items: center; }
-.inv img.hero-poster-heart {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 168px;
-  height: 168px;
-  max-width: none;
-  /* 이름 묶음이 하트의 볼록한 몸통 한가운데 오도록: 그림이 오른쪽으로 기울어 왼쪽으로, 아래 꼭짓점 몫만큼 위로 */
-  transform: translate(-55%, -44%);
-  /* 포토샵·피그마의 Overlay 블렌드: 아래 색(바탕·사진)에 하트의 밝고 어두움을 겹친다. 맨 위 레이어 */
-  mix-blend-mode: overlay;
+/* 왼쪽 위 작은 문구 + 작은 채운 하트 두 개 */
+.hero-pol-note {
+  position: relative;
+  align-self: flex-start;
+  max-width: 60%;
+  margin-bottom: -28px; /* 사진 더미 위쪽에 살짝 겹치게 */
+  font-size: var(--fs-caption);
+  line-height: var(--lh-body);
+  color: var(--c-ink);
+  text-align: left;
+  white-space: pre-line;
   z-index: 2;
+}
+.hero-pol-hearts { position: absolute; right: -36px; bottom: -22px; display: flex; gap: 4px; }
+.hero-pol-hearts svg { width: 14px; height: 13px; fill: var(--c-accent); }
+.hero-pol-hearts svg:last-child { width: 10px; height: 9px; margin-top: 10px; transform: rotate(12deg); }
+/* 폴라로이드 3장: 기울여 겹친 사진 더미 */
+.hero-pol-stack { position: relative; width: 100%; aspect-ratio: 295 / 380; }
+.hero-pol-card {
+  position: absolute;
+  width: 54%;
+  margin: 0;
+  padding: 7px 7px 26px;
+  background: color-mix(in srgb, var(--c-cream) 55%, white);
+  box-shadow: 0 1px 2px var(--c-ink-8), 0 10px 22px -12px var(--c-ink-20);
+}
+.hero-pol-card img, .hero-pol-card .hero-img--empty { display: block; width: 100%; aspect-ratio: 1 / 1.08; object-fit: cover; }
+.hero-pol-card .hero-img--empty { display: grid; place-items: center; background: var(--c-ink-4); color: var(--c-ink-60); font-size: var(--fs-caption); }
+.hero-pol-card.is-1 { left: 0; top: 18%; transform: rotate(-5deg); z-index: 1; }
+.hero-pol-card.is-2 { right: 0; top: 0; transform: rotate(4deg); }
+.hero-pol-card.is-3 { left: 24%; top: 44%; transform: rotate(2deg); z-index: 2; }
+/* 사진이 1장뿐이면 가운데 크게 */
+.has-1 .hero-pol-stack { aspect-ratio: 295 / 330; }
+.has-1 .hero-pol-card.is-1 { left: 12%; top: 4%; width: 76%; transform: rotate(-3deg); }
+.has-2 .hero-pol-stack { aspect-ratio: 295 / 330; }
+/* 영문 필기체: 사진 더미 아래쪽에 걸쳐 */
+.hero-pol-script {
+  position: absolute;
+  left: -8px;
+  right: -8px;
+  bottom: -6px;
+  z-index: 3;
+  font-family: var(--ff-script);
+  font-size: 54px;
+  font-weight: var(--fw-regular);
+  line-height: 0.95;
+  word-spacing: 0.18em; /* 필기체는 단어 사이가 좁아 붙어 보인다 */
+  color: var(--c-accent);
+  transform: rotate(-6deg);
   pointer-events: none;
 }
-/* 반짝이 보케: 밝은 심 + 빛 번짐 (사진 위, 하트 아래 레이어). transform·opacity만 움직인다 */
-.bokeh { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
-/* 바깥: 천천히 떠오르며 나타났다 사라짐 */
-.spark-float {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  animation: spark-rise ease-in-out infinite;
-}
-@keyframes spark-rise {
-  0% { transform: translate(-50%, -50%); opacity: 0; }
-  20% { opacity: 1; }
-  50% { transform: translate(calc(-50% + var(--drift)), calc(-50% - 36px)); }
-  80% { opacity: 1; }
-  100% { transform: translate(-50%, calc(-50% - 72px)); opacity: 0; }
-}
-/* 안쪽: 밝은 심(크림 100%) → 번짐(크림 반투명) → 투명, 반짝임 */
-.spark {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--c-cream) 0 var(--core), color-mix(in srgb, var(--c-cream) 55%, transparent) calc(var(--core) * 1.6), transparent 70%);
-  animation: spark-twinkle ease-in-out infinite alternate;
-}
-.spark.is-glow { background: radial-gradient(circle, var(--c-cream) 0 var(--core), color-mix(in srgb, var(--c-cream) 45%, transparent) calc(var(--core) * 1.8), color-mix(in srgb, var(--c-cream) 12%, transparent) 45%, transparent 70%); }
-@keyframes spark-twinkle {
-  from { opacity: 0.55; transform: scale(0.85); }
-  to { opacity: 1; transform: scale(1); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .spark-float, .spark { animation: none; opacity: 0.8; }
-}
-.hero-poster-names {
-  position: relative;
-  display: grid;
-  gap: var(--sp-item);
-  margin: var(--sp-stack) 0;
-  font-size: var(--fs-headline);
-  font-weight: var(--fw-medium) !important;
-  line-height: var(--lh-tight);
-  color: var(--c-cream);
-}
-.hero-poster-photo {
-  position: relative;
-  width: min(100%, 300px);
-  aspect-ratio: 299 / 294;
-  border: var(--bw-frame) solid var(--c-cream);
-  border-radius: var(--r-media);
-  overflow: hidden;
-  background: var(--c-cream);
-}
-.hero-poster-photo .hero-img { width: 100%; height: 100%; object-fit: cover; }
-.hero-poster-photo .hero-img--empty { display: grid; place-items: center; font-size: var(--fs-caption); color: var(--c-ink-60); }
-.hero-poster-when { display: grid; font-size: var(--fs-title); font-weight: var(--fw-medium); line-height: var(--lh-tight); color: var(--c-accent); }
+.hero-pol-names { margin: var(--sp-title) 0 0; font-size: var(--fs-section); font-weight: var(--fw-semibold); line-height: var(--lh-tight); color: var(--c-ink); }
+.hero-pol-when { display: grid; font-size: var(--fs-title); font-weight: var(--fw-medium); line-height: var(--lh-body); color: var(--c-accent); }
 
 /* ---- 시작 멘트 · 우리의 이야기 · 마무리: 하트 + 제목 ---- */
 
@@ -208,8 +190,19 @@
 .cal-strip-num { position: relative; font-family: var(--ff-display); font-size: var(--fs-numeral); line-height: 1.35; }
 .cal-strip-day.is-day .cal-strip-wd { color: var(--c-accent); }
 .cal-strip-day.is-day .cal-strip-num { color: var(--c-ink); }
-.inv img.heart-scribble { display: block; max-width: none; object-fit: contain; user-select: none; }
-.inv img.cal-heart {
+.heart-scribble {
+  display: block;
+  overflow: visible;
+  fill: none;
+  stroke: var(--c-accent);
+  stroke-width: 2.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke; /* 크기와 상관없이 같은 선 굵기 */
+  pointer-events: none;
+}
+.heart-scribble path { vector-effect: non-scaling-stroke; }
+.heart-scribble.cal-heart {
   position: absolute;
   left: 50%;
   top: 50%;

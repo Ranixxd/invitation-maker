@@ -11,7 +11,7 @@
 .ui-caption { margin: 0; font-size: var(--fs-caption); line-height: var(--lh-body); color: var(--c-ink-60); }
 .ui-body b { color: var(--sec-fg); }
 
-.inv img.ui-heart { width: 53px; height: 53px; }
+.heart-scribble.ui-heart { width: 53px; height: 49px; stroke-width: 2px; }
 
 .ui-icon { flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 

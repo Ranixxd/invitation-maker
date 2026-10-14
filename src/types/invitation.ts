@@ -60,15 +60,19 @@ export interface ImageAsset {
 
 // ---- 섹션 ----
 
-export type HeroLayout = 'full' | 'frame' | 'arch' | 'poster';
+export type HeroLayout = 'full' | 'frame' | 'arch' | 'polaroid';
 /** 예식 일자 표시 방식: 월 달력 / 앞뒤 하루를 포함한 3일 띠(하트 표시) — 템플릿이 결정 */
 export type CalendarStyle = 'month' | 'strip';
 export type GalleryLayout = 'grid' | 'slide';
 
 export interface HeroData {
   imageId: string | null;
+  /** 폴라로이드 레이아웃의 추가 사진(최대 2장). 대표 사진과 합쳐 최대 3장 */
+  extraImageIds?: string[];
   layout: HeroLayout;
   headline: string;
+  /** 폴라로이드 레이아웃의 영문 필기체 문구 (기본 'Our Wedding Day') */
+  script?: string;
 }
 export interface GreetingData {
   title: string;

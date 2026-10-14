@@ -10,6 +10,7 @@ import type {
   TimelineItem,
 } from '../../types/invitation';
 import type { EditorAction } from '../../store/editorReducer';
+import { HERO_EXTRA_MAX } from '../../store/editorReducer';
 import { PanelSection, TextArea, TextField, Toggle } from '../common/fields';
 import { PhotoDrop } from '../common/shared';
 import { toast } from '../common/toast';
@@ -28,7 +29,7 @@ function useUpdate<K extends SectionType>(type: K, dispatch: (a: EditorAction) =
   return (patch: Partial<SectionDataMap[K]>) => dispatch({ type: 'UPDATE_SECTION', sectionType: type, patch });
 }
 
-function useImageUpload(doc: InvitationDoc, dispatch: (a: EditorAction) => void, target: 'hero' | 'gallery') {
+function useImageUpload(doc: InvitationDoc, dispatch: (a: EditorAction) => void, target: 'hero' | 'hero-extra' | 'gallery', limit = Infinity) {
   const [busy, setBusy] = useState(false);
   const upload = async (files: File[]) => {
     const room = MAX_IMAGES_PER_DOC - Object.keys(doc.images).length;
@@ -37,7 +38,7 @@ function useImageUpload(doc: InvitationDoc, dispatch: (a: EditorAction) => void,
       return;
     }
     setBusy(true);
-    const assets = await filesToAssets(target === 'hero' ? files.slice(0, 1) : files, room);
+    const assets = await filesToAssets(target === 'hero' ? files.slice(0, 1) : files.slice(0, limit), room);
     setBusy(false);
     if (assets.length) dispatch({ type: 'ADD_IMAGES', images: assets, target });
   };
@@ -54,8 +55,13 @@ const SettingsLink = ({ onClick, children }: { onClick: () => void; children: st
 function HeroPanel({ doc, section, dispatch }: PanelProps<'hero'>) {
   const set = useUpdate('hero', dispatch);
   const { busy, upload } = useImageUpload(doc, dispatch, 'hero');
+  const extras = (section.data.extraImageIds ?? []).filter((id) => doc.images[id]);
+  const extraRoom = HERO_EXTRA_MAX - extras.length;
+  const extraUpload = useImageUpload(doc, dispatch, 'hero-extra', extraRoom);
+  const polaroid = section.data.layout === 'polaroid';
   const current = section.data.imageId ? doc.images[section.data.imageId] : null;
-  const others = Object.values(doc.images).filter((i) => i.id !== section.data.imageId);
+  const used = new Set([section.data.imageId, ...extras]);
+  const others = Object.values(doc.images).filter((i) => !used.has(i.id));
   return (
     <div className="panel-body">
       <PanelSection title="대표 사진">
@@ -76,8 +82,70 @@ function HeroPanel({ doc, section, dispatch }: PanelProps<'hero'>) {
           </>
         )}
       </PanelSection>
+      {/* 폴라로이드 레이아웃: 대표 사진 + 추가 사진 2장 = 폴라로이드 3장 */}
+      {polaroid && (
+        <PanelSection title={`추가 사진 (${extras.length}/${HERO_EXTRA_MAX})`}>
+          <p className="field-hint">대표 사진과 함께 폴라로이드 3장으로 보여요</p>
+          {extras.length > 0 && (
+            <div className="pick-grid">
+              {extras.map((id) => (
+                <button
+                  key={id}
+                  type="button"
+                  className="pick-item"
+                  onClick={() => set({ extraImageIds: extras.filter((x) => x !== id) })}
+                  aria-label="이 추가 사진 빼기"
+                  title="눌러서 빼기"
+                >
+                  <img src={doc.images[id].src} alt="" />
+                </button>
+              ))}
+            </div>
+          )}
+          {extraRoom > 0 && (
+            <>
+              <PhotoDrop onFiles={extraUpload.upload} busy={extraUpload.busy} compact>
+                <p className="field-hint">사진 추가</p>
+              </PhotoDrop>
+              {others.length > 0 && (
+                <>
+                  <p className="field-hint">올린 사진 중에서 추가</p>
+                  <div className="pick-grid">
+                    {others.map((img) => (
+                      <button
+                        key={img.id}
+                        type="button"
+                        className="pick-item"
+                        onClick={() => set({ extraImageIds: [...extras, img.id] })}
+                        aria-label="이 사진을 추가"
+                      >
+                        <img src={img.src} alt="" />
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </>
+          )}
+        </PanelSection>
+      )}
       <PanelSection title="문구">
-        <TextField label="헤드라인" value={section.data.headline} onChange={(headline) => set({ headline })} maxLength={40} />
+        <TextArea
+          label={polaroid ? '작은 문구' : '헤드라인'}
+          rows={polaroid ? 2 : 1}
+          value={section.data.headline}
+          onChange={(headline) => set({ headline })}
+          maxLength={40}
+        />
+        {polaroid && (
+          <TextField
+            label="필기체 문구 (영문)"
+            placeholder="Our Wedding Day"
+            value={section.data.script ?? ''}
+            onChange={(script) => set({ script })}
+            maxLength={24}
+          />
+        )}
       </PanelSection>
     </div>
   );
@@ -170,7 +238,7 @@ function GalleryPanel({ doc, section, dispatch }: PanelProps<'gallery'>) {
                   onClick={() => {
                     // §3.3: 히어로나 스티커가 쓰는 사진이면 갤러리에서만 빼고, 아니면 이미지 자체를 삭제
                     const usedElsewhere =
-                      doc.sections.some((s) => s.type === 'hero' && s.data.imageId === id) ||
+                      doc.sections.some((s) => s.type === 'hero' && (s.data.imageId === id || (s.data.extraImageIds ?? []).includes(id))) ||
                       doc.stickers.some((st) => st.imageId === id);
                     if (usedElsewhere) set({ imageIds: ids.filter((x) => x !== id) });
                     else dispatch({ type: 'REMOVE_IMAGE', imageId: id });

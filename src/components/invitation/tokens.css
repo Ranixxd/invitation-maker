@@ -29,6 +29,7 @@
   /* 글꼴 · 크기 · 줄 간격 */
   --ff-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --ff-display: var(--inv-font-display, var(--inv-font));
+  --ff-script: 'Great Vibes', cursive; /* 영문 필기체 (SIL OFL) */
   --fs-numeral: 57px; /* 예식 일자 숫자 */
   --fs-display: 32px; /* 신랑·신부 사이 & */
   --fs-headline: 28px; /* 히어로 이름 */
@@ -69,8 +70,8 @@
 
   /* 종이 질감 타일: 잔잔한 노이즈(stitchTiles로 이음새 없음)를 잉크색 점으로, 투명도 5% 안팎.
      색이 없는 반투명 점이라 크림·포인트 바탕 어디에나 같은 결로 얹힌다.
-     점 투명도 = 0.32 × 노이즈 − 0.14 (평균 약 2%) → 진하기는 이 두 값으로 조절 */
-  --tex-paper: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.14 0 0 0 0 0.11 0 0 0 0 0.11 0.32 0 0 0 -0.14'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+     점 투명도 = 0.24 × 노이즈 − 0.105 (평균 약 1.5%) → 진하기는 이 두 값으로 조절 */
+  --tex-paper: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.14 0 0 0 0 0.11 0 0 0 0 0.11 0.24 0 0 0 -0.105'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
 
   /* 섹션 문맥 색: 계열 CSS가 포인트 바탕 섹션에서 반전한다 (예: 에디토리얼 갤러리·방명록) */
   --sec-bg: transparent;

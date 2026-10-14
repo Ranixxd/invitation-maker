@@ -45,7 +45,9 @@ export function sampleDoc(t: DesignTemplate): InvitationDoc {
     color: '#d9b48a',
   };
   const gallery: ImageAsset[] = Array.from({ length: GALLERY_COUNT }, (_, i) => samplePhoto(t, i + 1));
-  const images = Object.fromEntries([hero, ...gallery].map((img) => [img.id, img]));
+  // 폴라로이드 추가 사진 2장: 샘플은 같은 사진(다른 id) — 실제 사진이 생기면 교체
+  const heroExtras: ImageAsset[] = [1, 2].map((n) => ({ ...hero, id: `${hero.id}_${n}` }));
+  const images = Object.fromEntries([hero, ...heroExtras, ...gallery].map((img) => [img.id, img]));
 
   const hosts = doc.core.hosts.map((h, i) => ({
     ...h,
@@ -56,7 +58,7 @@ export function sampleDoc(t: DesignTemplate): InvitationDoc {
   const sections = doc.sections.map((s): Section => {
     switch (s.type) {
       case 'hero':
-        return { ...s, data: { ...s.data, imageId: hero.id } };
+        return { ...s, data: { ...s.data, imageId: hero.id, extraImageIds: heroExtras.map((h) => h.id) } };
       case 'profile':
         return {
           ...s,

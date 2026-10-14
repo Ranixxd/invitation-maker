@@ -24,11 +24,14 @@ export type EditorAction =
   | { type: 'TOGGLE_SECTION'; sectionId: string }
   | { type: 'REORDER_SECTION'; sectionId: string; toIndex: number }
   /** target 'pool': 섹션에 넣지 않고 올린 사진 목록에만 추가 (스티커용) */
-  | { type: 'ADD_IMAGES'; images: ImageAsset[]; target: 'hero' | 'gallery' | 'pool' }
+  | { type: 'ADD_IMAGES'; images: ImageAsset[]; target: 'hero' | 'hero-extra' | 'gallery' | 'pool' }
   | { type: 'REMOVE_IMAGE'; imageId: string }
   | { type: 'ADD_STICKER'; sticker: Sticker }
   | { type: 'UPDATE_STICKER'; stickerId: string; patch: Partial<Omit<Sticker, 'id'>> }
   | { type: 'REMOVE_STICKER'; stickerId: string };
+
+/** 히어로 폴라로이드 추가 사진 최대 개수 (대표 사진 포함 3장) */
+export const HERO_EXTRA_MAX = 2;
 
 export type EditorState = InvitationDoc | null;
 
@@ -113,6 +116,8 @@ export function editorReducer(state: EditorState, action: EditorAction): EditorS
       for (const img of added) images[img.id] = img;
       const sections = doc.sections.map((s): Section => {
         if (action.target === 'hero' && s.type === 'hero') return { ...s, data: { ...s.data, imageId: added[0].id } };
+        if (action.target === 'hero-extra' && s.type === 'hero')
+          return { ...s, data: { ...s.data, extraImageIds: [...(s.data.extraImageIds ?? []), ...added.map((a) => a.id)].slice(0, HERO_EXTRA_MAX) } };
         if (action.target === 'gallery' && s.type === 'gallery')
           return { ...s, data: { ...s.data, imageIds: [...s.data.imageIds, ...added.map((a) => a.id)] } };
         return s;
@@ -124,7 +129,15 @@ export function editorReducer(state: EditorState, action: EditorAction): EditorS
       const images = { ...doc.images };
       delete images[action.imageId];
       const sections = doc.sections.map((s): Section => {
-        if (s.type === 'hero' && s.data.imageId === action.imageId) return { ...s, data: { ...s.data, imageId: null } };
+        if (s.type === 'hero')
+          return {
+            ...s,
+            data: {
+              ...s.data,
+              imageId: s.data.imageId === action.imageId ? null : s.data.imageId,
+              extraImageIds: (s.data.extraImageIds ?? []).filter((id) => id !== action.imageId),
+            },
+          };
         if (s.type === 'gallery')
           return { ...s, data: { ...s.data, imageIds: s.data.imageIds.filter((id) => id !== action.imageId) } };
         return s;

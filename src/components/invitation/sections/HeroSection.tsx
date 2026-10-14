@@ -1,8 +1,15 @@
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
 import { formatDot, formatDotKo, formatKo, parseLocal } from '../../../lib/date';
-import { HeartScribble } from '../HeartScribble';
-import { Bokeh } from '../Bokeh';
+
+/** 작은 채운 하트 (폴라로이드 히어로 장식) */
+function HeartFilled() {
+  return (
+    <svg viewBox="0 0 24 22" aria-hidden>
+      <path d="M12 21C5 15.5 1.5 12 1.5 7.5 1.5 4 4 1.5 7.2 1.5c2 0 3.6 1 4.8 2.8 1.2-1.8 2.8-2.8 4.8-2.8 3.2 0 5.7 2.5 5.7 6 0 4.5-3.5 8-10.5 13.5z" />
+    </svg>
+  );
+}
 
 export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
   const { imageId, layout, headline } = section.data;
@@ -19,23 +26,35 @@ export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
     </div>
   );
 
-  // 포스터: 포인트 바탕 위 이름(세로) · 크림 테두리 사진 · 아래 크림 띠에 일시·장소 (§3.5)
-  if (layout === 'poster') {
+  // 폴라로이드: 크림 종이 위 기울어진 폴라로이드 3장 · 작은 문구와 하트 · 영문 필기체 · 이름 · 일시·장소 (§3.5)
+  if (layout === 'polaroid') {
+    const extras = (section.data.extraImageIds ?? []).map((id) => doc.images[id]).filter(Boolean);
+    const shots = [img, ...extras].slice(0, 3);
+    const script = section.data.script?.trim() || 'Our Wedding Day';
     return (
-      <div className="hero hero--poster">
-        <Bokeh />
-        {/* 이름 묶음을 하트가 감싼다: 하트는 이름 묶음 가운데 기준으로 놓인다 */}
-        <div className="hero-poster-title">
-          <HeartScribble className="hero-poster-heart" />
-          <h1 className="hero-poster-names">
-            {names.map((n, i) => (
-              <span key={i}>{n}</span>
-            ))}
-          </h1>
+      <div className={`hero hero--polaroid has-${Math.max(1, shots.length)}`}>
+        {headline && (
+          <p className="hero-pol-note">
+            {headline}
+            <span className="hero-pol-hearts" aria-hidden>
+              <HeartFilled />
+              <HeartFilled />
+            </span>
+          </p>
+        )}
+        <div className="hero-pol-stack">
+          {(shots.length ? shots : [null]).map((shot, i) => (
+            <figure key={i} className={`hero-pol-card is-${i + 1}`}>
+              {shot ? <img src={shot.src} alt={i === 0 ? '대표 사진' : ''} /> : <div className="hero-img--empty">대표 사진을 추가해 주세요</div>}
+            </figure>
+          ))}
+          <p className="hero-pol-script" lang="en">
+            {script}
+          </p>
         </div>
-        <div className="hero-poster-photo">{photo}</div>
+        <h1 className="hero-pol-names">{names.join(' · ')}</h1>
         {(date || venue) && (
-          <p className="hero-poster-when">
+          <p className="hero-pol-when">
             {date && <span>{formatDotKo(date)}</span>}
             {venue && <span>{venue}</span>}
           </p>
