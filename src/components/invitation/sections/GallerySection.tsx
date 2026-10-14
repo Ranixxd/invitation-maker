@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
 import { GALLERY_MAX } from '../../../lib/image';
-import { IconChevronDown, IconChevronLeft, IconChevronRight, Modal, SectionHead } from '../ui';
+import { Button, IconChevronLeft, IconChevronRight, Modal, SectionHead } from '../ui';
 
 /** 접힌 상태에서 보이는 사진 수 (3열 × 2줄). 더 있으면 `더보기`로 펼친다 */
 const COLLAPSED = 6;
@@ -60,10 +60,11 @@ export function GallerySection({ doc, section, mode }: SectionProps<SectionOf<'g
         </div>
       )}
       {canFold && (
-        <button type="button" className={`gallery-more${expanded ? ' is-open' : ''}`} onClick={() => setExpanded((v) => !v)} aria-expanded={expanded}>
-          {expanded ? '접기' : `더보기`}
-          <IconChevronDown />
-        </button>
+        <div className="ui-col">
+          <Button variant="inverse" onClick={() => setExpanded((v) => !v)} aria-expanded={expanded}>
+            {expanded ? '접기' : '더보기'}
+          </Button>
+        </div>
       )}
       {/* 라이트박스: 흐린 배경 위 테두리 사진 + 좌우 넘기기, 배경 눌러서 닫기 */}
       {open !== null && images[open] && (
