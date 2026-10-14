@@ -77,15 +77,15 @@
   inset: auto 0 0 0;
   padding: 96px 24px 36px;
   color: #fff;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent);
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(to top, rgba(21, 21, 21, 0.55), transparent);
+  text-shadow: 0 1px 8px rgba(21, 21, 21, 0.25);
 }
 .hero--full:has(.hero-img--empty) .hero-overlay { color: var(--inv-text); background: none; text-shadow: none; }
 
 .hero--frame, .hero--arch { padding: 56px 28px 48px; }
 .hero--frame .hero-headline, .hero--arch .hero-headline { color: var(--inv-accent); }
 .hero-date--big { font-size: 22px; margin: 10px 0 28px; font-family: var(--inv-font); }
-.hero--frame .hero-media { aspect-ratio: 4 / 5; overflow: hidden; border-radius: 4px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08); }
+.hero--frame .hero-media { aspect-ratio: 4 / 5; overflow: hidden; border-radius: 4px; box-shadow: 0 12px 32px rgba(21, 21, 21, 0.08); }
 .hero--arch .hero-media { aspect-ratio: 3 / 4; overflow: hidden; border-radius: 999px 999px 8px 8px; }
 .hero--frame .hero-media .hero-img--empty, .hero--arch .hero-media .hero-img--empty { aspect-ratio: auto; height: 100%; }
 .hero--frame .hero-names, .hero--arch .hero-names { margin-top: 28px; font-size: 22px; }
@@ -134,7 +134,7 @@
   z-index: 1000;
   display: grid;
   place-items: center;
-  background: rgba(0, 0, 0, 0.92);
+  background: rgba(21, 21, 21, 0.92);
 }
 .lightbox img { max-width: 100vw; max-height: 86vh; object-fit: contain; }
 .lightbox button { position: absolute; border: 0; background: none; color: #fff; cursor: pointer; min-width: 48px; min-height: 48px; }
@@ -290,7 +290,7 @@
   z-index: 900;
   animation: gb-fab-in 0.25s ease;
 }
-.gb-fab .inv-btn { width: auto; min-width: 160px; box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.45); }
+.gb-fab .inv-btn { width: auto; min-width: 160px; box-shadow: 0 10px 24px -8px rgba(21, 21, 21, 0.45); }
 @keyframes gb-fab-in { from { opacity: 0; transform: translate(-50%, 12px); } }
 
 /* 쪽지 크게 보기 · 남기기 모달 (포털: .inv-portal 아래) */
@@ -303,7 +303,7 @@
   display: grid;
   place-items: center;
   padding: 24px 20px;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(21, 21, 21, 0.55);
   animation: gb-fade 0.2s ease;
 }
 @keyframes gb-fade { from { opacity: 0; } }
@@ -505,7 +505,7 @@
   border: 0;
   background: none;
   transform: translate(-50%, -50%);
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.18));
+  filter: drop-shadow(0 4px 10px rgba(21, 21, 21, 0.18));
 }
 .sticker.is-editable { pointer-events: auto; cursor: pointer; }
 .inv--view .sticker-reveal { opacity: 0; transition: opacity 0.8s ease; }
@@ -555,7 +555,7 @@
   background:
     repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.28) 0 3px, transparent 3px 8px),
     rgba(240, 222, 168, 0.85);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 1px 2px rgba(21, 21, 21, 0.12);
   clip-path: polygon(0 0, 100% 0, 96% 25%, 100% 50%, 96% 75%, 100% 100%, 0 100%, 4% 75%, 0 50%, 4% 25%);
 }
 .tape-a { top: -3%; left: -10%; transform: rotate(-35deg); }
@@ -584,7 +584,7 @@
   display: block;
   background: #fff;
   border-radius: 2px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 3px rgba(21, 21, 21, 0.15);
 }
 .kind-polaroid-photo { position: absolute; top: 6%; left: 7.14%; right: 7.14%; aspect-ratio: 1; display: block; }
 
@@ -602,7 +602,7 @@
   color: #fff;
   font: 600 12px 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(21, 21, 21, 0.2);
   cursor: pointer;
 }
 .inv--preview .inv-section.is-placing::after { outline: 2px solid #5b6cff; outline-offset: -2px; }
@@ -690,17 +690,19 @@
 .inv--fam-editorial .snap-grid img,
 .inv--fam-editorial .lightbox img { filter: grayscale(1) contrast(1.05); }
 
-/* 히어로: 꽉 찬 사진(원본 색감) 하단에 위로 옅어지는 흰 그라데이션 + 검정 글자(그림자 없음) */
+/* 히어로: 꽉 찬 사진(원본 색감) 하단에 위로 옅어지는 짙은(띠 색) 그라데이션 + 흰 글자(그림자 없음). 순검정(#000)은 쓰지 않는다 */
 .inv--fam-editorial .hero--full .hero-media { aspect-ratio: 3 / 4.4; }
 .inv--fam-editorial .hero--full .hero-overlay {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 150px 24px 40px;
-  color: var(--inv-text);
-  background: linear-gradient(to top, var(--inv-bg) 0%, color-mix(in srgb, var(--inv-bg) 82%, transparent) 38%, transparent 100%);
+  color: #fff;
+  background: linear-gradient(to top, color-mix(in srgb, var(--inv-band) 78%, transparent) 0%, color-mix(in srgb, var(--inv-band) 40%, transparent) 50%, transparent 100%);
   text-shadow: none;
 }
+/* 사진이 없으면 그라데이션 없이 본문 색 글자 */
+.inv--fam-editorial .hero--full:has(.hero-img--empty) .hero-overlay { color: var(--inv-text); background: none; }
 .inv--fam-editorial .hero--full .hero-date { display: none; }
 /* 이름 아래: 예식 일시 · 장소 */
 .inv--fam-editorial .hero--full .hero-info { display: grid; gap: 2px; margin-top: 10px; }
