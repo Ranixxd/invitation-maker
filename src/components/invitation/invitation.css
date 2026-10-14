@@ -72,8 +72,8 @@
   position: absolute;
   bottom: -40px;
   border-radius: 50%;
-  background: radial-gradient(circle, var(--c-cream) 0%, var(--c-cream-60) 45%, transparent 72%);
-  filter: blur(1.5px);
+  /* 또렷한 빛망울: 가장자리만 살짝 풀어 준다 (블러 필터 없음) */
+  background: radial-gradient(circle, var(--c-cream) 0%, var(--c-cream) 55%, var(--c-cream-60) 66%, transparent 72%);
   opacity: 0;
   animation: bokeh-rise linear infinite;
 }
@@ -92,7 +92,7 @@
   display: grid;
   gap: var(--sp-item);
   margin: var(--sp-stack) 0;
-  font-size: var(--fs-display);
+  font-size: var(--fs-headline);
   font-weight: var(--fw-medium) !important;
   line-height: var(--lh-tight);
   color: var(--c-cream);

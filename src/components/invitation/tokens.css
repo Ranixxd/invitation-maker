@@ -30,7 +30,8 @@
   --ff-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --ff-display: var(--inv-font-display, var(--inv-font));
   --fs-numeral: 57px; /* 예식 일자 숫자 */
-  --fs-display: 32px; /* 히어로 이름 · & */
+  --fs-display: 32px; /* 신랑·신부 사이 & */
+  --fs-headline: 28px; /* 히어로 이름 */
   --fs-title: 17px; /* 섹션 제목 · 이름 · 입력 · 버튼 */
   --fs-body: 15px; /* 본문 · 레이블 */
   --fs-caption: 13px; /* 보조 · 캡션 */
