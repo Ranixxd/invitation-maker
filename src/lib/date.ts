@@ -15,14 +15,18 @@ export function formatKo(d: Date): string {
   return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일 ${WEEK_KO[d.getDay()]}요일 ${ampm} ${h12}시${min ? ` ${min}분` : ''}`;
 }
 
-/** 2027. 01. 16. 토요일 · 오후 12시 30분 */
+/** 27. 01. 16. 토요일 · 12시 30분 (연도 두 자리, 24시간제) */
 export function formatDotKo(d: Date): string {
   const pad = (n: number) => String(n).padStart(2, '0');
-  const h = d.getHours();
-  const ampm = h < 12 ? '오전' : '오후';
-  const h12 = h % 12 === 0 ? 12 : h % 12;
   const min = d.getMinutes();
-  return `${d.getFullYear()}. ${pad(d.getMonth() + 1)}. ${pad(d.getDate())}. ${WEEK_KO[d.getDay()]}요일 · ${ampm} ${h12}시${min ? ` ${min}분` : ''}`;
+  return `${pad(d.getFullYear() % 100)}. ${pad(d.getMonth() + 1)}. ${pad(d.getDate())}. ${WEEK_KO[d.getDay()]}요일 · ${d.getHours()}시${min ? ` ${min}분` : ''}`;
+}
+
+/** 26.09.30 (연도 두 자리) */
+export function formatShortDot(t: number | Date): string {
+  const d = new Date(t);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${pad(d.getFullYear() % 100)}.${pad(d.getMonth() + 1)}.${pad(d.getDate())}`;
 }
 
 export function formatDot(d: Date): string {

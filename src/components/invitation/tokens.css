@@ -47,6 +47,7 @@
   --sp-hero: 50px; /* 히어로 위아래 */
   --sp-gutter: 40px; /* 섹션 좌우 */
   --sp-stack: 20px; /* 섹션 안 요소 사이 */
+  --sp-title: 12px; /* 섹션 제목 ↔ 설명·본문 */
   --sp-card: 20px; /* 카드 안쪽 */
   --sp-item: 8px; /* 같은 묶음 안 항목 사이 */
   --sp-label: 4px; /* 레이블과 입력 사이 */

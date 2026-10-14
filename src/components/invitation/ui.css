@@ -2,6 +2,9 @@
 
 /* ---- 텍스트 ---- */
 .ui-head { display: grid; justify-items: center; gap: var(--sp-stack); }
+/* 제목 ↔ 설명, 머리 ↔ 본문은 요소 간격(20)보다 좁게 (--sp-title) */
+.ui-title + .ui-desc { margin-top: calc(var(--sp-title) - var(--sp-stack)); }
+.ui-head + *, .cal-title + * { margin-top: calc(var(--sp-title) - var(--sp-stack)); }
 .ui-title { margin: 0; font-size: var(--fs-section); font-weight: var(--fw-semibold); line-height: var(--lh-tight); color: var(--sec-title); }
 .ui-desc { margin: 0; font-size: var(--fs-caption); line-height: var(--lh-body); color: var(--sec-muted); white-space: pre-line; }
 .ui-body { margin: 0; font-size: var(--fs-body); line-height: var(--lh-body); color: var(--sec-muted); white-space: pre-line; }

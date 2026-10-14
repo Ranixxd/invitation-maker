@@ -10,6 +10,7 @@ import { ThemePortal, useInvitationEnv } from '../theme';
 import { toast } from '../../common/toast';
 import { checkPassword, hashPassword, PW_MAX, PW_MIN } from '../../../lib/guestbook';
 import { Button, Divider, Field, Modal, SectionHead } from '../ui';
+import { formatShortDot } from '../../../lib/date';
 
 const NAME_MAX = 20;
 const TEXT_MAX = 300;
@@ -32,10 +33,7 @@ function hash(s: string) {
 }
 const tiltOf = (id: string) => ((hash(id) % 9) - 4) * 0.9; // -3.6° ~ 3.6°
 
-const fmtDate = (t: number) => {
-  const d = new Date(t);
-  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
-};
+const fmtDate = formatShortDot;
 
 export function GuestbookSection({ doc, section, mode }: SectionProps<SectionOf<'guestbook'>>) {
   const { title, description, seed = [] } = section.data;
