@@ -26,37 +26,59 @@
   --c-cream-60: color-mix(in srgb, var(--inv-bg) 60%, transparent);
   --c-scrim: color-mix(in srgb, var(--inv-text) 60%, transparent);
 
-  /* 글꼴 · 크기 · 줄 간격 */
+  /* 면: 흰 종이 카드(폴라로이드·음악 재생 바) — 크림보다 한 톤 밝게 */
+  --c-paper-hi: color-mix(in srgb, var(--inv-bg) 55%, white);
+
+  /* 불투명도: 색은 위 단계(100·60·20·8·4)로만, 요소 자체 투명도는 아래 하나만 */
+  --op-disabled: 0.35;
+
+  /* 글꼴 */
   --ff-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --ff-display: var(--inv-font-display, var(--inv-font));
   --ff-script: 'Great Vibes', cursive; /* 영문 필기체 (SIL OFL) */
-  --fs-numeral: 57px; /* 예식 일자 숫자 */
+
+  /* 글자 크기: 본문 계열 3단계(13·15·20) + 장식 3종 */
+  --fs-caption: 13px; /* 캡션 · 보조 · 레이블(작은) */
+  --fs-body: 15px; /* 본문 · 레이블 · 입력 · 버튼 */
+  --fs-title: 15px; /* 이름 · 모달 제목 (굵기로 구분) */
+  --fs-section: 20px; /* 섹션 제목 · 신랑/신부 이름 */
+  --fs-numeral: 24px; /* 예식 일자 숫자 (디스플레이 세리프) */
   --fs-display: 32px; /* 신랑·신부 사이 & */
-  --fs-headline: 28px; /* 히어로 이름 */
-  --fs-section: 20px; /* 섹션 제목 */
-  --fs-title: 15px; /* 이름 · 입력 · 버튼 · 모달 제목 · 히어로 일시 */
-  --fs-body: 15px; /* 본문 · 레이블 */
-  --fs-caption: 13px; /* 보조 · 캡션 */
-  --lh-tight: 1.3;
-  --lh-body: 1.5;
+  --fs-script: 54px; /* 히어로 영문 필기체 */
+  --lh-none: 1; /* 장식 글자(숫자·&·필기체) */
+  --lh-tight: 1.3; /* 제목 */
+  --lh-body: 1.5; /* 여러 줄 글 */
   --fw-regular: 400;
   --fw-medium: 500;
   --fw-semibold: 600;
 
-  /* 간격 */
-  --sp-section: 40px; /* 섹션 위아래 */
-  --sp-hero: 50px; /* 히어로 위아래 */
-  --sp-gutter: 40px; /* 섹션 좌우 */
-  --sp-stack: 20px; /* 섹션 안 요소 사이 */
-  --sp-title: 12px; /* 섹션 제목 ↔ 설명·본문 */
-  --sp-card: 20px; /* 카드 안쪽 */
-  --sp-item: 8px; /* 같은 묶음 안 항목 사이 */
-  --sp-label: 4px; /* 레이블과 입력 사이 */
+  /* 간격 눈금: 4의 배수 */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-14: 56px;
+  --sp-16: 64px;
+  /* 간격 역할 (눈금을 가리킨다) */
+  --sp-label: var(--sp-1); /* 레이블 ↔ 입력, 아주 가까운 묶음 */
+  --sp-item: var(--sp-2); /* 같은 묶음 안 항목 사이 */
+  --sp-title: var(--sp-3); /* 섹션 제목 ↔ 설명·본문 */
+  --sp-inset: var(--sp-4); /* 입력·카드 안쪽(좁은) */
+  --sp-stack: var(--sp-5); /* 섹션 안 요소 사이 */
+  --sp-card: var(--sp-5); /* 카드 안쪽 */
+  --sp-section: var(--sp-10); /* 섹션 위아래 */
+  --sp-gutter: var(--sp-10); /* 섹션 좌우 */
+  --sp-hero: var(--sp-12); /* 히어로 위아래 */
   --w-col: 320px; /* 폼·카드 열 최대 폭 */
 
   /* 크기 */
-  --h-control: 40px; /* 버튼 · 한 줄 입력 · 선택 알약 */
-  --h-chip: 32px; /* 작은 버튼(복사·삭제·지도) */
+  --h-control: 40px; /* 버튼 · 한 줄 입력 · 선택 알약 · 아이콘 버튼 */
+  --h-chip: 32px; /* 작은 버튼(복사·삭제·지도·페이지) */
   --bw: 1px;
   --bw-strong: 2px; /* 선택된 알약 */
   --bw-frame: 8px; /* 히어로 사진 테두리 */

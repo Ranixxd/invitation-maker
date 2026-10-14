@@ -2,6 +2,7 @@ import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
 import { formatDot, formatDotKo, formatKo, parseLocal } from '../../../lib/date';
 import { HeartCut } from '../HeartCut';
+import { MusicBar } from '../MusicBar';
 
 const DEFAULT_SCRIPT = 'Our Wedding Day';
 
@@ -66,6 +67,7 @@ export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
             {venue && <span>{venue}</span>}
           </p>
         )}
+        <MusicBar title={section.data.music?.title || 'Our Wedding Song'} src={section.data.music?.src} />
       </div>
     );
   }

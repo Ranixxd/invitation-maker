@@ -73,6 +73,8 @@ export interface HeroData {
   headline: string;
   /** 폴라로이드 레이아웃의 영문 필기체 문구 (기본 'Our Wedding Day') */
   script?: string;
+  /** 배경음악: 히어로 하단 재생 바. src가 없으면 재생 모습만(연결 전) */
+  music?: { title: string; src?: string };
 }
 export interface GreetingData {
   title: string;
