@@ -15,11 +15,10 @@ export function formatKo(d: Date): string {
   return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일 ${WEEK_KO[d.getDay()]}요일 ${ampm} ${h12}시${min ? ` ${min}분` : ''}`;
 }
 
-/** 27. 01. 16. 토요일 · 12시 30분 (연도 두 자리, 24시간제) */
-export function formatDotKo(d: Date): string {
-  const pad = (n: number) => String(n).padStart(2, '0');
+/** 1월 16일 토요일 · 12시 30분 (24시간제) */
+export function formatDateKo(d: Date): string {
   const min = d.getMinutes();
-  return `${pad(d.getFullYear() % 100)}. ${pad(d.getMonth() + 1)}. ${pad(d.getDate())}. ${WEEK_KO[d.getDay()]}요일 · ${d.getHours()}시${min ? ` ${min}분` : ''}`;
+  return `${d.getMonth() + 1}월 ${d.getDate()}일 ${WEEK_KO[d.getDay()]}요일 · ${d.getHours()}시${min ? ` ${min}분` : ''}`;
 }
 
 /** 26.09.30 (연도 두 자리) */

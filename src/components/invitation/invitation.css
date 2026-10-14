@@ -35,6 +35,10 @@
   text-align: center;
 }
 
+/* 시작 멘트 바로 뒤 신랑·신부: 한 섹션으로 이어 보인다 (§4.1) */
+.inv-section--greeting:has(+ .inv-section--couple) > .inv-block { padding-bottom: 0; }
+.inv-section--greeting + .inv-section--couple > .inv-block { padding-top: var(--sp-8); }
+
 /* 포인트 바탕 섹션 (에디토리얼 계열: 우리의 이야기·갤러리·방명록) */
 .inv--fam-editorial .inv-section--profile,
 .inv--fam-editorial .inv-section--gallery,
@@ -255,7 +259,7 @@
 .cal-strip-n { position: relative; }
 .cal-strip-day.is-day .cal-strip-wd { color: var(--c-accent); }
 /* 예식일: 오린 하트 위에 흰(크림) 숫자 */
-.cal-strip-day.is-day .cal-strip-n { color: var(--c-cream); }
+.cal-strip-day.is-day .cal-strip-n { color: var(--c-cream); font-weight: var(--fw-semibold); }
 .heart-cut.cal-heart { position: absolute; inset: calc(-1 * var(--sp-1)); width: calc(100% + 2 * var(--sp-1)); height: calc(100% + 2 * var(--sp-1)); transform: rotate(-6deg); }
 .countdown { font-weight: var(--fw-medium); color: var(--c-ink); }
 .countdown b { font-weight: var(--fw-medium); color: var(--c-accent); }

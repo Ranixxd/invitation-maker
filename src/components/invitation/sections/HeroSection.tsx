@@ -1,6 +1,6 @@
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
-import { formatDot, formatDotKo, formatKo, parseLocal } from '../../../lib/date';
+import { formatDot, formatDateKo, formatKo, parseLocal } from '../../../lib/date';
 import { HeartCut } from '../HeartCut';
 import { MusicBar } from '../MusicBar';
 
@@ -63,7 +63,7 @@ export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
         </h1>
         {(date || venue) && (
           <p className="hero-pol-when">
-            {date && <span>{formatDotKo(date)}</span>}
+            {date && <span>{formatDateKo(date)}</span>}
             {venue && <span>{venue}</span>}
           </p>
         )}

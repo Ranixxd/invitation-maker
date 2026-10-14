@@ -1,7 +1,7 @@
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
 import { HeartCut } from '../HeartCut';
-import { dday, formatDotKo, monthMatrix, parseLocal, weekdayKo } from '../../../lib/date';
+import { dday, formatDateKo, monthMatrix, parseLocal, weekdayKo } from '../../../lib/date';
 
 const HEAD = ['일', '월', '화', '수', '목', '금', '토'];
 const MARQUEE_REPEAT = 6;
@@ -69,7 +69,7 @@ export function CalendarSection({ doc, section }: SectionProps<SectionOf<'calend
   return (
     <section className={`inv-block calendar is-${style}`}>
       {/* 예식 일자: 날짜·시간이 제목 (§4.1) */}
-      <h2 className="ui-title cal-title">{formatDotKo(date)}</h2>
+      <h2 className="ui-title cal-title">{formatDateKo(date)}</h2>
       {showCalendar && style === 'strip' && <WeekStrip date={date} />}
       {showCalendar && style === 'month' && (
         <table className="cal" aria-label={`${date.getFullYear()}년 ${date.getMonth() + 1}월 달력`}>
