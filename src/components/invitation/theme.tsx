@@ -1,5 +1,5 @@
 // 청첩장 테마 토큰·환경 (디자인 시스템 §3.6)
-import { createContext, useContext, type CSSProperties, type ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import type { InvitationDoc } from '../../types/invitation';
 import { THEME_PRESETS } from '../../data/templates';
 import { designTokens } from '../../data/designSystem';
@@ -27,6 +27,3 @@ export function ThemePortal({ doc, children }: { doc: InvitationDoc; children: R
   );
 }
 
-/** 렌더 환경: 떠 있는 버튼 허용 여부(실제 하객 화면에서만). 편집기·템플릿 미리보기는 자리에 그대로 둔다 */
-export const InvitationEnv = createContext<{ floatingActions: boolean }>({ floatingActions: false });
-export const useInvitationEnv = () => useContext(InvitationEnv);

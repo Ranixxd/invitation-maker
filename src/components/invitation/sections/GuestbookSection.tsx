@@ -1,12 +1,9 @@
 // 방명록: 남겨진 쪽지를 먼저 보여주고(9개씩), [방명록 남기기]로만 작성. 작성·삭제는 비밀번호 필수 (CONSTITUTION §4.4)
-// - 하객 화면(/view): 섹션이 화면에 보이는 동안 하단에 떠 있는 버튼
-// - 편집기·템플릿 미리보기: 섹션 안 버튼
+// - 버튼은 어디서나 섹션 안(쪽지 보드 아래)에 둔다
 // 서버 연동 전 데모: 메시지는 보는 사람의 브라우저(localStorage)에만 저장
-import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
-import { createPortal } from 'react-dom';
+import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import type { GuestMessage, InvitationDoc, SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
-import { ThemePortal, useInvitationEnv } from '../theme';
 import { toast } from '../../common/toast';
 import { checkPassword, hashPassword, PW_MAX, PW_MIN } from '../../../lib/guestbook';
 import { Button, Divider, Field, Modal, SectionHead } from '../ui';
@@ -45,25 +42,14 @@ const fmtDate = formatShortDot;
 
 export function GuestbookSection({ doc, section, mode }: SectionProps<SectionOf<'guestbook'>>) {
   const { title, description, seed = [] } = section.data;
-  const { floatingActions } = useInvitationEnv();
   const [local, setLocal] = useState<GuestMessage[]>(() => load(doc.id));
   const [page, setPage] = useState(0);
   const [opened, setOpened] = useState<GuestMessage | null>(null);
   const [writing, setWriting] = useState(false);
-  const [inView, setInView] = useState(false);
   // 지운 예시 쪽지 (예시는 문서 데이터라 화면에서만 숨긴다)
   const [hiddenSeeds, setHiddenSeeds] = useState<string[]>([]);
-  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => setLocal(load(doc.id)), [doc.id]);
-
-  // 하객 화면: 섹션이 화면에 보이는 동안만 떠 있는 버튼
-  useEffect(() => {
-    if (!floatingActions || !sectionRef.current || !('IntersectionObserver' in window)) return;
-    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { rootMargin: '0px 0px -15% 0px' });
-    io.observe(sectionRef.current);
-    return () => io.disconnect();
-  }, [floatingActions]);
 
   // 내가 남긴 것(최신순) → 예시 쪽지(최신순)
   const messages = useMemo(
@@ -104,7 +90,7 @@ export function GuestbookSection({ doc, section, mode }: SectionProps<SectionOf<
   );
 
   return (
-    <section ref={sectionRef} className="inv-block guestbook">
+    <section className="inv-block guestbook">
       <SectionHead title={title} desc={description} />
 
       {visible.length === 0 ? (
@@ -152,18 +138,7 @@ export function GuestbookSection({ doc, section, mode }: SectionProps<SectionOf<
         </nav>
       )}
 
-      {/* 편집기·미리보기에서는 섹션 안에, 하객 화면에서는 떠 있는 버튼으로 */}
-      {!floatingActions && <div className="ui-col">{writeButton}</div>}
-      {floatingActions &&
-        inView &&
-        !writing &&
-        !opened &&
-        createPortal(
-          <ThemePortal doc={doc}>
-            <div className="gb-fab">{writeButton}</div>
-          </ThemePortal>,
-          document.body,
-        )}
+      <div className="ui-col">{writeButton}</div>
 
       {opened && <DetailModal doc={doc} message={opened} onClose={() => setOpened(null)} onDelete={() => remove(opened)} />}
       {writing && <WriteModal doc={doc} onClose={() => setWriting(false)} onSubmit={add} demoNote={mode === 'preview'} />}

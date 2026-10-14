@@ -23,7 +23,7 @@ export default function View() {
       <Link to="/editor" className="view-back">
         ← 편집으로
       </Link>
-      <InvitationView doc={doc} mode="view" floatingActions />
+      <InvitationView doc={doc} mode="view" />
     </div>
   );
 }

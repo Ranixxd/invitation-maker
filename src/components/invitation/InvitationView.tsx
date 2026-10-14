@@ -1,7 +1,7 @@
 // 초대장 렌더러. 편집기 미리보기와 /view가 공용으로 사용 (CONSTITUTION §6.3)
 import { useEffect, useRef, type ReactNode } from 'react';
 import type { InvitationDoc, Section } from '../../types/invitation';
-import { InvitationEnv, themeClasses, themeVars } from './theme';
+import { themeClasses, themeVars } from './theme';
 import { HeroSection } from './sections/HeroSection';
 import { GreetingSection } from './sections/GreetingSection';
 import { CoupleSection } from './sections/CoupleSection';
@@ -73,8 +73,6 @@ interface Props {
   renderOverlay?: (section: Section) => ReactNode;
   /** 붙이기: 위치 정하기 중인 스티커 */
   stickerEdit?: StickerEdit | null;
-  /** 떠 있는 버튼(방명록 남기기 등) 허용 — 실제 하객 화면(/view)에서만 true */
-  floatingActions?: boolean;
   /** 편집기에서 붙어 있는 스티커를 눌렀을 때 */
   onStickerClick?: (stickerId: string) => void;
 }
@@ -88,7 +86,6 @@ export function InvitationView({
   renderOverlay,
   stickerEdit,
   onStickerClick,
-  floatingActions = false,
 }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -122,7 +119,6 @@ export function InvitationView({
   }, [mode, doc.sections]);
 
   return (
-    <InvitationEnv.Provider value={{ floatingActions }}>
     <div ref={rootRef} className={`inv inv--${mode} ${themeClasses(doc)}`} style={themeVars(doc)}>
       {doc.sections
         .filter((s) => s.enabled)
@@ -143,6 +139,5 @@ export function InvitationView({
       {/* 스티커는 섹션에 잘리지 않도록 최상단 레이어에 (§4.10) */}
       <StickerOverlay doc={doc} mode={mode} rootRef={rootRef} edit={stickerEdit} onStickerClick={onStickerClick} />
     </div>
-    </InvitationEnv.Provider>
   );
 }

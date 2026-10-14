@@ -391,18 +391,6 @@
   cursor: pointer;
 }
 .gb-pager button.is-on { background: var(--sec-title); color: var(--sec-bg) !important; }
-/* 하객 화면: 섹션이 보이는 동안 하단에 떠 있는 [방명록 남기기] */
-.gb-fab {
-  position: fixed;
-  left: 50%;
-  bottom: calc(var(--sp-stack) + env(safe-area-inset-bottom));
-  z-index: 900;
-  width: min(calc(100% - 2 * var(--sp-gutter)), var(--w-col));
-  transform: translateX(-50%);
-  animation: gb-fab-in 0.25s ease;
-}
-.gb-fab .ui-btn { box-shadow: 0 8px 24px -8px var(--c-scrim); }
-@keyframes gb-fab-in { from { opacity: 0; transform: translate(-50%, 12px); } }
 /* 상세 · 작성 */
 /* 상세: 이름 · 구분선 · 본문 · 날짜는 촘촘하게(8), 삭제 영역만 조금 띄운다(16) */
 .ui-modal-card.gb-detail { gap: var(--sp-item); background-image: none; } /* 상세 카드는 종이 질감 없이 */
