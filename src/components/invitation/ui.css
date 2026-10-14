@@ -2,7 +2,7 @@
 
 /* ---- 텍스트 ---- */
 .ui-head { display: grid; justify-items: center; gap: var(--sp-stack); }
-.ui-title { margin: 0; font-size: var(--fs-title); font-weight: var(--fw-semibold); line-height: var(--lh-tight); color: var(--sec-title); }
+.ui-title { margin: 0; font-size: var(--fs-section); font-weight: var(--fw-semibold); line-height: var(--lh-tight); color: var(--sec-title); }
 .ui-desc { margin: 0; font-size: var(--fs-caption); line-height: var(--lh-body); color: var(--sec-muted); white-space: pre-line; }
 .ui-body { margin: 0; font-size: var(--fs-body); line-height: var(--lh-body); color: var(--sec-muted); white-space: pre-line; }
 .ui-caption { margin: 0; font-size: var(--fs-caption); line-height: var(--lh-body); color: var(--c-ink-60); }

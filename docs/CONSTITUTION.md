@@ -3,7 +3,7 @@
 > **살아있는 마스터 문서.** 시스템 전체의 로직·정책·규칙의 *현재 유효한* 상태를 기록한다.
 > 코드와 이 문서가 다르면 **둘 중 하나가 버그**다. 정책을 바꾸는 커밋은 반드시 이 문서도 같은 커밋에서 고친다.
 >
-> - 현재 판: **v0.47** (2026-10-14)
+> - 현재 판: **v0.48** (2026-10-14)
 > - 설계의 *배경과 당시 판단*은 [PRD 스냅샷](./prd/)에 남긴다. 이 문서는 "지금 무엇이 참인가"만 다룬다.
 
 ---
@@ -124,7 +124,7 @@
 - **토큰 (`src/components/invitation/tokens.css`)** — 모든 컴포넌트·섹션 CSS는 이 이름만 쓴다:
   - 색 `--c-ink`·`--c-ink-60/20/8/4`·`--c-accent`·`--c-accent-40/20`·`--c-cream`·`--c-cream-60`·`--c-scrim`(3색에 `color-mix`로 불투명도)
   - 섹션 문맥 `--sec-bg`·`--sec-fg`·`--sec-title`·`--sec-muted`·`--sec-paper` (포인트 바탕 섹션에서 계열 CSS가 반전)
-  - 글꼴·크기 `--ff-sans`·`--ff-display`·`--fs-numeral 57`·`--fs-display 32`·`--fs-headline 28`·`--fs-title 17`·`--fs-body 15`·`--fs-caption 13`, 줄 간격 `--lh-tight 1.3`·`--lh-body 1.5`, 굵기 400/500/600
+  - 글꼴·크기 `--ff-sans`·`--ff-display`·`--fs-numeral 57`·`--fs-display 32`·`--fs-headline 28`·`--fs-section 20`(섹션 제목)·`--fs-title 17`·`--fs-body 15`·`--fs-caption 13`, 줄 간격 `--lh-tight 1.3`·`--lh-body 1.5`, 굵기 400/500/600
   - 간격 `--sp-section 40`(섹션 위아래)·`--sp-hero 50`(히어로 위아래)·`--sp-gutter 40`(좌우)·`--sp-stack 20`(요소 사이)·`--sp-card 20`·`--sp-item 8`·`--sp-label 4`, 열 폭 `--w-col 320`
   - 크기 `--h-control 40`·`--h-chip 24`, 테두리 `--bw 1`·`--bw-strong 3`(선택)·`--bw-frame 8`·`--bw-frame-sm 4`
 - **컴포넌트 (`src/components/invitation/ui.tsx` + `ui.css`)** — 섹션은 이것들을 조합한다:
@@ -505,3 +505,4 @@ Refs: PRD-XXXX, §조항
 | v0.45 | 2026-10-14 | §3.5 우리의 이야기: 항목을 화면 양 끝 → 가운데 기준 좌우 칸 안쪽으로 붙여 화살표와 간격 축소 | — |
 | v0.46 | 2026-10-14 | §3.6 섹션 위아래 여백 50 → 40px(히어로는 50 유지, `--sp-hero`) | — |
 | v0.47 | 2026-10-14 | §4.9 브랜드 소개를 비우고 홍보 배너 자리 문구(`홍보 배너 영역`)만 표시 | — |
+| v0.48 | 2026-10-14 | §3.6 섹션 제목 17 → 20px(새 토큰 `--fs-section`, 예식 일자 제목 포함) | — |
