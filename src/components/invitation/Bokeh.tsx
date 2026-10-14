@@ -1,46 +1,82 @@
 import type { CSSProperties } from 'react';
 
-// 보케: 흐릿한 빛망울이 아래에서 위로 천천히 떠오른다 (장식, CONSTITUTION §3.5)
-// 위치·크기·속도는 고정 값이라 렌더마다 같다. 색·블러는 CSS 토큰(.bokeh)
-const DOTS: { x: number; size: number; dur: number; delay: number; drift: number }[] = [
-  { x: 6, size: 8, dur: 13, delay: 0, drift: 12 },
-  { x: 14, size: 16, dur: 17, delay: -6, drift: -10 },
-  { x: 23, size: 5, dur: 11, delay: -3, drift: 8 },
-  { x: 31, size: 11, dur: 15, delay: -9, drift: -14 },
-  { x: 40, size: 6, dur: 12, delay: -1, drift: 10 },
-  { x: 48, size: 18, dur: 19, delay: -12, drift: 6 },
-  { x: 56, size: 7, dur: 14, delay: -5, drift: -8 },
-  { x: 63, size: 13, dur: 16, delay: -2, drift: 14 },
-  { x: 71, size: 5, dur: 10, delay: -7, drift: -6 },
-  { x: 78, size: 10, dur: 13, delay: -11, drift: 10 },
-  { x: 86, size: 17, dur: 18, delay: -4, drift: -12 },
-  { x: 93, size: 7, dur: 12, delay: -8, drift: 8 },
-  { x: 10, size: 12, dur: 15, delay: -13, drift: -8 },
-  { x: 27, size: 7, dur: 12, delay: -10, drift: 12 },
-  { x: 44, size: 10, dur: 14, delay: -7, drift: -10 },
-  { x: 60, size: 5, dur: 10, delay: -9, drift: 6 },
-  { x: 75, size: 14, dur: 16, delay: -14, drift: -12 },
-  { x: 89, size: 8, dur: 13, delay: -3, drift: 10 },
-];
+// 반짝이 보케: 밝은 심 + 빛 번짐 점들이 히어로 전체에 흩어져, 천천히 떠오르며 반짝인다 (장식, CONSTITUTION §3.5)
+// 배치는 고정 시드로 만들어 렌더마다 같다. 움직임은 transform·opacity만 써서 가볍다. 색은 크림 토큰(.spark)
+
+interface Spark {
+  x: number; // %
+  y: number; // %
+  core: number; // 밝은 심 지름(px)
+  glow: boolean; // 큰 빛 번짐
+  rise: number; // 떠오르는 주기(s)
+  twinkle: number; // 반짝임 주기(s)
+  delay: number; // s (음수: 이미 진행 중인 상태로 시작)
+  drift: number; // 좌우 흔들림(px)
+}
+
+/** 고정 시드 난수 (mulberry32) */
+function seeded(seed: number) {
+  return () => {
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+const COUNT = 70;
+const SPARKS: Spark[] = (() => {
+  const r = seeded(20270116);
+  return Array.from({ length: COUNT }, () => {
+    const glow = r() < 0.22; // 약 1/5은 크게 번지는 빛
+    return {
+      x: r() * 100,
+      y: r() * 100,
+      core: glow ? 3.5 + r() * 2.5 : 1.2 + r() * 2.3,
+      glow,
+      rise: 14 + r() * 12,
+      twinkle: 2.2 + r() * 3.4,
+      delay: -r() * 26,
+      drift: (r() - 0.5) * 24,
+    };
+  });
+})();
 
 export function Bokeh() {
   return (
     <div className="bokeh" aria-hidden>
-      {DOTS.map((d, i) => (
-        <span
-          key={i}
-          style={
-            {
-              left: `${d.x}%`,
-              width: d.size,
-              height: d.size,
-              animationDuration: `${d.dur}s`,
-              animationDelay: `${d.delay}s`,
-              '--drift': `${d.drift}px`,
-            } as CSSProperties
-          }
-        />
-      ))}
+      {SPARKS.map((s, i) => {
+        // 빛 번짐까지 포함한 점 크기: 일반 점은 심의 4배, 큰 빛은 9배
+        const size = s.core * (s.glow ? 9 : 4);
+        return (
+          <span
+            key={i}
+            className="spark-float"
+            style={
+              {
+                left: `${s.x}%`,
+                top: `${s.y}%`,
+                width: size,
+                height: size,
+                animationDuration: `${s.rise}s`,
+                animationDelay: `${s.delay}s`,
+                '--drift': `${s.drift}px`,
+              } as CSSProperties
+            }
+          >
+            <span
+              className={`spark${s.glow ? ' is-glow' : ''}`}
+              style={
+                {
+                  animationDuration: `${s.twinkle}s`,
+                  animationDelay: `${s.delay / 3}s`,
+                  '--core': `${(100 / (s.glow ? 9 : 4)).toFixed(1)}%`,
+                } as CSSProperties
+              }
+            />
+          </span>
+        );
+      })}
     </div>
   );
 }

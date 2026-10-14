@@ -62,36 +62,47 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 190px;
-  height: 190px;
+  width: 168px;
+  height: 168px;
   max-width: none;
-  /* 하트 그림의 볼록한 위쪽이 무게 중심이라 살짝 아래로 내려 이름이 하트 가운데 오게 */
-  transform: translate(-54%, -46%); /* 그림이 오른쪽으로 기울어 있어 살짝 왼쪽으로 */
+  /* 이름 묶음이 하트의 볼록한 몸통 한가운데 오도록: 그림이 오른쪽으로 기울어 왼쪽으로, 아래 꼭짓점 몫만큼 위로 */
+  transform: translate(-55%, -44%);
   /* 포토샵·피그마의 Overlay 블렌드: 아래 색(바탕·사진)에 하트의 밝고 어두움을 겹친다. 맨 위 레이어 */
   mix-blend-mode: overlay;
   z-index: 2;
   pointer-events: none;
 }
-/* 보케: 크림 빛망울이 아래 → 위로 떠오르며 흐려진다 (사진 위, 하트 아래 레이어) */
+/* 반짝이 보케: 밝은 심 + 빛 번짐 (사진 위, 하트 아래 레이어). transform·opacity만 움직인다 */
 .bokeh { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
-.bokeh span {
+/* 바깥: 천천히 떠오르며 나타났다 사라짐 */
+.spark-float {
   position: absolute;
-  bottom: -40px;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--c-cream) 0%, var(--c-cream-60) 45%, transparent 72%);
-  filter: blur(1.5px);
-  opacity: 0;
-  animation: bokeh-rise linear infinite;
+  transform: translate(-50%, -50%);
+  animation: spark-rise ease-in-out infinite;
 }
-@keyframes bokeh-rise {
-  0% { transform: translate(0, 0) scale(0.8); opacity: 0; }
-  12% { opacity: 0.75; }
-  50% { transform: translate(var(--drift), -360px) scale(1); }
-  80% { opacity: 0.45; }
-  100% { transform: translate(calc(var(--drift) * -1), -720px) scale(1.1); opacity: 0; }
+@keyframes spark-rise {
+  0% { transform: translate(-50%, -50%); opacity: 0; }
+  20% { opacity: 1; }
+  50% { transform: translate(calc(-50% + var(--drift)), calc(-50% - 36px)); }
+  80% { opacity: 1; }
+  100% { transform: translate(-50%, calc(-50% - 72px)); opacity: 0; }
+}
+/* 안쪽: 밝은 심(크림 100%) → 번짐(크림 반투명) → 투명, 반짝임 */
+.spark {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--c-cream) 0 var(--core), color-mix(in srgb, var(--c-cream) 55%, transparent) calc(var(--core) * 1.6), transparent 70%);
+  animation: spark-twinkle ease-in-out infinite alternate;
+}
+.spark.is-glow { background: radial-gradient(circle, var(--c-cream) 0 var(--core), color-mix(in srgb, var(--c-cream) 45%, transparent) calc(var(--core) * 1.8), color-mix(in srgb, var(--c-cream) 12%, transparent) 45%, transparent 70%); }
+@keyframes spark-twinkle {
+  from { opacity: 0.55; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .bokeh { display: none; }
+  .spark-float, .spark { animation: none; opacity: 0.8; }
 }
 .hero-poster-names {
   position: relative;
@@ -322,7 +333,7 @@
 @keyframes gb-fab-in { from { opacity: 0; transform: translate(-50%, 12px); } }
 /* 상세 · 작성 */
 /* 상세: 이름 · 구분선 · 본문 · 날짜는 촘촘하게(8), 삭제 영역만 조금 띄운다(16) */
-.ui-modal-card.gb-detail { gap: var(--sp-item); }
+.ui-modal-card.gb-detail { gap: var(--sp-item); background-image: none; } /* 상세 카드는 종이 질감 없이 */
 .gb-detail .ui-form, .gb-detail > .ui-btn--chip { margin-top: var(--sp-item); }
 .gb-detail .ui-form { gap: var(--sp-title); }
 .gb-detail-name { font-size: var(--fs-title); font-weight: var(--fw-semibold); color: var(--c-accent); }
