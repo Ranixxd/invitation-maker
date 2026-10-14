@@ -38,14 +38,11 @@ function ribbonPath(pts: Anchor[], width: number) {
       d += ` C ${clamp(prev.x + prev.dir * k1)} ${prev.y}, ${clamp(enter - dir * k2)} ${p.y}, ${enter} ${p.y}`;
     }
 
-    // 날짜 글자를 건너뛰고 반대편에서 다시
-    d += ` M ${exit} ${p.y}`;
+    // 날짜 글자를 건너뛰고 반대편에서 다시 (마지막 날짜 뒤로는 선을 잇지 않는다)
+    if (i < pts.length - 1) d += ` M ${exit} ${p.y}`;
     prev = { x: exit, y: p.y, dir };
   });
 
-  // 끝: 아래로 살짝 말려 내려가며 끝난다
-  const end = { x: clamp(prev.x + prev.dir * 46), y: prev.y + 52 };
-  d += ` C ${clamp(prev.x + prev.dir * 60)} ${prev.y}, ${clamp(prev.x + prev.dir * 60)} ${prev.y + 40}, ${end.x} ${end.y}`;
   return d;
 }
 

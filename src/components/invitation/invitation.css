@@ -149,7 +149,7 @@
   row-gap: 56px;
   width: calc(100% + 2 * var(--sp-gutter));
   margin: 0 calc(-1 * var(--sp-gutter));
-  padding: 44px 16px 64px;
+  padding: 44px 16px 0;
   list-style: none;
   overflow: hidden;
 }
