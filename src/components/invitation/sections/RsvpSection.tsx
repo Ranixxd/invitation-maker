@@ -73,9 +73,8 @@ export function RsvpSection({ doc, section }: SectionProps<SectionOf<'rsvp'>>) {
           {hosts.length > 1 && (
             <ChoiceGroup
               label="어느 쪽 하객이신가요?"
-              variant="card"
               value={side}
-              options={hosts.map((h) => ({ value: h.id, label: h.label, sub: h.name || h.label }))}
+              options={hosts.map((h) => ({ value: h.id, label: h.name ? `${h.label} ${h.name}` : h.label }))}
               onChange={setSide}
             />
           )}

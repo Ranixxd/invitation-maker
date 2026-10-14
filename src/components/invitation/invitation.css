@@ -74,7 +74,16 @@
 }
 .heart-cut { flex: none; fill: var(--sec-title); stroke: var(--sec-title); stroke-width: 0.6; stroke-linejoin: round; }
 /* 배경에 흩날리는 하트 (히어로만): 깊이 3단계 — 멀수록 작고·옅고·흐리고·느리다 */
-.hero-fall { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.hero-fall {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  /* 위아래 끝에서 하트가 잘리지 않고 스르륵 나타나고 사라지게 */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 8%, #000 70%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 8%, #000 70%, transparent 100%);
+}
 .hero--polaroid > :not(.hero-fall) { position: relative; z-index: 1; }
 .hero-fall-item {
   position: absolute;
@@ -184,14 +193,14 @@
 }
 
 /* ---- 글자 역할 묶음 (크기·줄 간격을 한 곳에서) ---- */
-/* 작은 글 13: 음악 곡 제목 · 방명록 쪽지만 */
-.music-title, .gb-note {
+/* 작은 글 13: 음악 곡 제목 · 방명록 쪽지 · 혼주 */
+.music-title, .gb-note, .couple-parents {
   font-size: var(--fs-small);
   line-height: var(--lh-body);
 }
 /* 본문 15: 나머지 글 전부 */
 .hero-pol-note, .hero-pol-card .hero-img--empty, .hero-pol-names, .hero-pol-when,
-.couple-role, .couple-parents, .couple-contact summary, .couple-contact-who,
+.couple-role, .couple-contact summary, .couple-contact-who,
 .story-date, .story-text, .cal-strip-wd, .countdown, .cal caption,
 .gb-empty, .gb-pager button, .gb-detail-name, .gb-detail-text, .gb-write-title,
 .venue-name, .venue-tel, .closing-names, .inv-brand-copy {
