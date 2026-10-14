@@ -3,7 +3,7 @@ import type { SectionProps } from '../InvitationView';
 import { copyText } from '../../common/toast';
 import { Button, IconChevronDown, InfoCard, SectionHead } from '../ui';
 
-// 그룹별 접힘 + 복사 (CONSTITUTION §4.3)
+// 그룹별 펼침(기본 펼침, 눌러서 접기) + 복사 (CONSTITUTION §4.3)
 export function AccountSection({ doc, section }: SectionProps<SectionOf<'account'>>) {
   const { title, description, accounts } = section.data;
   const groups = doc.core.hosts
@@ -16,7 +16,7 @@ export function AccountSection({ doc, section }: SectionProps<SectionOf<'account
       {groups.length > 0 && (
         <div className="ui-col account-groups">
           {groups.map(({ host, items }) => (
-            <details key={host.id} className="ui-disclosure">
+            <details key={host.id} className="ui-disclosure" open>
               <summary>
                 {host.label}측 계좌번호
                 <IconChevronDown />
