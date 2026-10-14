@@ -324,9 +324,17 @@
 /* ---- 오시는 길 ---- */
 .venue { display: grid; justify-items: center; gap: var(--sp-item); }
 .venue-name { font-size: var(--fs-title); font-weight: var(--fw-semibold); color: var(--c-ink); }
-.venue-address { display: inline-flex; align-items: center; gap: 2px; padding: 0; border: 0; background: none; font-size: var(--fs-caption); color: var(--c-ink-60) !important; cursor: pointer; }
 .venue-tel { font-size: var(--fs-caption); color: var(--c-ink-60); text-decoration: none; }
 .location .ui-card-body { font-weight: var(--fw-regular); }
+/* 지도 자리 그림 (카카오맵 연동 전) */
+.map-preview { position: relative; aspect-ratio: 5 / 3; border-radius: var(--r-card); overflow: hidden; background: var(--c-ink-4); }
+.map-preview > svg:first-child { display: block; width: 100%; height: 100%; }
+.map-river { fill: none; stroke: var(--c-ink-8); stroke-width: 14; stroke-linecap: round; }
+.map-road { fill: none; stroke: var(--c-cream); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.map-road--main { stroke-width: 8; }
+.map-block { fill: var(--c-ink-8); }
+.map-pin { position: absolute; left: 50%; top: 50%; width: 28px; height: 36px; transform: translate(-50%, -88%); fill: var(--c-accent); filter: drop-shadow(0 2px 3px var(--c-ink-20)); }
+.map-pin circle { fill: var(--c-cream); }
 .map-links { display: grid; justify-items: center; gap: var(--sp-item); width: 100%; max-width: var(--w-col); }
 /* 지도 버튼 3개는 열 폭을 3등분해 같은 너비 */
 .map-links-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-item); width: 100%; }

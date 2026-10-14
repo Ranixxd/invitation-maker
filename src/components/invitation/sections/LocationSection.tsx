@@ -1,9 +1,9 @@
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
-import { copyText } from '../../common/toast';
-import { IconMapPin, InfoCard, SectionHead } from '../ui';
+import { InfoCard, SectionHead } from '../ui';
+import { MapPreview } from '../MapPreview';
 
-// v0.1: 지도 임베드 대신 외부 지도 링크 (CONSTITUTION §4.5)
+// 장소명 · 지도 자리 그림(카카오맵 연동 전, plan.md) · 교통편 · 외부 지도 링크 (CONSTITUTION §4.5)
 function mapLinks(query: string) {
   const q = encodeURIComponent(query);
   return [
@@ -28,18 +28,16 @@ export function LocationSection({ doc, section }: SectionProps<SectionOf<'locati
       {v.name && (
         <div className="venue">
           <p className="venue-name">{[v.name, v.hall].filter(Boolean).join(' ')}</p>
-          {/* 주소를 누르면 복사 */}
-          {v.address && (
-            <button type="button" className="venue-address" onClick={() => copyText(v.address, '주소가 복사되었습니다')}>
-              <IconMapPin />
-              {v.address}
-            </button>
-          )}
           {v.tel && (
             <a className="venue-tel" href={`tel:${v.tel}`}>
               Tel. {v.tel}
             </a>
           )}
+        </div>
+      )}
+      {v.name && (
+        <div className="ui-col">
+          <MapPreview label={v.name} />
         </div>
       )}
       {transports.length > 0 && (
