@@ -61,7 +61,7 @@ export function GallerySection({ doc, section, mode }: SectionProps<SectionOf<'g
       )}
       {canFold && (
         <div className="ui-col">
-          <Button variant="inverse" onClick={() => setExpanded((v) => !v)} aria-expanded={expanded}>
+          <Button variant="primary" onClick={() => setExpanded((v) => !v)} aria-expanded={expanded}>
             {expanded ? '접기' : '더보기'}
           </Button>
         </div>

@@ -84,7 +84,7 @@ export function GuestbookSection({ doc, section, mode }: SectionProps<SectionOf<
   };
 
   const writeButton = (
-    <Button variant="inverse" className="gb-write" onClick={() => setWriting(true)}>
+    <Button variant="primary" className="gb-write" onClick={() => setWriting(true)}>
       방명록 남기기
     </Button>
   );

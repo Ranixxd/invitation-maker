@@ -20,6 +20,8 @@
   --c-scrim: color-mix(in srgb, var(--inv-text) 60%, transparent);
 
   /* 면: 흰 종이 카드(폴라로이드·음악 재생 바) — 크림보다 한 톤 밝게 */
+  /* 연분홍 바탕(우리의 이야기·갤러리·방명록): 포인트 6% */
+  --c-blush: color-mix(in srgb, var(--c-accent) 6%, var(--inv-bg));
   --c-paper-hi: color-mix(in srgb, var(--inv-bg) 55%, white);
 
   /* 불투명도: 색은 위 단계(100·60·20·8·4)로만, 요소 자체 투명도는 아래 하나만 */
@@ -67,7 +69,7 @@
   --w-col: 320px; /* 폼·카드 열 최대 폭 */
 
   /* 크기 */
-  --h-control: 40px; /* 버튼 · 한 줄 입력 · 선택 알약 · 아이콘 버튼 */
+  --h-control: 48px; /* 버튼 · 한 줄 입력 · 선택 알약 · 스테퍼 · 아이콘 버튼 (누르기 쉬운 높이) */
   --h-chip: 32px; /* 작은 버튼(복사·삭제·지도·페이지) */
   --bw: 1px;
   --bw-strong: 2px; /* 선택된 알약 */

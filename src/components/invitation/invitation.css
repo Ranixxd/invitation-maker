@@ -35,15 +35,13 @@
   text-align: center;
 }
 
-/* 포인트 바탕 섹션 (에디토리얼 계열: 우리의 이야기·갤러리·방명록) */
+/* 연분홍 바탕 섹션 (에디토리얼 계열: 우리의 이야기·갤러리·방명록)
+   포인트색을 아주 옅게 섞은 바탕 + 글자는 잉크, 제목·장식은 포인트 그대로 */
 .inv--fam-editorial .inv-section--profile,
 .inv--fam-editorial .inv-section--gallery,
 .inv--fam-editorial .inv-section--guestbook {
-  --sec-bg: var(--c-accent);
-  --sec-fg: var(--c-cream);
-  --sec-title: var(--c-cream);
-  --sec-muted: var(--c-cream-60);
-  --sec-paper: var(--c-cream);
+  --sec-bg: var(--c-blush);
+  --sec-paper: var(--c-paper-hi);
 }
 
 /* ---- 히어로: 폴라로이드 (에디토리얼) ---- */
@@ -282,7 +280,7 @@
 }
 .cal-strip-day { display: grid; justify-items: center; gap: var(--sp-label); padding: var(--sp-4) 0; color: var(--c-ink-60); }
 .cal-strip-wd { font-weight: var(--fw-regular); }
-.cal-strip-num { position: relative; display: grid; place-items: center; width: var(--h-control); height: var(--h-control); font-size: var(--fs-numeral); font-weight: var(--fw-regular); line-height: var(--lh-none); }
+.cal-strip-num { position: relative; display: grid; place-items: center; width: var(--sp-10); height: var(--sp-10); font-size: var(--fs-numeral); font-weight: var(--fw-regular); line-height: var(--lh-none); }
 .cal-strip-n { position: relative; }
 .cal-strip-day.is-day .cal-strip-wd { color: var(--c-accent); font-weight: var(--fw-medium); }
 /* 예식일: 오린 하트 위에 흰(크림) 숫자 */
@@ -393,7 +391,7 @@
   font-weight: var(--fw-medium);
   cursor: pointer;
 }
-.gb-pager button.is-on { background: var(--sec-title); color: var(--sec-bg) !important; }
+.gb-pager button.is-on { background: var(--sec-title); color: var(--c-cream) !important; }
 /* 상세 · 작성 */
 /* 상세: 이름 · 구분선 · 본문 · 날짜는 촘촘하게(8), 삭제 영역만 조금 띄운다(16) */
 .ui-modal-card.gb-detail { gap: var(--sp-item); background-image: none; } /* 상세 카드는 종이 질감 없이 */
