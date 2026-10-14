@@ -33,7 +33,7 @@
   --fs-display: 32px; /* 신랑·신부 사이 & */
   --fs-headline: 28px; /* 히어로 이름 */
   --fs-section: 20px; /* 섹션 제목 */
-  --fs-title: 17px; /* 이름 · 입력 · 버튼 · 모달 제목 */
+  --fs-title: 15px; /* 이름 · 입력 · 버튼 · 모달 제목 · 히어로 일시 */
   --fs-body: 15px; /* 본문 · 레이블 */
   --fs-caption: 13px; /* 보조 · 캡션 */
   --lh-tight: 1.3;
