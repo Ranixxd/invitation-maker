@@ -2,6 +2,7 @@ import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
 import { formatDot, formatDotKo, formatKo, parseLocal } from '../../../lib/date';
 import { HeartScribble } from '../HeartScribble';
+import { Bokeh } from '../Bokeh';
 
 export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
   const { imageId, layout, headline } = section.data;
@@ -22,6 +23,7 @@ export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
   if (layout === 'poster') {
     return (
       <div className="hero hero--poster">
+        <Bokeh />
         <HeartScribble className="hero-poster-heart" />
         <h1 className="hero-poster-names">
           {names.map((n, i) => (
