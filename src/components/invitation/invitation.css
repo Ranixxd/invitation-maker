@@ -113,7 +113,7 @@
 /* ---- 시작 멘트 · 우리의 이야기 · 마무리: 하트 + 제목 ---- */
 
 /* ---- 신랑·신부 (혼주는 작게) ---- */
-.couple-grid { position: relative; display: grid; grid-template-columns: 1fr 1fr; column-gap: 60px; }
+.couple-grid { position: relative; display: grid; grid-template-columns: auto auto; justify-content: center; column-gap: 44px; }
 .couple-cell { position: relative; display: grid; }
 .couple-person { display: grid; justify-items: center; gap: 6px; }
 .couple-role { font-size: var(--fs-caption); font-weight: var(--fw-medium); color: var(--c-accent); }
@@ -122,7 +122,7 @@
 .couple-amp {
   position: absolute;
   top: 50%;
-  left: -30px;
+  left: -22px; /* 두 사람 사이(간격 44px)의 가운데 */
   transform: translate(-50%, -50%);
   font-family: var(--ff-display);
   font-size: var(--fs-display);
