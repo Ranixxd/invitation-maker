@@ -24,12 +24,15 @@ export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
     return (
       <div className="hero hero--poster">
         <Bokeh />
-        <HeartScribble className="hero-poster-heart" />
-        <h1 className="hero-poster-names">
-          {names.map((n, i) => (
-            <span key={i}>{n}</span>
-          ))}
-        </h1>
+        {/* 이름 묶음을 하트가 감싼다: 하트는 이름 묶음 가운데 기준으로 놓인다 */}
+        <div className="hero-poster-title">
+          <HeartScribble className="hero-poster-heart" />
+          <h1 className="hero-poster-names">
+            {names.map((n, i) => (
+              <span key={i}>{n}</span>
+            ))}
+          </h1>
+        </div>
         <div className="hero-poster-photo">{photo}</div>
         {(date || venue) && (
           <p className="hero-poster-when">
