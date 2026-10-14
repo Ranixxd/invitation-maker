@@ -20,7 +20,7 @@ const EDIT_LABELS: Record<SectionType, string | null> = {
   hero: '대표 사진 편집',
   greeting: '시작 멘트 편집',
   couple: '신랑·신부 편집',
-  profile: '추가 정보 편집',
+  profile: '이야기 편집',
   calendar: '예식 일자 편집',
   gallery: '갤러리 편집',
   rsvp: '참석 여부 편집',

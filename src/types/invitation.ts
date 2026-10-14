@@ -60,7 +60,7 @@ export interface ImageAsset {
 
 // ---- 섹션 ----
 
-export type HeroLayout = 'full' | 'frame' | 'arch';
+export type HeroLayout = 'full' | 'frame' | 'arch' | 'poster';
 /** 예식 일자 표시 방식: 월 달력 / 앞뒤 하루를 포함한 3일 띠(하트 표시) — 템플릿이 결정 */
 export type CalendarStyle = 'month' | 'strip';
 export type GalleryLayout = 'grid' | 'slide';
@@ -79,20 +79,14 @@ export interface CoupleData {
   showParents: boolean;
   showContact: boolean;
 }
-export interface ProfilePerson {
-  hostId: string;
-  mbti: string;
-  intro: string;
-}
 export interface TimelineItem {
   id: string;
   date: string; // 자유 형식 (예: 2019.03)
   text: string;
 }
-/** 신랑·신부 추가 정보: MBTI·한 줄 소개·타임라인 */
+/** 우리의 이야기: 타임라인 */
 export interface ProfileData {
   title: string;
-  people: ProfilePerson[];
   timeline: TimelineItem[];
 }
 /** 예식 일자: 장소 요약·날짜·시간·D-day */

@@ -16,6 +16,8 @@ import { SnapSection } from './sections/SnapSection';
 import { ClosingSection } from './sections/ClosingSection';
 import { BrandSection } from './sections/BrandSection';
 import { PlacingHitArea, StickerOverlay, type StickerEdit } from './StickerLayer';
+import './tokens.css';
+import './ui.css';
 import './invitation.css';
 
 export type RenderMode = 'view' | 'preview';

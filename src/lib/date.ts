@@ -15,6 +15,16 @@ export function formatKo(d: Date): string {
   return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일 ${WEEK_KO[d.getDay()]}요일 ${ampm} ${h12}시${min ? ` ${min}분` : ''}`;
 }
 
+/** 2027. 01. 16. 토요일 오후 12시 30분 */
+export function formatDotKo(d: Date): string {
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const h = d.getHours();
+  const ampm = h < 12 ? '오전' : '오후';
+  const h12 = h % 12 === 0 ? 12 : h % 12;
+  const min = d.getMinutes();
+  return `${d.getFullYear()}. ${pad(d.getMonth() + 1)}. ${pad(d.getDate())}. ${WEEK_KO[d.getDay()]}요일 ${ampm} ${h12}시${min ? ` ${min}분` : ''}`;
+}
+
 export function formatDot(d: Date): string {
   const pad = (n: number) => String(n).padStart(2, '0');
   return `${d.getFullYear()}. ${pad(d.getMonth() + 1)}. ${pad(d.getDate())}. ${WEEK_EN[d.getDay()].slice(0, 3)}`;

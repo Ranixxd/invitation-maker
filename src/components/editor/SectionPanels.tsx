@@ -3,7 +3,6 @@ import { useState } from 'react';
 import type {
   BankAccount,
   InvitationDoc,
-  ProfilePerson,
   Section,
   SectionDataMap,
   SectionOf,
@@ -203,20 +202,11 @@ function CouplePanel({ section, dispatch, goSettings }: PanelProps<'couple'>) {
 }
 
 // ---------------- profile ----------------
-const MBTI_MAX = 4;
 const TIMELINE_MAX = 10;
 
-function ProfilePanel({ doc, section, dispatch }: PanelProps<'profile'>) {
+function ProfilePanel({ section, dispatch }: PanelProps<'profile'>) {
   const set = useUpdate('profile', dispatch);
-  const { people, timeline } = section.data;
-  const person = (hostId: string) => people.find((p) => p.hostId === hostId) ?? { hostId, mbti: '', intro: '' };
-  const setPerson = (hostId: string, patch: Partial<ProfilePerson>) => {
-    const exists = people.some((p) => p.hostId === hostId);
-    const next = exists
-      ? people.map((p) => (p.hostId === hostId ? { ...p, ...patch } : p))
-      : [...people, { ...person(hostId), ...patch }];
-    set({ people: next });
-  };
+  const { timeline } = section.data;
   const setItem = (id: string, patch: Partial<TimelineItem>) =>
     set({ timeline: timeline.map((t) => (t.id === id ? { ...t, ...patch } : t)) });
 
@@ -225,29 +215,6 @@ function ProfilePanel({ doc, section, dispatch }: PanelProps<'profile'>) {
       <PanelSection title="섹션">
         <TextField label="제목" value={section.data.title} onChange={(title) => set({ title })} />
       </PanelSection>
-      {doc.core.hosts.map((h) => {
-        const p = person(h.id);
-        return (
-          <PanelSection key={h.id} title={`${h.label} ${h.name}`.trim()}>
-            <TextField
-              label="MBTI"
-              placeholder="예) ENFP"
-              value={p.mbti}
-              maxLength={MBTI_MAX}
-              autoCapitalize="characters"
-              onChange={(mbti) => setPerson(h.id, { mbti: mbti.toUpperCase().replace(/[^A-Z]/g, '') })}
-            />
-            <TextArea
-              label="한 줄 소개"
-              rows={2}
-              maxLength={80}
-              placeholder="예) 주말마다 빵집 투어하는 사람"
-              value={p.intro}
-              onChange={(intro) => setPerson(h.id, { intro })}
-            />
-          </PanelSection>
-        );
-      })}
       <PanelSection
         title="타임라인"
         aside={

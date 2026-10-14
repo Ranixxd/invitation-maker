@@ -8,14 +8,11 @@ import weddingHero01 from '../assets/samples/wedding-hero-01.jpg';
 import { DEFAULT_CROP } from '../lib/stickers';
 
 const GALLERY_COUNT = 6;
-const SAMPLE_PROFILE = [
-  { mbti: 'ENFJ', intro: '주말마다 새로운 빵집을 찾아다녀요' },
-  { mbti: 'INFP', intro: '그 빵집 리스트를 정리하는 사람' },
-];
 const SAMPLE_TIMELINE = [
   { date: '2019.03', text: '동아리에서 처음 만난 날' },
   { date: '2020.05', text: '연애 시작' },
   { date: '2026.06', text: '제주에서 프러포즈' },
+  { date: '2027.01', text: '우리 결혼합니다' },
 ];
 const SAMPLE_PARENTS = [
   { father: '김철수', mother: '박영희' },
@@ -66,7 +63,6 @@ export function sampleDoc(t: DesignTemplate): InvitationDoc {
           ...s,
           data: {
             ...s.data,
-            people: hosts.map((h, i) => ({ hostId: h.id, ...SAMPLE_PROFILE[i] })),
             timeline: SAMPLE_TIMELINE.map((t, i) => ({ id: `sample_tl_${i}`, ...t })),
           },
         };

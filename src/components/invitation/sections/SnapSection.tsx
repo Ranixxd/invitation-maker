@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
 import { toast } from '../../common/toast';
+import { Button, SectionHead } from '../ui';
 
 const MAX_SNAPS = 10;
 
@@ -25,12 +26,13 @@ export function SnapSection({ section }: SectionProps<SectionOf<'snap'>>) {
 
   return (
     <section className="inv-block snap">
-      <h2 className="inv-title">{title}</h2>
-      {description && <p className="inv-desc">{description}</p>}
+      <SectionHead title={title} desc={description} />
       <input ref={input} type="file" accept="image/*" multiple hidden onChange={(e) => onFiles(e.target.files)} />
-      <button type="button" className="inv-btn" onClick={() => input.current?.click()} disabled={urls.length >= MAX_SNAPS}>
-        사진 올리기
-      </button>
+      <div className="ui-col">
+        <Button onClick={() => input.current?.click()} disabled={urls.length >= MAX_SNAPS}>
+          사진 올리기
+        </Button>
+      </div>
       {urls.length > 0 && (
         <ul className="snap-grid">
           {urls.map((u) => (

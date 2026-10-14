@@ -1,0 +1,174 @@
+/* 청첩장 UI 컴포넌트 (ui.tsx). 값은 tokens.css의 토큰만 쓴다 */
+
+/* ---- 텍스트 ---- */
+.ui-head { display: grid; justify-items: center; gap: var(--sp-stack); }
+.ui-title { margin: 0; font-size: var(--fs-title); font-weight: var(--fw-semibold); line-height: var(--lh-tight); color: var(--sec-title); }
+.ui-desc { margin: 0; font-size: var(--fs-caption); line-height: var(--lh-body); color: var(--sec-muted); white-space: pre-line; }
+.ui-body { margin: 0; font-size: var(--fs-body); line-height: var(--lh-body); color: var(--sec-muted); white-space: pre-line; }
+.ui-caption { margin: 0; font-size: var(--fs-caption); line-height: var(--lh-body); color: var(--c-ink-60); }
+.ui-body b { color: var(--sec-fg); }
+
+.inv img.ui-heart { width: 53px; height: 53px; }
+
+.ui-icon { flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---- 레이아웃: 폼·카드 열 ---- */
+.ui-col { display: grid; gap: var(--sp-stack); width: 100%; max-width: var(--w-col); margin: 0 auto; text-align: left; }
+.ui-form { display: grid; gap: var(--sp-stack); text-align: left; }
+.ui-stack { display: grid; gap: var(--sp-item); }
+
+/* ---- 버튼 ---- */
+.ui-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-label);
+  border: 0;
+  font-family: var(--ff-sans);
+  font-weight: var(--fw-medium);
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.ui-btn:disabled { opacity: 0.4; cursor: default; }
+.ui-btn--primary,
+.ui-btn--inverse { width: 100%; height: var(--h-control); padding: 0 var(--sp-card); border-radius: var(--r-control); font-size: var(--fs-title); }
+.ui-btn--primary { background: var(--c-accent); color: var(--c-cream); }
+.ui-btn--inverse { background: var(--c-cream); color: var(--c-accent); }
+.ui-btn--chip {
+  justify-self: start;
+  height: var(--h-chip);
+  padding: 0 var(--sp-item);
+  border: var(--bw) solid var(--c-ink-60);
+  border-radius: var(--r-control);
+  background: transparent;
+  color: var(--c-ink);
+  font-size: var(--fs-body);
+}
+
+/* ---- 입력 필드 ---- */
+.ui-field { display: grid; gap: var(--sp-label); text-align: left; }
+.ui-field-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-item); }
+.ui-label { font-size: var(--fs-body); line-height: var(--lh-body); color: var(--c-ink-60); }
+.ui-field-aside { font-size: var(--fs-caption); line-height: var(--lh-body); color: var(--c-ink-60); }
+.ui-field-help, .ui-field-error { font-size: var(--fs-caption); line-height: var(--lh-body); color: var(--c-ink-60); }
+.ui-field-error { color: var(--c-accent); }
+.ui-input {
+  width: 100%;
+  min-width: 0;
+  height: var(--h-control);
+  padding: 0 16px;
+  border: var(--bw) solid var(--c-ink-60);
+  border-radius: var(--r-control);
+  background: transparent;
+  color: var(--c-ink);
+  font: var(--fw-regular) var(--fs-title) var(--ff-sans);
+  outline: none;
+}
+.ui-input:focus { border-color: var(--c-accent); }
+.ui-textarea { height: 160px; padding: 16px; border-radius: var(--r-card); resize: none; line-height: var(--lh-body); }
+
+/* ---- 선택 알약 (라디오) ---- */
+.ui-choices { display: flex; gap: var(--sp-item); }
+.ui-choice {
+  flex: 1 1 0;
+  min-width: 0;
+  height: var(--h-control);
+  padding: 0 16px;
+  border: var(--bw) solid var(--c-ink-60);
+  border-radius: var(--r-control);
+  background: transparent;
+  color: var(--c-ink);
+  font: var(--fw-medium) var(--fs-title) var(--ff-sans);
+  cursor: pointer;
+}
+/* 선택: 굵은 포인트 테두리 (글자는 가운데 정렬이라 위치가 흔들리지 않는다) */
+.ui-choice.is-on { border: var(--bw-strong) solid var(--c-accent); }
+.ui-choices--card .ui-choice { display: grid; place-content: center; gap: 6px; height: 80px; border-radius: var(--r-card); }
+.ui-choice-sub { font-size: var(--fs-caption); color: var(--c-accent); }
+.ui-choice-main { font-size: var(--fs-title); }
+
+/* ---- 스테퍼 ---- */
+.ui-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--h-control);
+  padding: 0 12px;
+  border: var(--bw) solid var(--c-ink-60);
+  border-radius: var(--r-control);
+}
+.ui-stepper button { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 0; background: none; color: var(--c-accent); cursor: pointer; }
+.ui-stepper button:disabled { opacity: 0.3; cursor: default; }
+.ui-stepper output { font: var(--fw-medium) var(--fs-title) var(--ff-sans); color: var(--c-ink); }
+
+/* ---- 정보 카드 ---- */
+.ui-divider { width: 100%; height: var(--bw); margin: 0; border: 0; background: var(--c-ink-8); }
+.ui-card {
+  display: grid;
+  gap: var(--sp-item);
+  padding: var(--sp-card);
+  border-radius: var(--r-card);
+  background: var(--c-ink-4);
+  color: var(--c-ink);
+  font-size: var(--fs-body);
+  line-height: var(--lh-tight);
+  text-align: left;
+}
+.ui-card-head { font-weight: var(--fw-medium); }
+.ui-card-label { color: var(--c-ink-60); }
+.ui-card-row { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-item); }
+
+/* ---- 펼침 (계좌 그룹) ---- */
+.ui-disclosure > summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-label);
+  margin-bottom: var(--sp-item);
+  font-size: var(--fs-title);
+  line-height: var(--lh-body);
+  color: var(--c-ink);
+  list-style: none;
+  cursor: pointer;
+}
+.ui-disclosure > summary::-webkit-details-marker { display: none; }
+.ui-disclosure > summary .ui-icon { color: var(--c-accent); transition: transform 0.2s ease; }
+.ui-disclosure[open] > summary .ui-icon { transform: rotate(180deg); }
+.ui-disclosure:not([open]) > summary { margin-bottom: 0; }
+
+/* ---- 모달 (포털) ---- */
+.inv-portal { font-family: var(--ff-sans); color: var(--c-ink); -webkit-font-smoothing: antialiased; }
+.inv-portal * { box-sizing: border-box; }
+.ui-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-stack);
+  padding: var(--sp-stack) var(--sp-gutter);
+  background: var(--c-scrim);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  animation: ui-fade 0.2s ease;
+}
+@keyframes ui-fade { from { opacity: 0; } }
+.ui-modal-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-stack);
+  width: 100%;
+  max-width: var(--w-col);
+  max-height: calc(100dvh - 120px);
+  overflow: auto;
+  padding: var(--sp-card);
+  border-radius: var(--r-card);
+  background: var(--c-cream);
+  text-align: left;
+}
+.ui-modal-bare { max-width: 100%; }
+.ui-modal-hint { margin: 0; font-size: var(--fs-caption); font-weight: var(--fw-medium); color: var(--c-cream); }

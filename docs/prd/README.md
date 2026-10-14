@@ -28,5 +28,6 @@
 | [PRD-0013](./PRD-0013-sticker-kinds-adjust.md) | 스티커 종류·사진 조정·네모 프레임 | 2026-10-13 | 확정 |
 | [PRD-0014](./PRD-0014-desktop-sticker-panel.md) | 데스크탑 붙이기: 타이틀 옆 버튼, 패널 교체 | 2026-10-13 | 확정 |
 | [PRD-0015](./PRD-0015-theme1-warm-polaroid.md) | 1번 테마: 웜 폴라로이드 | 2026-10-13 | 대체됨 → PRD-0016 |
-| [PRD-0016](./PRD-0016-theme1-modern-mono.md) | 1번 테마: 모던 모노 | 2026-10-14 | 일부 대체됨 → PRD-0017 (히어로 흑백·명조 제목·각진 모서리) |
-| [PRD-0017](./PRD-0017-design-system-guestbook-board.md) | 템플릿 디자인 시스템 · 방명록 쪽지 보드 | 2026-10-14 | 확정 |
+| [PRD-0016](./PRD-0016-theme1-modern-mono.md) | 1번 테마: 모던 모노 | 2026-10-14 | 대체됨 → PRD-0017, PRD-0018 |
+| [PRD-0017](./PRD-0017-design-system-guestbook-board.md) | 템플릿 디자인 시스템 · 방명록 쪽지 보드 | 2026-10-14 | 일부 대체됨 → PRD-0018 (시각 규칙) |
+| [PRD-0018](./PRD-0018-figma-redesign-theme1.md) | 1번 테마 Figma 시안 기준 전면 재설계 · 토큰/컴포넌트 체계 | 2026-10-14 | 확정 |

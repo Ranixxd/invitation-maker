@@ -1,6 +1,7 @@
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
 import { copyText } from '../../common/toast';
+import { IconMapPin, InfoCard, SectionHead } from '../ui';
 
 // v0.1: 지도 임베드 대신 외부 지도 링크 (CONSTITUTION §4.5)
 function mapLinks(query: string) {
@@ -23,46 +24,44 @@ export function LocationSection({ doc, section }: SectionProps<SectionOf<'locati
 
   return (
     <section className="inv-block location">
-      <h2 className="inv-title">{title}</h2>
-      {v.name ? (
-        <p className="venue-name">
-          {v.name}
-          {v.hall && <span> {v.hall}</span>}
-        </p>
-      ) : (
-        <p className="inv-muted">장소를 입력해 주세요</p>
-      )}
-      {v.address && (
-        <p className="venue-address">
-          {v.address}
-          <button type="button" className="inv-chip" onClick={() => copyText(v.address, '주소가 복사되었습니다')}>
-            복사
-          </button>
-        </p>
-      )}
-      {v.tel && (
-        <p className="venue-tel">
-          <a href={`tel:${v.tel}`}>Tel. {v.tel}</a>
-        </p>
-      )}
-      {showMapLinks && (v.address || v.name) && (
-        <div className="map-links">
-          {mapLinks(v.address || v.name).map((l) => (
-            <a key={l.label} href={l.href} target="_blank" rel="noreferrer">
-              {l.label}
+      <SectionHead title={title} desc={v.name ? undefined : '장소를 입력해 주세요'} />
+      {v.name && (
+        <div className="venue">
+          <p className="venue-name">{[v.name, v.hall].filter(Boolean).join(' ')}</p>
+          {/* 주소를 누르면 복사 */}
+          {v.address && (
+            <button type="button" className="venue-address" onClick={() => copyText(v.address, '주소가 복사되었습니다')}>
+              <IconMapPin />
+              {v.address}
+            </button>
+          )}
+          {v.tel && (
+            <a className="venue-tel" href={`tel:${v.tel}`}>
+              Tel. {v.tel}
             </a>
-          ))}
+          )}
         </div>
       )}
       {transports.length > 0 && (
-        <dl className="transport">
+        <div className="ui-col ui-stack">
           {transports.map((t) => (
-            <div key={t.label}>
-              <dt>{t.label}</dt>
-              <dd>{t.text}</dd>
-            </div>
+            <InfoCard key={t.label} head={t.label}>
+              {t.text}
+            </InfoCard>
           ))}
-        </dl>
+        </div>
+      )}
+      {showMapLinks && (v.address || v.name) && (
+        <div className="map-links">
+          <p className="ui-caption">지도로 보기</p>
+          <div className="map-links-row">
+            {mapLinks(v.address || v.name).map((l) => (
+              <a key={l.label} className="ui-btn ui-btn--chip" href={l.href} target="_blank" rel="noreferrer">
+                {l.label}
+              </a>
+            ))}
+          </div>
+        </div>
       )}
     </section>
   );

@@ -65,15 +65,16 @@ export const THEME_PRESETS: Record<ThemePreset, ThemePresetDef> = {
   },
   mono: {
     label: '모노',
-    bg: '#ffffff',
-    surface: '#f3f3f1',
-    text: '#151515',
-    muted: '#6e6e6e',
-    accent: '#8e1f2f',
-    band: '#161616',
-    onBand: '#ffffff',
-    paper: '#ffffff',
-    board: '#b8202f',
+    // 두 가지 색(레드 포인트 · 잉크)만 쓰고 나머지는 불투명도로 만든다 (§3.6)
+    bg: '#fcfcf4',
+    surface: '#f2f1ea',
+    text: '#241c1d',
+    muted: '#7c7677',
+    accent: '#66000e',
+    band: '#66000e',
+    onBand: '#fcfcf4',
+    paper: '#fcfcf4',
+    board: '#66000e',
     font: 'sans',
   },
   romantic: {
@@ -100,12 +101,12 @@ export const WEDDING = {
   greetingTitle: '소중한 분들을 초대합니다',
   greetingBody:
     '서로가 마주보며 다져온 사랑을\n이제 함께 한 곳을 바라보며\n걸어갈 수 있는 큰 사랑으로 키우고자 합니다.\n\n저희 두 사람이 사랑의 이름으로\n지켜나갈 수 있도록\n앞날을 축복해 주시면 감사하겠습니다.',
-  profileTitle: '우리 이야기',
+  profileTitle: '우리의 이야기',
   rsvpTitle: '참석 여부 전달',
-  rsvpDescription: '원활한 예식 준비를 위해\n참석 여부를 미리 알려주시면 감사하겠습니다.',
+  rsvpDescription: '',
   snapTitle: '게스트 스냅',
   snapDescription: '예식 날 찍은 사진을 올려주세요.\n저희에게 소중한 선물이 됩니다.',
-  closingBody: '바쁘신 와중에도 저희의 시작을 축하해 주셔서 감사합니다.\n\n서로 아끼고 배려하며\n예쁘게 잘 살겠습니다.',
+  closingBody: '바쁘신 와중에도\n저희의 시작을 축하해 주셔서 감사합니다.\n\n서로 아끼고 배려하며\n예쁘게 잘 살겠습니다.',
   accountTitle: '마음 전하실 곳',
   accountDescription: '참석이 어려우신 분들을 위해\n계좌번호를 기재하였습니다.\n너그러운 마음으로 양해 부탁드립니다.',
   guestbookTitle: '방명록',
@@ -148,7 +149,7 @@ export function createSections(hosts: HostSide[]): Section[] {
         return {
           ...base,
           type,
-          data: { title: WEDDING.profileTitle, people: hosts.map((h) => ({ hostId: h.id, mbti: '', intro: '' })), timeline: [] },
+          data: { title: WEDDING.profileTitle, timeline: [] },
         };
       case 'calendar':
         return { ...base, type, data: { showCalendar: true, showCountdown: true, style: 'month' } };
@@ -229,7 +230,7 @@ export const SECTION_LABELS: Record<SectionType, string> = {
   hero: '히어로 (맨 위)',
   greeting: '시작 멘트',
   couple: '신랑·신부',
-  profile: '신랑·신부 추가 정보',
+  profile: '우리의 이야기',
   calendar: '예식 일자',
   gallery: '갤러리',
   rsvp: '참석 여부',

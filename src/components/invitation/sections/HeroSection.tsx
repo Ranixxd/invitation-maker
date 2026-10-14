@@ -1,6 +1,6 @@
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
-import { formatDot, formatKo, parseLocal } from '../../../lib/date';
+import { formatDot, formatDotKo, formatKo, parseLocal } from '../../../lib/date';
 import { HeartScribble } from '../HeartScribble';
 
 export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
@@ -18,35 +18,35 @@ export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
     </div>
   );
 
+  // 포스터: 포인트 바탕 위 이름(세로) · 크림 테두리 사진 · 아래 크림 띠에 일시·장소 (§3.5)
+  if (layout === 'poster') {
+    return (
+      <div className="hero hero--poster">
+        <HeartScribble className="hero-poster-heart" />
+        <h1 className="hero-poster-names">
+          {names.map((n, i) => (
+            <span key={i}>{n}</span>
+          ))}
+        </h1>
+        <div className="hero-poster-photo">{photo}</div>
+        {(date || venue) && (
+          <p className="hero-poster-when">
+            {date && <span>{formatDotKo(date)}</span>}
+            {venue && <span>{venue}</span>}
+          </p>
+        )}
+      </div>
+    );
+  }
+
   if (layout === 'full') {
     return (
       <div className="hero hero--full">
         <div className="hero-media">{photo}</div>
         <div className="hero-overlay">
           {headline && <p className="hero-headline">{headline}</p>}
-          <h1 className="hero-names">
-            {names.map((n, i) => (
-              <span key={i} className="hero-name-part">
-                {i > 0 && (
-                  <span className="hero-sep">
-                    <span className="hero-dot" aria-hidden>
-                      ·
-                    </span>
-                    <HeartScribble className="hero-heart" />
-                  </span>
-                )}
-                {n}
-              </span>
-            ))}
-          </h1>
+          <h1 className="hero-names">{names.join(' · ')}</h1>
           {date && <p className="hero-date">{formatDot(date)}</p>}
-          {/* 이름 아래 예식 일시·장소 (에디토리얼 계열에서 표시) */}
-          {(date || venue) && (
-            <div className="hero-info">
-              {date && <p>{formatKo(date)}</p>}
-              {venue && <p>{venue}</p>}
-            </div>
-          )}
         </div>
       </div>
     );

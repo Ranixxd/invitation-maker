@@ -3,6 +3,7 @@ import { useState, type FormEvent } from 'react';
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
 import { toast } from '../../common/toast';
+import { Button, ChoiceGroup, Field, SectionHead, Stepper } from '../ui';
 
 type Attend = 'yes' | 'no';
 type Meal = 'yes' | 'no' | 'unsure';
@@ -26,33 +27,6 @@ function loadReply(docId: string): Reply | null {
   } catch {
     return null;
   }
-}
-
-function Choice<T extends string>({ label, value, options, onChange }: {
-  label: string;
-  value: T;
-  options: { value: T; label: string }[];
-  onChange: (v: T) => void;
-}) {
-  return (
-    <div className="rsvp-row">
-      <span className="rsvp-label">{label}</span>
-      <div className="gb-to" role="radiogroup" aria-label={label}>
-        {options.map((o) => (
-          <button
-            key={o.value}
-            type="button"
-            role="radio"
-            aria-checked={value === o.value}
-            className={value === o.value ? 'is-on' : ''}
-            onClick={() => onChange(o.value)}
-          >
-            {o.label}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
 }
 
 export function RsvpSection({ doc, section }: SectionProps<SectionOf<'rsvp'>>) {
@@ -83,30 +57,32 @@ export function RsvpSection({ doc, section }: SectionProps<SectionOf<'rsvp'>>) {
 
   return (
     <section className="inv-block rsvp">
-      <h2 className="inv-title">{title}</h2>
-      {description && <p className="inv-desc">{description}</p>}
+      <SectionHead title={title} desc={description} />
 
       {sent ? (
-        <div className="rsvp-done">
-          <p>
+        <div className="ui-col rsvp-done">
+          <p className="ui-body">
             <b>{sent.name}</b>님, {sent.attend === 'yes' ? `${sent.count}명 참석으로` : '불참으로'} 전달되었어요.
           </p>
-          <button type="button" className="inv-chip" onClick={() => setSent(null)}>
+          <Button variant="chip" onClick={() => setSent(null)}>
             다시 보내기
-          </button>
+          </Button>
         </div>
       ) : (
-        <form className="gb-form rsvp-form" onSubmit={submit}>
+        <form className="ui-col ui-form" onSubmit={submit}>
           {hosts.length > 1 && (
-            <Choice
+            <ChoiceGroup
               label="어느 쪽 하객이신가요?"
+              variant="card"
               value={side}
-              options={hosts.map((h) => ({ value: h.id, label: `${h.label}측` }))}
+              options={hosts.map((h) => ({ value: h.id, label: h.label, sub: h.name || h.label }))}
               onChange={setSide}
             />
           )}
-          <input value={name} maxLength={NAME_MAX} onChange={(e) => setName(e.target.value)} placeholder="성함" aria-label="성함" />
-          <Choice
+          <Field label="성함">
+            <input className="ui-input" value={name} maxLength={NAME_MAX} onChange={(e) => setName(e.target.value)} placeholder="성함을 입력해 주세요" />
+          </Field>
+          <ChoiceGroup
             label="참석 여부"
             value={attend}
             options={[
@@ -115,39 +91,20 @@ export function RsvpSection({ doc, section }: SectionProps<SectionOf<'rsvp'>>) {
             ]}
             onChange={setAttend}
           />
-          {attend === 'yes' && askCount && (
-            <div className="rsvp-row">
-              <span className="rsvp-label">참석 인원 (본인 포함)</span>
-              <div className="stepper-input">
-                <button type="button" aria-label="인원 줄이기" disabled={count <= 1} onClick={() => setCount((c) => Math.max(1, c - 1))}>
-                  <svg viewBox="0 0 16 16" aria-hidden>
-                    <path d="M3 8h10" />
-                  </svg>
-                </button>
-                <output aria-live="polite">{count}명</output>
-                <button type="button" aria-label="인원 늘리기" disabled={count >= COUNT_MAX} onClick={() => setCount((c) => Math.min(COUNT_MAX, c + 1))}>
-                  <svg viewBox="0 0 16 16" aria-hidden>
-                    <path d="M3 8h10M8 3v10" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          )}
+          {attend === 'yes' && askCount && <Stepper label="참석 인원" value={count} min={1} max={COUNT_MAX} onChange={setCount} />}
           {attend === 'yes' && askMeal && (
-            <Choice
+            <ChoiceGroup
               label="식사 여부"
               value={meal}
               options={[
-                { value: 'yes', label: '식사함' },
+                { value: 'yes', label: '식사 함' },
                 { value: 'no', label: '안 함' },
                 { value: 'unsure', label: '미정' },
               ]}
               onChange={setMeal}
             />
           )}
-          <button type="submit" className="inv-btn">
-            참석 여부 전달하기
-          </button>
+          <Button type="submit">참석 여부 전달하기</Button>
         </form>
       )}
     </section>

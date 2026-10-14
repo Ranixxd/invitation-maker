@@ -29,7 +29,7 @@ export interface ShapeTokens {
 }
 
 export const SHAPES: Record<ThemeShape, ShapeTokens> = {
-  round: { control: '999px', card: '22px', paper: '6px', media: '14px' },
+  round: { control: '999px', card: '20px', paper: '8px', media: '0px' },
   square: { control: '0px', card: '0px', paper: '0px', media: '0px' },
 };
 
@@ -39,9 +39,10 @@ export const FAMILY_LABELS: Record<ThemeFamily, string> = {
 };
 
 /** 계열별 글꼴 토큰 */
-const FAMILY_FONTS: Record<ThemeFamily, { title: string }> = {
-  basic: { title: 'inherit' },
-  editorial: { title: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif" },
+const FAMILY_FONTS: Record<ThemeFamily, { title: string; display: string }> = {
+  basic: { title: 'inherit', display: 'inherit' },
+  // 숫자·장식 문구용 디스플레이 세리프 (Figma의 Oblata Display 대체: Playfair Display)
+  editorial: { title: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif", display: "'Playfair Display', 'Gowun Batang', serif" },
 };
 
 /** 팔레트·모양·계열 → CSS 변수 */
@@ -63,5 +64,6 @@ export function designTokens(palette: Palette, accent: string, family: ThemeFami
     '--inv-r-paper': sh.paper,
     '--inv-r-media': sh.media,
     '--inv-font-title': f.title,
+    '--inv-font-display': f.display,
   } as CSSProperties;
 }
