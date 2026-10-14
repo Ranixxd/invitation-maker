@@ -335,9 +335,7 @@
   font-family: var(--ff-sans);
   text-align: center;
 }
-.inv-brand-logo { font-weight: var(--fw-semibold); font-size: var(--fs-body); }
 .inv-brand-copy { font-size: var(--fs-caption); color: var(--c-ink-60); }
-.inv-brand-link { margin-top: 10px; font-size: var(--fs-caption); color: var(--c-accent); text-decoration: underline; text-underline-offset: 3px; }
 
 /* ---- 미리보기 모드: 섹션 선택 하이라이트 ---- */
 .inv--preview .inv-section { position: relative; cursor: pointer; }
