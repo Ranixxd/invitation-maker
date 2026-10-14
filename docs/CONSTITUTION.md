@@ -126,7 +126,7 @@
   - 간격 눈금 `--sp-1~16`(4의 배수)과 역할 토큰 `--sp-section 40`(섹션 위아래)·`--sp-hero 48`(히어로 위아래)·`--sp-gutter 40`(좌우)·`--sp-stack 20`(요소 사이)·`--sp-title 12`(제목 ↔ 설명·본문)·`--sp-card 20`·`--sp-item 8`·`--sp-label 4`, 열 폭 `--w-col 320`
   - 크기 `--h-control 40`·`--h-chip 24`, 테두리 `--bw 1`·`--bw-strong 2`(선택)·`--bw-frame 8`·`--bw-frame-sm 4`
 - **컴포넌트 (`src/components/invitation/ui.tsx` + `ui.css`)** — 섹션은 이것들을 조합한다:
-  - `SectionHead`(하트·제목·설명) · `HeartMark` · `Button`(`primary` 포인트 바탕 / `inverse` 크림 바탕 / `chip` 작은 테두리) · `Field`(레이블·우측 보조·도움말/오류 + `.ui-input`/`.ui-textarea`) · `ChoiceGroup`(`pill` / `card`: 위 작은 레이블 + 이름, 선택 = 포인트 2px 테두리: 1px 테두리 + 안쪽 그림자 1px로 그려 크기·글자 위치가 변하지 않음) · `Stepper`(− 왼쪽 · + 오른쪽, 포인트색 아이콘, 끝값 비활성) · `InfoCard`(머리 · 구분선 · 내용, 잉크 4% 바탕) · `Divider` · `Modal`(흐린 배경 + 카드 또는 맨 내용 + `배경 눌러서 닫기`) · `.ui-disclosure`(펼침 + 셰브론) · lucide 아이콘(currentColor)
+  - `SectionHead`(하트·제목·설명) · `HeartMark` · `Button`(`primary` 포인트 바탕 / `inverse` 크림 바탕 / `chip` 작은 테두리) · `Field`(레이블·우측 보조·도움말/오류 + `.ui-input`/`.ui-textarea`) · `ChoiceGroup`(`pill` / `card`: 위 작은 레이블 + 이름, 선택 = 포인트 2px 테두리: 1px 테두리 + 안쪽 그림자 1px로 그려 크기·글자 위치가 변하지 않음) · `Stepper`(− 왼쪽 · + 오른쪽, 잉크색 아이콘, 끝값 비활성) · `InfoCard`(머리 · 구분선 · 내용, 잉크 4% 바탕) · `Divider` · `Modal`(흐린 배경 + 카드 또는 맨 내용 + `배경 눌러서 닫기`) · `.ui-disclosure`(펼침 + 셰브론) · lucide 아이콘(currentColor)
 - **새 템플릿 = 팔레트만 바꾸기:** ① `THEME_PRESETS`에 팔레트 추가 ② `DESIGN_TEMPLATES`에 `preset`·`family`·`shape` 지정. CSS 추가 없음. 템플릿에 `family`/`shape`가 없으면 `basic`·`round`.
 - **포털**(모달·떠 있는 버튼)은 렌더러 루트 밖에 그려지므로 `ThemePortal`로 같은 토큰·클래스를 다시 입힌다(`.inv-portal`). `Modal`이 이를 감싼다.
 - 렌더 환경 `InvitationEnv.floatingActions`: 실제 하객 화면(`/view`)에서만 `true`. 떠 있는 버튼은 이때만 쓰고, 편집기·템플릿 미리보기에서는 섹션 안에 둔다.

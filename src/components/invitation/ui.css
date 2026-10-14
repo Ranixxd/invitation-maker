@@ -110,7 +110,7 @@
   border: var(--bw) solid var(--c-ink-60);
   border-radius: var(--r-control);
 }
-.ui-stepper button { display: grid; place-items: center; width: var(--h-chip); height: var(--h-chip); padding: 0; border: 0; background: none; color: var(--c-accent); cursor: pointer; }
+.ui-stepper button { display: grid; place-items: center; width: var(--h-chip); height: var(--h-chip); padding: 0; border: 0; background: none; color: var(--c-ink); cursor: pointer; }
 .ui-stepper button:disabled { opacity: var(--op-disabled); cursor: default; }
 .ui-stepper output { font: var(--fw-medium) var(--fs-body) var(--ff-sans); color: var(--c-ink); }
 
