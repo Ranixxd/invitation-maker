@@ -67,7 +67,7 @@
   white-space: pre-line;
   z-index: 2;
 }
-.hero-pol-hearts { position: absolute; right: -36px; bottom: -22px; display: flex; gap: var(--sp-1); } /* 위치는 장식 배치값 */
+.hero-pol-hearts { position: absolute; right: -46px; bottom: -32px; display: flex; gap: var(--sp-1); } /* 위치는 장식 배치값 */
 .heart-cut { flex: none; fill: var(--sec-title); stroke: var(--sec-title); stroke-width: 0.6; stroke-linejoin: round; }
 .hero-pol-hearts .heart-cut { width: 19px; height: 17px; transform: rotate(-10deg); }
 .hero-pol-hearts .heart-cut:last-child { width: 13px; height: 12px; margin-top: var(--sp-3); transform: rotate(16deg); }
@@ -161,15 +161,17 @@
 }
 
 /* ---- 글자 역할 묶음 (크기·줄 간격을 한 곳에서) ---- */
-/* 캡션 13 */
-.hero-pol-note, .hero-pol-card .hero-img--empty, .couple-parents, .couple-contact-who, .story-date, .cal-strip-wd,
-.gb-note, .gb-empty, .gb-pager button, .venue-tel, .closing-names, .inv-brand-copy, .music-title {
-  font-size: var(--fs-caption);
+/* 작은 글 13: 음악 곡 제목 · 방명록 쪽지만 */
+.music-title, .gb-note {
+  font-size: var(--fs-small);
   line-height: var(--lh-body);
 }
-/* 본문 15 */
-.hero-pol-names, .hero-pol-when, .couple-role, .couple-contact summary, .story-text, .countdown, .cal caption,
-.gb-detail-name, .gb-detail-text, .gb-write-title, .venue-name {
+/* 본문 15: 나머지 글 전부 */
+.hero-pol-note, .hero-pol-card .hero-img--empty, .hero-pol-names, .hero-pol-when,
+.couple-role, .couple-parents, .couple-contact summary, .couple-contact-who,
+.story-date, .story-text, .cal-strip-wd, .countdown, .cal caption,
+.gb-empty, .gb-pager button, .gb-detail-name, .gb-detail-text, .gb-write-title,
+.venue-name, .venue-tel, .closing-names, .inv-brand-copy {
   font-size: var(--fs-body);
   line-height: var(--lh-body);
 }
@@ -187,8 +189,8 @@
   top: 50%;
   left: calc(-0.5 * var(--sp-10)); /* 두 사람 사이 간격의 가운데 */
   transform: translate(-50%, -50%);
-  font-family: var(--ff-display);
-  font-size: var(--fs-display);
+  font-size: var(--fs-section);
+  font-weight: var(--fw-semibold);
   line-height: var(--lh-none);
   color: var(--c-accent);
 }
@@ -238,7 +240,6 @@
 }
 
 /* ---- 예식 일자 ---- */
-.cal-title { display: grid; font-size: var(--fs-title); } /* 섹션 제목보다 한 단계 작게 */
 .cal-strip {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -250,7 +251,7 @@
 }
 .cal-strip-day { display: grid; justify-items: center; gap: var(--sp-label); padding: var(--sp-4) 0; color: var(--c-ink-60); }
 .cal-strip-wd { font-weight: var(--fw-medium); }
-.cal-strip-num { position: relative; display: grid; place-items: center; width: var(--h-control); height: var(--h-control); font-family: var(--ff-display); font-size: var(--fs-numeral); line-height: var(--lh-none); }
+.cal-strip-num { position: relative; display: grid; place-items: center; width: var(--h-control); height: var(--h-control); font-size: var(--fs-numeral); font-weight: var(--fw-medium); line-height: var(--lh-none); }
 .cal-strip-n { position: relative; }
 .cal-strip-day.is-day .cal-strip-wd { color: var(--c-accent); }
 /* 예식일: 오린 하트 위에 흰(크림) 숫자 */
@@ -262,13 +263,13 @@
 .save-row { overflow: hidden; white-space: nowrap; }
 .save-track { display: inline-flex; gap: 0.6em; animation: save-scroll 28s linear infinite; }
 .save-row.is-reverse .save-track { animation-direction: reverse; padding-left: 3em; }
-.save-track span { font-family: var(--ff-display); font-size: var(--fs-body); line-height: var(--lh-tight); color: var(--c-accent-20); }
+.save-track span { font-size: var(--fs-body); font-weight: var(--fw-medium); line-height: var(--lh-tight); color: var(--c-accent-20); }
 @keyframes save-scroll { to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) {
   .save-track { animation: none; }
 }
 /* 월 달력 (기본 계열) */
-.cal { margin: 0 auto; border-collapse: collapse; font-family: var(--ff-sans); font-size: var(--fs-caption); }
+.cal { margin: 0 auto; border-collapse: collapse; font-family: var(--ff-sans); font-size: var(--fs-body); }
 .cal caption { margin-bottom: var(--sp-2); font-weight: var(--fw-medium); }
 .cal th { padding-bottom: var(--sp-2); font-weight: var(--fw-medium); color: var(--c-ink-60); }
 .cal th, .cal td { width: 40px; height: 36px; text-align: center; }

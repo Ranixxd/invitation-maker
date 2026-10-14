@@ -2,7 +2,7 @@
 
 /* ---- 글자 역할 (크기·줄 간격 묶음) ---- */
 /* 캡션 13 */
-.ui-desc, .ui-caption, .ui-field-aside, .ui-field-help, .ui-field-error, .ui-choice-sub, .ui-modal-hint { font-size: var(--fs-caption); line-height: var(--lh-body); }
+.ui-desc, .ui-caption, .ui-field-aside, .ui-field-help, .ui-field-error, .ui-choice-sub, .ui-modal-hint { font-size: var(--fs-body); line-height: var(--lh-body); }
 /* 본문 15 */
 .ui-body, .ui-label, .ui-card, .ui-btn--chip { font-size: var(--fs-body); line-height: var(--lh-body); }
 
@@ -43,7 +43,7 @@
 }
 .ui-btn:disabled { opacity: var(--op-disabled); cursor: default; }
 .ui-btn--primary,
-.ui-btn--inverse { width: 100%; height: var(--h-control); padding: 0 var(--sp-card); border-radius: var(--r-control); font-size: var(--fs-title); }
+.ui-btn--inverse { width: 100%; height: var(--h-control); padding: 0 var(--sp-card); border-radius: var(--r-control); font-size: var(--fs-body); }
 .ui-btn--primary { background: var(--c-accent); color: var(--c-cream); }
 .ui-btn--inverse { background: var(--c-cream); color: var(--c-accent); }
 .ui-btn--chip {

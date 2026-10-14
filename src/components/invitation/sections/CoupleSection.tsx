@@ -52,7 +52,7 @@ export function CoupleSection({ doc, section }: SectionProps<SectionOf<'couple'>
           <div key={h.id} className="couple-cell">
             {i > 0 && (
               <span className="couple-amp" aria-hidden>
-                &amp;
+                ·
               </span>
             )}
             <Person host={h} showParents={showParents} />

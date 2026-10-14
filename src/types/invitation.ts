@@ -95,7 +95,7 @@ export interface ProfileData {
   title: string;
   timeline: TimelineItem[];
 }
-/** 예식 일자: 장소 요약·날짜·시간·D-day */
+/** 예식 일자: 날짜·시간·D-day */
 export interface CalendarData {
   showCalendar: boolean;
   showCountdown: boolean;

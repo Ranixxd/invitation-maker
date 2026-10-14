@@ -65,15 +65,11 @@ export function CalendarSection({ doc, section }: SectionProps<SectionOf<'calend
   const rows = monthMatrix(date.getFullYear(), date.getMonth());
   const left = dday(date);
   const names = doc.core.hosts.map((h) => h.name || h.label).join(' · ');
-  // 예식 일자: 날짜·시간과 장소 요약이 제목 (§4.1)
-  const venue = [doc.core.venue.name, doc.core.venue.hall].filter(Boolean).join(' ');
 
   return (
     <section className={`inv-block calendar is-${style}`}>
-      <h2 className="ui-title cal-title">
-        <span>{formatDotKo(date)}</span>
-        {venue && <span>{venue}</span>}
-      </h2>
+      {/* 예식 일자: 날짜·시간이 제목 (§4.1) */}
+      <h2 className="ui-title cal-title">{formatDotKo(date)}</h2>
       {showCalendar && style === 'strip' && <WeekStrip date={date} />}
       {showCalendar && style === 'month' && (
         <table className="cal" aria-label={`${date.getFullYear()}년 ${date.getMonth() + 1}월 달력`}>
