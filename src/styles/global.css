@@ -308,7 +308,7 @@ a.choice-card:hover, button.choice-card:hover { border-color: var(--primary); tr
 }
 .tpl-detail-info { display: grid; gap: 10px; position: sticky; top: calc(var(--top-h) + 32px); }
 .tpl-detail-info h1 { font-size: clamp(24px, 4vw, 32px); }
-.tpl-detail-preview { display: grid; justify-items: center; }
+.tpl-detail-preview { display: grid; justify-items: center; min-width: 0; } /* 청첩장 내용 폭에 밀려 칸보다 넓어지지 않게 */
 .tpl-detail .phone { height: min(780px, calc(100dvh - var(--top-h) - 150px)); }
 
 /* ---------- 쉽게 시작 마법사 ---------- */
@@ -611,9 +611,9 @@ a.choice-card:hover, button.choice-card:hover { border-color: var(--primary); tr
   .timeline-edit { grid-template-columns: 1fr; }
 
   .choice-grid { grid-template-columns: 1fr; }
-  .tpl-detail-body { grid-template-columns: 1fr; gap: 16px; padding: 20px 0 0; }
+  .tpl-detail-body { grid-template-columns: minmax(0, 1fr); gap: 16px; padding: 20px 0 0; } /* 내용 폭에 밀려 화면보다 넓어지지 않게 */
   .tpl-detail-info { position: static; padding: 0 16px; gap: 6px; }
-  .tpl-detail .phone { width: 100%; height: auto; min-height: 0; padding: 0; border-radius: 0; background: none; box-shadow: none; }
+  .tpl-detail .phone { width: 100%; min-width: 0; height: auto; min-height: 0; padding: 0; border-radius: 0; background: none; box-shadow: none; }
   .tpl-detail .phone-notch { display: none; }
   .tpl-detail .phone-screen { border-radius: 0; overflow: visible; }
   .tpl-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }

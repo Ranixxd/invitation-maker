@@ -1,17 +1,9 @@
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
 import { formatDot, formatDotKo, formatKo, parseLocal } from '../../../lib/date';
+import { HeartCut } from '../HeartCut';
 
 const DEFAULT_SCRIPT = 'Our Wedding Day';
-
-/** 작은 채운 하트 (폴라로이드 히어로 장식) */
-function HeartFilled() {
-  return (
-    <svg viewBox="0 0 24 22" aria-hidden>
-      <path d="M12 21C5 15.5 1.5 12 1.5 7.5 1.5 4 4 1.5 7.2 1.5c2 0 3.6 1 4.8 2.8 1.2-1.8 2.8-2.8 4.8-2.8 3.2 0 5.7 2.5 5.7 6 0 4.5-3.5 8-10.5 13.5z" />
-    </svg>
-  );
-}
 
 export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
   const { imageId, layout, headline } = section.data;
@@ -41,8 +33,8 @@ export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
           <p className="hero-pol-note">
             {headline}
             <span className="hero-pol-hearts" aria-hidden>
-              <HeartFilled />
-              <HeartFilled />
+              <HeartCut shape="a" />
+              <HeartCut shape="b" />
             </span>
           </p>
         )}
@@ -60,7 +52,14 @@ export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
             </p>
           )}
         </div>
-        <h1 className="hero-pol-names">{names.join(' · ')}</h1>
+        <h1 className="hero-pol-names">
+          {names.map((n, i) => (
+            <span key={i}>
+              {i > 0 && <HeartCut shape="b" className="hero-pol-names-heart" />}
+              {n}
+            </span>
+          ))}
+        </h1>
         {(date || venue) && (
           <p className="hero-pol-when">
             {date && <span>{formatDotKo(date)}</span>}

@@ -11,7 +11,8 @@
 .ui-caption { margin: 0; font-size: var(--fs-caption); line-height: var(--lh-body); color: var(--c-ink-60); }
 .ui-body b { color: var(--sec-fg); }
 
-.heart-scribble.ui-heart { width: 53px; height: 49px; stroke-width: 2px; }
+/* 섹션 머리 하트: 오린 하트, 예전 선 하트(53px)의 1/4 */
+.heart-cut.ui-heart { width: 14px; height: 13px; transform: rotate(-8deg); }
 
 .ui-icon { flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 

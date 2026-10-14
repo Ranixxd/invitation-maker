@@ -11,6 +11,7 @@ import { toast } from '../../common/toast';
 import { checkPassword, hashPassword, PW_MAX, PW_MIN } from '../../../lib/guestbook';
 import { Button, Divider, Field, Modal, SectionHead } from '../ui';
 import { formatShortDot } from '../../../lib/date';
+import { HeartCut } from '../HeartCut';
 
 const NAME_MAX = 20;
 const TEXT_MAX = 300;
@@ -122,7 +123,10 @@ export function GuestbookSection({ doc, section, mode }: SectionProps<SectionOf<
                 onClick={() => setOpened(m)}
                 aria-label={`${m.name}님의 방명록 보기`}
               >
-                <span className="gb-note-name">{m.name}</span>
+                <span className="gb-note-name">
+                  <span>{m.name}</span>
+                  <HeartCut shape={i % 2 ? 'b' : 'a'} />
+                </span>
                 <Divider />
                 <span className="gb-note-text">{m.text}</span>
                 <span className="gb-note-date">{fmtDate(m.at)}</span>
@@ -198,7 +202,10 @@ function DetailModal({
 
   return (
     <Modal doc={doc} label={`${message.name}님의 방명록`} onClose={onClose} className="gb-detail">
-      <p className="gb-detail-name">{message.name}</p>
+      <p className="gb-detail-name">
+        <span>{message.name}</span>
+        <HeartCut shape="a" />
+      </p>
       <Divider />
       <p className="gb-detail-text">{message.text}</p>
       <p className="ui-caption">{fmtDate(message.at)}</p>

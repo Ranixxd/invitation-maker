@@ -1,26 +1,29 @@
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
-import { HeartScribble } from '../HeartScribble';
+import { HeartCut } from '../HeartCut';
 import { dday, formatDotKo, monthMatrix, parseLocal, weekdayKo } from '../../../lib/date';
 
 const HEAD = ['일', '월', '화', '수', '목', '금', '토'];
 const MARQUEE_REPEAT = 6;
 
-/** 앞뒤 하루를 포함한 3일 띠, 예식일은 손그림 하트 (템플릿 calendarStyle = 'strip') */
-function DayStrip({ date }: { date: Date }) {
-  const days = [-1, 0, 1].map((off) => {
-    const d = new Date(date);
-    d.setDate(d.getDate() + off);
-    return { off, d };
+/** 예식일이 있는 한 주(월~일) 띠. 예식일은 오린 하트 위에 흰 숫자 (템플릿 calendarStyle = 'strip') */
+const WEEK_LABELS = ['월', '화', '수', '목', '금', '토', '일'];
+function WeekStrip({ date }: { date: Date }) {
+  const monday = new Date(date);
+  monday.setDate(date.getDate() - ((date.getDay() + 6) % 7)); // 월요일 시작
+  const days = WEEK_LABELS.map((label, i) => {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    return { label, d, isDay: d.toDateString() === date.toDateString() };
   });
   return (
     <div className="cal-strip" role="img" aria-label={`${date.getMonth() + 1}월 ${date.getDate()}일 ${weekdayKo(date)}요일`}>
-      {days.map(({ off, d }) => (
-        <div key={off} className={`cal-strip-day${off === 0 ? ' is-day' : ''}`}>
-          <span className="cal-strip-wd">{weekdayKo(d)}요일</span>
+      {days.map(({ label, d, isDay }) => (
+        <div key={label} className={`cal-strip-day${isDay ? ' is-day' : ''}`}>
+          <span className="cal-strip-wd">{label}</span>
           <span className="cal-strip-num">
-            {d.getDate()}
-            {off === 0 && <HeartScribble className="cal-heart" />}
+            {isDay && <HeartCut shape="b" className="cal-heart" />}
+            <span className="cal-strip-n">{d.getDate()}</span>
           </span>
         </div>
       ))}
@@ -71,7 +74,7 @@ export function CalendarSection({ doc, section }: SectionProps<SectionOf<'calend
         <span>{formatDotKo(date)}</span>
         {venue && <span>{venue}</span>}
       </h2>
-      {showCalendar && style === 'strip' && <DayStrip date={date} />}
+      {showCalendar && style === 'strip' && <WeekStrip date={date} />}
       {showCalendar && style === 'month' && (
         <table className="cal" aria-label={`${date.getFullYear()}년 ${date.getMonth() + 1}월 달력`}>
           <caption>{date.getMonth() + 1}월</caption>

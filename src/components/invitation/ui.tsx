@@ -2,7 +2,7 @@
 import { useEffect, type ButtonHTMLAttributes, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import type { InvitationDoc } from '../../types/invitation';
-import { HeartScribble } from './HeartScribble';
+import { HeartCut } from './HeartCut';
 import { ThemePortal } from './theme';
 
 /* ---------- 아이콘 (lucide, 색은 currentColor) ---------- */
@@ -27,7 +27,7 @@ export const IconMapPin = () =>
 
 /* ---------- 섹션 머리: (하트) 제목 · 설명 ---------- */
 export function HeartMark() {
-  return <HeartScribble className="ui-heart" />;
+  return <HeartCut shape="a" className="ui-heart" />;
 }
 
 export function SectionHead({ title, desc, heart = false }: { title?: ReactNode; desc?: string; heart?: boolean }) {
