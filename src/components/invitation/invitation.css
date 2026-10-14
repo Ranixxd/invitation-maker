@@ -149,7 +149,7 @@
   row-gap: 56px;
   width: calc(100% + 2 * var(--sp-gutter));
   margin: 0 calc(-1 * var(--sp-gutter));
-  padding: 44px 16px 72px;
+  padding: 44px 16px 64px;
   list-style: none;
   overflow: hidden;
 }
@@ -171,11 +171,8 @@
   transition: stroke-dashoffset 2.6s cubic-bezier(0.45, 0, 0.25, 1);
 }
 .story.is-drawn .story-ribbon path { stroke-dashoffset: 0; }
-.story-end { position: absolute; z-index: 1; width: 26px; height: 26px; transform: translate(-50%, -30%); opacity: 0; transition: opacity 0.5s ease 2.4s; }
-.inv img.story-end-heart { width: 100%; height: 100%; }
-.story.is-drawn .story-end { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
-  .story-ribbon path, .story-end { transition: none; }
+  .story-ribbon path { transition: none; }
 }
 
 /* ---- 예식 일자 ---- */

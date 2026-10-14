@@ -1,12 +1,11 @@
-// 우리의 이야기: 타임라인만. 항목을 좌우 번갈아 놓고, 손그림 리본 선(작은 고리 포함)이 항목을 잇는다 (§4.1, §3.5)
+// 우리의 이야기: 타임라인만. 항목을 좌우 번갈아 놓고, 매끈한 리본 선(작은 고리 포함)이 항목을 잇는다 (§4.1, §3.5)
 // - 선은 각 날짜 글자의 실제 위치를 재서 계산한다 → 항목 수·글 길이·화면 폭이 바뀌어도 맞는다
 // - 날짜 글자 앞에서 끊기고 뒤에서 다시 이어진다(글자를 가리지 않음)
 // - 섹션이 화면에 들어오면 선이 위에서부터 그려진다(움직임 줄이기면 바로 다 그려진 상태)
-import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
 import { SectionHead } from '../ui';
-import { HeartScribble } from '../HeartScribble';
 
 interface Anchor {
   l: number; // 날짜 글자 왼쪽
@@ -52,19 +51,18 @@ function ribbonPath(pts: Anchor[], width: number) {
     prev = { x, y: p.y, dir };
   });
 
-  // 끝: 아래로 말려 내려가 하트로
+  // 끝: 아래로 살짝 말려 내려가며 끝난다
   const end = { x: clamp(prev.x + prev.dir * 46), y: prev.y + 52 };
   d += ` C ${clamp(prev.x + prev.dir * 60)} ${prev.y}, ${clamp(prev.x + prev.dir * 60)} ${prev.y + 40}, ${end.x} ${end.y}`;
-  return { d, end };
+  return d;
 }
 
 export function ProfileSection({ section, mode }: SectionProps<SectionOf<'profile'>>) {
   const { title, timeline } = section.data;
   const items = timeline.filter((t) => t.date || t.text);
   const listRef = useRef<HTMLOListElement>(null);
-  const [geo, setGeo] = useState<{ w: number; h: number; d: string; end: { x: number; y: number } } | null>(null);
+  const [geo, setGeo] = useState<{ w: number; h: number; d: string } | null>(null);
   const [drawn, setDrawn] = useState(false);
-  const filterId = `story-rough-${useId().replace(/:/g, '')}`;
 
   // 날짜 글자 위치 재기 (offset 기준: 템플릿 썸네일처럼 확대·축소된 화면에서도 정확)
   useLayoutEffect(() => {
@@ -87,7 +85,7 @@ export function ProfileSection({ section, mode }: SectionProps<SectionOf<'profil
       });
       if (!anchors.length) return;
       const w = ol.clientWidth;
-      setGeo({ w, h: ol.clientHeight, ...ribbonPath(anchors, w) });
+      setGeo({ w, h: ol.clientHeight, d: ribbonPath(anchors, w) });
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -133,14 +131,7 @@ export function ProfileSection({ section, mode }: SectionProps<SectionOf<'profil
       <ol ref={listRef} className={`story${drawn ? ' is-drawn' : ''}`}>
         {geo && (
           <svg className="story-ribbon" width={geo.w} height={geo.h} viewBox={`0 0 ${geo.w} ${geo.h}`} aria-hidden>
-            <defs>
-              {/* 손그림 느낌: 선을 살짝 흔든다 */}
-              <filter id={filterId} x="-5%" y="-5%" width="110%" height="110%">
-                <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" />
-                <feDisplacementMap in="SourceGraphic" scale="3" />
-              </filter>
-            </defs>
-            <path d={geo.d} pathLength={1} filter={`url(#${filterId})`} />
+            <path d={geo.d} pathLength={1} />
           </svg>
         )}
         {items.map((t, i) => (
@@ -149,12 +140,6 @@ export function ProfileSection({ section, mode }: SectionProps<SectionOf<'profil
             {t.text && <span className={`story-text${t.date ? '' : ' story-anchor'}`}>{t.text}</span>}
           </li>
         ))}
-        {/* 리본 끝의 작은 하트 (선이 다 그려진 뒤 나타남) */}
-        {geo && (
-          <span className="story-end" style={{ left: geo.end.x, top: geo.end.y }} aria-hidden>
-            <HeartScribble className="story-end-heart" />
-          </span>
-        )}
       </ol>
     </section>
   );
