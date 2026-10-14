@@ -206,6 +206,9 @@
 
 
 /* ---- 신랑·신부 (혼주는 작게) ---- */
+/* 섹션 머리 하트 대신: 리본(.story-ribbon)과 같은 선 */
+.couple-mark { display: block; width: 64px; height: auto; overflow: visible; }
+.couple-mark path { fill: none; stroke: var(--sec-title); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .couple-grid { position: relative; display: grid; grid-template-columns: auto auto; justify-content: center; column-gap: var(--sp-10); }
 .couple-cell { position: relative; display: grid; }
 .couple-person { display: grid; justify-items: center; gap: var(--sp-label); }
