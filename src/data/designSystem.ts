@@ -41,8 +41,8 @@ export const FAMILY_LABELS: Record<ThemeFamily, string> = {
 /** 계열별 글꼴 토큰 */
 const FAMILY_FONTS: Record<ThemeFamily, { title: string; display: string }> = {
   basic: { title: 'inherit', display: 'inherit' },
-  // 숫자·장식 문구용 디스플레이 세리프 (Figma의 Oblata Display 대체: Playfair Display)
-  editorial: { title: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif", display: "'Playfair Display', 'Gowun Batang', serif" },
+  // 숫자·장식 문구용 디스플레이 세리프 (Oblata Display, 프로젝트에 포함 — tokens.css @font-face)
+  editorial: { title: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif", display: "'Oblata Display', 'Gowun Batang', serif" },
 };
 
 /** 팔레트·모양·계열 → CSS 변수 */

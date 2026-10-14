@@ -3,7 +3,7 @@
 > **살아있는 마스터 문서.** 시스템 전체의 로직·정책·규칙의 *현재 유효한* 상태를 기록한다.
 > 코드와 이 문서가 다르면 **둘 중 하나가 버그**다. 정책을 바꾸는 커밋은 반드시 이 문서도 같은 커밋에서 고친다.
 >
-> - 현재 판: **v0.37** (2026-10-14)
+> - 현재 판: **v0.38** (2026-10-14)
 > - 설계의 *배경과 당시 판단*은 [PRD 스냅샷](./prd/)에 남긴다. 이 문서는 "지금 무엇이 참인가"만 다룬다.
 
 ---
@@ -97,7 +97,7 @@
   - **색은 두 가지만:** 포인트 **레드 `#66000e`** · 잉크 **`#241c1d`**, 바탕 **크림 `#fcfcf4`**. 나머지는 불투명도로 만든다(잉크 60/20/8/4%, 포인트 40/20%, 크림 60%, 흐린 배경 = 잉크 60% + 블러 10px). 포인트 색만 바꾸면 전체가 따라오도록 모든 색은 토큰(§3.6)으로만.
   - **포인트 바탕 섹션:** 히어로(위쪽)·갤러리·방명록. 그 안의 제목·글자는 크림, 보조는 크림 60%.
   - 사진은 원본 색감(필터 없음). 히어로 사진 크림 테두리 8px, 갤러리 사진 크림 테두리 4px, 사진 라운드 없음.
-  - 글꼴: 고딕 **Pretendard**(400·500·600) + 숫자·장식용 디스플레이 세리프(**Playfair Display**, Figma의 Oblata Display 대체: 예식 일자 숫자, `&`, `SAVE THE DATE`).
+  - 글꼴: 고딕 **Pretendard**(400·500·600) + 숫자·장식용 디스플레이 세리프 **Oblata Display**(예식 일자 숫자, `&`, `SAVE THE DATE`).
   - 히어로 `poster`: 포인트 바탕(아래 176px는 크림 띠) 위 **이름 두 줄**(32px Medium, 크림) · **크림 테두리 사진** · 크림 띠에 **일시·장소 두 줄**(`2027. 01. 16. 토요일 오후 12시 30분` / `장소명 홀`, 17px SemiBold 포인트). 이름 뒤 큰 크레용 하트(275px, `mix-blend-mode: luminosity`).
   - 시작 멘트·우리의 이야기·마무리: 섹션 머리에 **크레용 하트(53px)**.
   - 신랑·신부: 역할(13 Medium 포인트) · 이름(17 SemiBold) · 혼주(13 Medium 포인트 40%), 두 사람 사이 디스플레이 `&`(32px, 포인트 80%).
@@ -118,7 +118,8 @@
 - **계열** `Theme.family`: `basic`(기본, 2~6번) / `editorial`(에디토리얼, 1번). 렌더러 루트에 `.inv--fam-<family>`. 계열 CSS는 **토큰으로만** 쓴다 — 색 값을 직접 쓰지 않는다. 계열이 정하는 것: 포인트 바탕 섹션(섹션 문맥 토큰 반전), 디스플레이 글꼴.
 - **팔레트** `Theme.preset` → `THEME_PRESETS`(`bg`·`surface`·`text`·`muted`·`accent`·`band`·`onBand`·`paper`·`board`) → CSS 변수 `--inv-*`. 렌더러 색은 이 중 **`--inv-accent`(포인트)·`--inv-text`(잉크)·`--inv-bg`(크림) 세 가지에서만** 파생한다.
 - **모양** `Theme.shape`: `round` = control `999px`(알약)·card `20px`·paper `8px`·media `0` / `square` = 모두 `0`. CSS 변수 `--inv-r-control`·`--inv-r-card`·`--inv-r-paper`·`--inv-r-media`.
-- 계열 글꼴 토큰 `--inv-font-title`·`--inv-font-display`(basic은 테마 글꼴, editorial은 Playfair Display).
+- 계열 글꼴 토큰 `--inv-font-title`·`--inv-font-display`(basic은 테마 글꼴, editorial은 Oblata Display).
+- **Oblata Display**: Astrid Schäfer, **SIL OFL 1.1**. 공식 저장소(`github.com/AstridsFont/Oblata-Display`)의 `.otf`를 `src/assets/fonts/`에 넣고 `tokens.css`의 `@font-face`로 불러온다(40KB). 라이선스 전문 `src/assets/fonts/Oblata-Display-OFL.txt`를 함께 둔다. 폰트 파일을 고치지 않는다(예약 글꼴 이름).
 - **토큰 (`src/components/invitation/tokens.css`)** — 모든 컴포넌트·섹션 CSS는 이 이름만 쓴다:
   - 색 `--c-ink`·`--c-ink-60/20/8/4`·`--c-accent`·`--c-accent-40/20`·`--c-cream`·`--c-cream-60`·`--c-scrim`(3색에 `color-mix`로 불투명도)
   - 섹션 문맥 `--sec-bg`·`--sec-fg`·`--sec-title`·`--sec-muted`·`--sec-paper` (포인트 바탕 섹션에서 계열 CSS가 반전)
@@ -493,3 +494,4 @@ Refs: PRD-XXXX, §조항
 | v0.35 | 2026-10-14 | §3.5 모던 모노 히어로: 흰 그라데이션 → 짙은(band) 그라데이션 + 흰 글자, §8 순검정 금지(최대 #151515, 그림자·dim 포함) | — |
 | v0.36 | 2026-10-14 | §3.5 모던 모노 섹션 제목 색을 포인트색(버건디)으로 | — |
 | v0.37 | 2026-10-14 | Figma 시안 기준 1번 테마 전면 재설계: §3.5 모던 모노 규칙(레드·잉크·크림 두 가지 색 + 불투명도, 포인트 바탕 섹션, `poster` 히어로, 디스플레이 세리프, 지그재그 타임라인, 마무리 사진 띠), §3.6 토큰(tokens.css)·컴포넌트(ui.tsx) 체계·모양 토큰 값, §4.1 우리의 이야기 타임라인만·예식 일자 표기, §4.4 방명록 상세·삭제·작성 모달, §4.5 주소 눌러 복사, §4.6 라이트박스, §4.7 선택·스테퍼 | PRD-0018 |
+| v0.38 | 2026-10-14 | §3.5·§3.6 디스플레이 세리프를 대체 폰트(Playfair Display) → 시안 원본 **Oblata Display**(SIL OFL 1.1, 프로젝트에 포함)로 | — |
