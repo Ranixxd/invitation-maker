@@ -76,7 +76,7 @@
   outline: none;
 }
 .ui-input:focus { border-color: var(--c-accent); }
-.ui-textarea { height: 160px; padding: var(--sp-inset); border-radius: var(--r-card); resize: none; line-height: var(--lh-body); }
+.ui-textarea { height: 160px; padding: var(--sp-inset); border-radius: var(--r-control); resize: none; line-height: var(--lh-body); }
 
 /* ---- 선택 알약 (라디오) ---- */
 .ui-choices { display: flex; gap: var(--sp-item); }
