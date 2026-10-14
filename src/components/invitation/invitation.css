@@ -61,8 +61,8 @@
   height: 275px;
   max-width: none;
   transform: translateX(-50%);
-  /* 포토샵·피그마의 Luminosity 블렌드: 아래 색(바탕·사진)의 색상·채도 + 하트의 밝기. 맨 위 레이어 */
-  mix-blend-mode: luminosity;
+  /* 포토샵·피그마의 Overlay 블렌드: 아래 색(바탕·사진)에 하트의 밝고 어두움을 겹친다. 맨 위 레이어 */
+  mix-blend-mode: overlay;
   z-index: 2;
   pointer-events: none;
 }
@@ -72,8 +72,8 @@
   position: absolute;
   bottom: -40px;
   border-radius: 50%;
-  /* 또렷한 빛망울: 가장자리만 살짝 풀어 준다 (블러 필터 없음) */
-  background: radial-gradient(circle, var(--c-cream) 0%, var(--c-cream) 55%, var(--c-cream-60) 66%, transparent 72%);
+  background: radial-gradient(circle, var(--c-cream) 0%, var(--c-cream-60) 45%, transparent 72%);
+  filter: blur(1.5px);
   opacity: 0;
   animation: bokeh-rise linear infinite;
 }
