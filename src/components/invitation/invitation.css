@@ -48,7 +48,7 @@
   flex-direction: column;
   align-items: center;
   gap: var(--sp-stack);
-  padding: var(--sp-section) var(--sp-gutter);
+  padding: var(--sp-hero) var(--sp-gutter);
   overflow: hidden;
   /* 위는 포인트, 아래 176px는 크림 띠 (사진 아래쪽이 띠에 걸친다) */
   background: linear-gradient(to bottom, var(--c-accent) calc(100% - 176px), var(--c-cream) 0);

@@ -42,7 +42,8 @@
   --fw-semibold: 600;
 
   /* 간격 */
-  --sp-section: 50px; /* 섹션 위아래 */
+  --sp-section: 40px; /* 섹션 위아래 */
+  --sp-hero: 50px; /* 히어로 위아래 */
   --sp-gutter: 40px; /* 섹션 좌우 */
   --sp-stack: 20px; /* 섹션 안 요소 사이 */
   --sp-card: 20px; /* 카드 안쪽 */

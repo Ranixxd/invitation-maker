@@ -3,7 +3,7 @@
 > **살아있는 마스터 문서.** 시스템 전체의 로직·정책·규칙의 *현재 유효한* 상태를 기록한다.
 > 코드와 이 문서가 다르면 **둘 중 하나가 버그**다. 정책을 바꾸는 커밋은 반드시 이 문서도 같은 커밋에서 고친다.
 >
-> - 현재 판: **v0.45** (2026-10-14)
+> - 현재 판: **v0.46** (2026-10-14)
 > - 설계의 *배경과 당시 판단*은 [PRD 스냅샷](./prd/)에 남긴다. 이 문서는 "지금 무엇이 참인가"만 다룬다.
 
 ---
@@ -125,7 +125,7 @@
   - 색 `--c-ink`·`--c-ink-60/20/8/4`·`--c-accent`·`--c-accent-40/20`·`--c-cream`·`--c-cream-60`·`--c-scrim`(3색에 `color-mix`로 불투명도)
   - 섹션 문맥 `--sec-bg`·`--sec-fg`·`--sec-title`·`--sec-muted`·`--sec-paper` (포인트 바탕 섹션에서 계열 CSS가 반전)
   - 글꼴·크기 `--ff-sans`·`--ff-display`·`--fs-numeral 57`·`--fs-display 32`·`--fs-headline 28`·`--fs-title 17`·`--fs-body 15`·`--fs-caption 13`, 줄 간격 `--lh-tight 1.3`·`--lh-body 1.5`, 굵기 400/500/600
-  - 간격 `--sp-section 50`(섹션 위아래)·`--sp-gutter 40`(좌우)·`--sp-stack 20`(요소 사이)·`--sp-card 20`·`--sp-item 8`·`--sp-label 4`, 열 폭 `--w-col 320`
+  - 간격 `--sp-section 40`(섹션 위아래)·`--sp-hero 50`(히어로 위아래)·`--sp-gutter 40`(좌우)·`--sp-stack 20`(요소 사이)·`--sp-card 20`·`--sp-item 8`·`--sp-label 4`, 열 폭 `--w-col 320`
   - 크기 `--h-control 40`·`--h-chip 24`, 테두리 `--bw 1`·`--bw-strong 3`(선택)·`--bw-frame 8`·`--bw-frame-sm 4`
 - **컴포넌트 (`src/components/invitation/ui.tsx` + `ui.css`)** — 섹션은 이것들을 조합한다:
   - `SectionHead`(하트·제목·설명) · `HeartMark` · `Button`(`primary` 포인트 바탕 / `inverse` 크림 바탕 / `chip` 작은 테두리) · `Field`(레이블·우측 보조·도움말/오류 + `.ui-input`/`.ui-textarea`) · `ChoiceGroup`(`pill` / `card`: 위 작은 레이블 + 이름, 선택 = 포인트 3px 테두리) · `Stepper`(− 왼쪽 · + 오른쪽, 포인트색 아이콘, 끝값 비활성) · `InfoCard`(머리 · 구분선 · 내용, 잉크 4% 바탕) · `Divider` · `Modal`(흐린 배경 + 카드 또는 맨 내용 + `배경 눌러서 닫기`) · `.ui-disclosure`(펼침 + 셰브론) · lucide 아이콘(currentColor)
@@ -503,3 +503,4 @@ Refs: PRD-XXXX, §조항
 | v0.43 | 2026-10-14 | §3.5 히어로 이름 32 → 28px(`--fs-headline`), 보케 블러 줄임(필터 제거, 또렷한 원) | — |
 | v0.44 | 2026-10-14 | §3.5 히어로 보케 블러 원복·크기 60%(5~18px), 큰 하트 블렌드 luminosity → overlay | — |
 | v0.45 | 2026-10-14 | §3.5 우리의 이야기: 항목을 화면 양 끝 → 가운데 기준 좌우 칸 안쪽으로 붙여 화살표와 간격 축소 | — |
+| v0.46 | 2026-10-14 | §3.6 섹션 위아래 여백 50 → 40px(히어로는 50 유지, `--sp-hero`) | — |
