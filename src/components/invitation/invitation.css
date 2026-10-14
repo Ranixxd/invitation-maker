@@ -679,7 +679,7 @@
   font-weight: 600;
   font-size: 18px;
   line-height: 1.5;
-  color: var(--inv-text);
+  color: var(--inv-accent); /* 섹션 제목은 포인트(빨강 계열) 색 */
 }
 .inv--fam-editorial .cal-title { margin-bottom: 4px; }
 .inv--fam-editorial .inv-desc,
