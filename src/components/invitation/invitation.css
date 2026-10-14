@@ -61,13 +61,16 @@
   height: 275px;
   max-width: none;
   transform: translateX(-50%);
+  /* 포토샵·피그마의 Luminosity 블렌드: 아래 색(바탕·사진)의 색상·채도 + 하트의 밝기. 맨 위 레이어 */
   mix-blend-mode: luminosity;
+  z-index: 2;
   pointer-events: none;
 }
 .hero-poster-names {
   position: relative;
   display: grid;
-  margin: 0;
+  gap: var(--sp-item);
+  margin: var(--sp-stack) 0;
   font-size: var(--fs-display);
   font-weight: var(--fw-medium) !important;
   line-height: var(--lh-tight);
