@@ -42,7 +42,7 @@
 .ui-btn--chip {
   justify-self: start;
   height: var(--h-chip);
-  padding: 0 var(--sp-item);
+  padding: 0 10px;
   border: var(--bw) solid var(--c-ink-60);
   border-radius: var(--r-control);
   background: transparent;
