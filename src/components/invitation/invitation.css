@@ -323,8 +323,10 @@
 .venue-address { display: inline-flex; align-items: center; gap: 2px; padding: 0; border: 0; background: none; font-size: var(--fs-caption); color: var(--c-ink-60) !important; cursor: pointer; }
 .venue-tel { font-size: var(--fs-caption); color: var(--c-ink-60); text-decoration: none; }
 .location .ui-card-body { font-weight: var(--fw-regular); }
-.map-links { display: grid; justify-items: center; gap: var(--sp-item); }
-.map-links-row { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--sp-item); }
+.map-links { display: grid; justify-items: center; gap: var(--sp-item); width: 100%; max-width: var(--w-col); }
+/* 지도 버튼 3개는 열 폭을 3등분해 같은 너비 */
+.map-links-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-item); width: 100%; }
+.map-links-row .ui-btn { justify-self: stretch; }
 
 /* ---- 게스트 스냅 ---- */
 .snap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 100%; max-width: var(--w-col); padding: 0; list-style: none; }
