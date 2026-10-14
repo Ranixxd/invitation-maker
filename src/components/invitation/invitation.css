@@ -141,13 +141,15 @@
 .couple-contact-who b { color: var(--c-ink); font-weight: var(--fw-medium); }
 
 /* ---- 우리의 이야기: 좌우 번갈아 + 점선 화살표 ---- */
-.story { display: flex; flex-direction: column; width: calc(100% + 2 * var(--sp-gutter)); margin: 0 calc(-1 * var(--sp-gutter)); padding: 0 var(--sp-gutter); list-style: none; }
-.story-item { display: flex; flex-direction: column; align-items: center; gap: var(--sp-label); max-width: 75%; line-height: var(--lh-body); }
-.story-item.is-left { align-self: flex-start; }
-.story-item.is-right { align-self: flex-end; }
+.story-item { display: flex; flex-direction: column; align-items: center; gap: var(--sp-label); line-height: var(--lh-body); }
+/* 가운데 화살표를 기준으로 좌우 두 칸: 왼쪽 항목은 가운데 쪽 끝에, 오른쪽 항목은 가운데 쪽 시작에 붙인다 */
+.story { display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--sp-item); width: 100%; margin: 0; padding: 0; list-style: none; }
+.story-item.is-left { grid-column: 1; justify-self: end; }
+.story-item.is-right { grid-column: 2; justify-self: start; }
+.story-arrow { grid-column: 1 / -1; }
 .story-date { font-size: var(--fs-caption); color: var(--c-ink-60); }
 .story-text { font-size: var(--fs-body); color: var(--c-ink); }
-.story-arrow { position: relative; align-self: center; width: 49px; height: 49px; color: var(--c-accent); }
+.story-arrow { position: relative; justify-self: center; width: 49px; height: 49px; color: var(--c-accent); }
 .story-arrow::before {
   content: '';
   position: absolute;
