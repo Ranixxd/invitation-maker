@@ -236,7 +236,7 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 .inv--fam-ticket .story > .story-item::after { content: ''; position: absolute; top: 50%; left: 84px; width: 20px; height: 20px; transform: translate(-50%, -50%); }
 .inv--fam-ticket .story > .story-item::before { border-radius: 50%; background: var(--inv-bg); }
 .inv--fam-ticket .story > .story-item::after { background: var(--c-accent); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23000' stroke-width='1.4' stroke-linecap='round'%3E%3Cpath d='M10 8C8.6 5 9.4 2.2 10.6 2.4s1.4 3-.4 5.6M11.6 9.2c2.6-2 5.4-1.6 5.6-.2.2 1.6-2.4 2.4-5.2 1.6M11.2 11.4c1.8 2.4 1.6 5 .2 5.2s-1.8-2.4-.8-5M8.8 11.2c-2.2 2.2-4.8 2.4-5.2.8s2-2.4 4.6-1.6M8.4 8.8C5.6 7.8 4.4 5.6 5.6 4.6s3.2.8 3.6 3.6'/%3E%3Ccircle cx='10' cy='10' r='1.5'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23000' stroke-width='1.4' stroke-linecap='round'%3E%3Cpath d='M10 8C8.6 5 9.4 2.2 10.6 2.4s1.4 3-.4 5.6M11.6 9.2c2.6-2 5.4-1.6 5.6-.2.2 1.6-2.4 2.4-5.2 1.6M11.2 11.4c1.8 2.4 1.6 5 .2 5.2s-1.8-2.4-.8-5M8.8 11.2c-2.2 2.2-4.8 2.4-5.2.8s2-2.4 4.6-1.6M8.4 8.8C5.6 7.8 4.4 5.6 5.6 4.6s3.2.8 3.6 3.6'/%3E%3Ccircle cx='10' cy='10' r='1.5'/%3E%3C/svg%3E") center / contain no-repeat; }
-.inv--fam-ticket .story-date { font-size: var(--fs-body); font-weight: var(--fw-medium); color: var(--c-ink); text-align: right; }
+.inv--fam-ticket .story-date { font-size: var(--fs-body); font-weight: var(--fw-medium); color: var(--c-ink); }
 .inv--fam-ticket .story-text { grid-column: 2; }
 
 /* 갤러리: 흰 테두리 사진을 2열로 엇갈려 흩어 놓기 (번갈아 기울고, 오른쪽 열은 반 칸 내려감) */
