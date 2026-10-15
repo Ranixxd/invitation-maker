@@ -216,12 +216,10 @@
 .cal-ticket-n { position: relative; font-family: var(--ff-serif); font-size: var(--fs-numeral); line-height: var(--lh-none); }
 .cal-ticket-circle { position: absolute; left: 50%; top: 50%; width: 64px; height: 52px; overflow: visible; fill: none; stroke: var(--c-accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transform: translate(-50%, -50%) rotate(-4deg); }
 
-/* 우리의 이야기: 세로 타임라인(날짜 · 점 · 내용), 리본 대신 */
+/* 우리의 이야기: 선·점 없이 날짜 | 내용 두 칸만 (리본 대신) */
 .inv--fam-ticket .story-ribbon { display: none; }
-.inv--fam-ticket .story { grid-template-columns: 1fr; row-gap: var(--sp-6); width: 100%; max-width: var(--w-col); margin: 0 auto; padding: 0; overflow: visible; }
-.inv--fam-ticket .story::before { content: ''; position: absolute; top: var(--sp-2); bottom: var(--sp-2); left: 88px; border-left: var(--bw) dashed var(--c-ink-20); }
-.inv--fam-ticket .story > .story-item { grid-column: 1 !important; display: grid; grid-template-columns: 76px 1fr; column-gap: var(--sp-6); align-items: center; justify-self: stretch; text-align: left; }
-.inv--fam-ticket .story > .story-item::before { content: ''; position: absolute; top: 50%; left: 85px; width: 7px; height: 7px; border-radius: 50%; background: var(--c-accent); transform: translateY(-50%); }
+.inv--fam-ticket .story { grid-template-columns: 1fr; row-gap: var(--sp-4); width: 100%; max-width: var(--w-col); margin: 0 auto; padding: 0; overflow: visible; }
+.inv--fam-ticket .story > .story-item { grid-column: 1 !important; display: grid; grid-template-columns: 76px 1fr; column-gap: var(--sp-5); align-items: baseline; justify-self: stretch; text-align: left; }
 .inv--fam-ticket .story-date { font-family: var(--ff-serif); font-size: var(--fs-body); color: var(--c-ink); }
 .inv--fam-ticket .story-text { grid-column: 2; }
 
