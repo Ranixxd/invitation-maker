@@ -101,7 +101,7 @@ export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
     );
   }
 
-  // 표지: 꽉 찬 사진 위 작은 문구·명조 이름(and)·날짜/연도 → 올리브 띠 → 플레이어 (§3.5 크림 티켓)
+  // 표지: 꽉 찬 사진 위 작은 문구·명조 이름(두 줄)·날짜/연도 → 올리브 띠 → 플레이어 (§3.5 크림 티켓)
   if (layout === 'cover') {
     const pad = (n: number) => String(n).padStart(2, '0');
     const band = Array.from({ length: BAND_REPEAT }, (_, i) => <span key={i}>{COVER_BAND}</span>);
@@ -111,16 +111,10 @@ export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
           {img ? <img src={img.src} alt="대표 사진" /> : <div className="hero-img--empty">대표 사진을 추가해 주세요</div>}
           <div className="hero-cov-top">
             {headline && <p className="hero-cov-label">{headline}</p>}
+            {/* 이름은 한 줄에 한 사람씩 */}
             <h1 className="hero-cov-names">
               {names.map((n, i) => (
-                <span key={i}>
-                  {i > 0 && (
-                    <span className="hero-cov-and" lang="en">
-                      and
-                    </span>
-                  )}
-                  {n}
-                </span>
+                <span key={i}>{n}</span>
               ))}
             </h1>
           </div>

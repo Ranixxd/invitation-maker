@@ -177,9 +177,7 @@
 }
 .hero-cov-top { position: absolute; top: var(--sp-8); left: 0; right: 0; z-index: 1; display: grid; justify-items: center; gap: var(--sp-2); padding: 0 var(--sp-4); text-align: center; }
 .hero-cov-label { margin: 0; font-size: var(--fs-small); font-weight: var(--fw-medium); line-height: var(--lh-tight); color: var(--c-cover-label); }
-.hero-cov-names { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; margin: 0; font-family: var(--ff-serif); font-size: var(--fs-cover); font-weight: var(--fw-regular); line-height: var(--lh-tight); color: var(--c-cream); }
-.hero-cov-names > span { display: inline-flex; align-items: baseline; }
-.hero-cov-and { margin: 0 var(--sp-2); font-family: var(--ff-script); font-size: var(--fs-section); }
+.hero-cov-names { display: grid; justify-items: center; margin: 0; font-family: var(--ff-serif); font-size: var(--fs-cover); font-weight: var(--fw-regular); line-height: var(--lh-tight); color: var(--c-cream); }
 .hero-cov-date { position: absolute; left: var(--sp-5); right: var(--sp-5); bottom: var(--sp-5); z-index: 1; display: flex; justify-content: space-between; margin: 0; font-family: var(--ff-serif); font-size: var(--fs-section); line-height: var(--lh-none); color: var(--c-cream); }
 /* 올리브 띠: 흐르는 안내 문구 */
 .hero-cov-band { padding: var(--sp-2) 0; overflow: hidden; background: var(--c-accent); white-space: nowrap; }
