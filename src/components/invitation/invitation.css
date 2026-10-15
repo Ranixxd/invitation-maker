@@ -257,20 +257,27 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 /* 방명록: 포인트를 옅게 깐 면 위에, 마스킹 테이프로 붙인 가로 쪽지를 겹겹이 쌓는다 */
 .inv--fam-ticket .inv-section--guestbook { --sec-bg: var(--c-tint-soft); }
 .inv--fam-ticket .gb-notes { grid-template-columns: 1fr; gap: 0; width: 100%; max-width: var(--w-col); margin: 0 auto; padding-top: var(--sp-3); }
-.inv--fam-ticket .gb-notes li + li { margin-top: var(--sp-4); }
+.inv--fam-ticket .gb-notes li + li { margin-top: var(--sp-3); }
 .inv--fam-ticket .gb-note {
   position: relative;
   isolation: isolate;
-  align-items: center;
-  gap: var(--sp-2);
+  /* 한 화면에 많이 보이도록 촘촘하게: 이름 · 날짜 한 줄, 본문 2줄 */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: 'name date' 'text text';
+  align-items: baseline;
+  gap: var(--sp-1) var(--sp-3);
   aspect-ratio: auto;
-  padding: var(--sp-6) var(--sp-5) var(--sp-8);
+  padding: var(--sp-4) var(--sp-4) var(--sp-5);
   border: 0;
   border-radius: 0;
   background: none;
-  text-align: center;
+  text-align: left;
   transform: rotate(calc(var(--tilt, 0deg) * 0.7));
 }
+.inv--fam-ticket .gb-note-name { grid-area: name; align-self: center; }
+.inv--fam-ticket .gb-note-text { grid-area: text; }
+.inv--fam-ticket .gb-note-date { grid-area: date; align-self: center; }
 /* 종이: 아래 가장자리를 잔잔하게 찢은 듯 (방명록 쪽지·상세 카드·예식 일자 티켓 공통) */
 .inv--fam-ticket .gb-note::after,
 .inv--fam-ticket .ui-modal-card.gb-detail::after,
@@ -290,7 +297,6 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 }
 .inv--fam-ticket .gb-notes li:nth-child(even) .gb-note::before { left: 30%; transform: translateX(-50%) rotate(5deg); }
 .inv--fam-ticket .gb-notes li:nth-child(3n) .gb-note::before { left: 70%; transform: translateX(-50%) rotate(-7deg); }
-.inv--fam-ticket .gb-note-name { justify-content: center; }
 .inv--fam-ticket .gb-note-name .heart-cut,
 .inv--fam-ticket .gb-note .ui-divider { display: none; }
 .inv--fam-ticket .gb-note-text { margin-bottom: 0; -webkit-line-clamp: 2; font-size: var(--fs-small); }
