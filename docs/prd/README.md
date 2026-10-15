@@ -32,3 +32,4 @@
 | [PRD-0017](./PRD-0017-design-system-guestbook-board.md) | 템플릿 디자인 시스템 · 방명록 쪽지 보드 | 2026-10-14 | 일부 대체됨 → PRD-0018 (시각 규칙) |
 | [PRD-0018](./PRD-0018-figma-redesign-theme1.md) | 1번 테마 Figma 시안 기준 전면 재설계 · 토큰/컴포넌트 체계 | 2026-10-14 | 확정 |
 | [PRD-0019](./PRD-0019-accent-color.md) | 포인트 색 바꾸기 | 2026-10-14 | 확정 |
+| [PRD-0020](./PRD-0020-theme2-love-letters.md) | 2번 테마: 러브 레터 | 2026-10-15 | 확정 |

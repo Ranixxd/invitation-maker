@@ -40,6 +40,22 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
     sample: ['#d6d6d6', '#262626'],
   },
   {
+    // 2번 테마: 러브 레터 — 하늘색 면 위 하트 모양 사진, 흩어진 동그라미와 동그라미 글자, 원톤 (§3.5, PRD-0020)
+    id: 'love-letters',
+    name: '러브 레터',
+    tagline: '하트 사진과 동그라미 글자, 원톤 하늘색',
+    preset: 'sky',
+    family: 'dots',
+    shape: 'round',
+    font: 'sans',
+    accent: THEME_PRESETS.sky.accent,
+    heroLayout: 'heart',
+    galleryLayout: 'grid',
+    calendarStyle: 'strip',
+    headline: 'WEDDING INVITATION',
+    sample: ['#bccbe6', '#3d63a8'],
+  },
+  {
     id: 'classic-frame',
     name: '클래식 액자',
     tagline: '날짜를 크게, 사진은 액자처럼',

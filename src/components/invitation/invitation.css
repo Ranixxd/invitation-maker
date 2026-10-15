@@ -150,6 +150,74 @@
 .hero-pol-names-heart { width: 16px; height: 15px; margin: 0 var(--sp-2); transform: rotate(-8deg); }
 .hero-pol-when { display: grid; font-weight: var(--fw-medium); color: var(--c-ink-60); }
 
+/* ---- 도트 계열 (러브 레터, §3.5 PRD-0020) ----
+   원톤: 포인트(진한 색) 하나에서 하늘색 면(--c-tint)과 연한 섹션 바탕(--c-tint-soft)을 만든다 */
+.inv--fam-dots {
+  --c-tint: color-mix(in srgb, var(--c-accent) 34%, white);
+  --c-tint-soft: color-mix(in srgb, var(--c-accent) 13%, var(--inv-bg));
+}
+.inv--fam-dots .inv-section--profile,
+.inv--fam-dots .inv-section--gallery,
+.inv--fam-dots .inv-section--guestbook {
+  --sec-bg: var(--c-tint-soft);
+  --sec-paper: var(--c-paper-hi);
+}
+/* 하트 자리에 동그라미 (HeartCut이 둘 다 그리고 계열에 따라 하나만 보인다) */
+.heart-cut .hc-dot { display: none; }
+.inv--fam-dots .heart-cut .hc-heart { display: none; }
+.inv--fam-dots .heart-cut .hc-dot { display: inline; }
+.inv--fam-dots .heart-cut.ui-heart { width: 12px; height: 11px; }
+
+/* 히어로: 하트 */
+.hero--heart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-title);
+  padding: var(--sp-hero) var(--sp-gutter) var(--sp-section);
+  overflow: hidden;
+}
+.hero-hrt-label { margin: 0 0 var(--sp-4); font-size: var(--fs-body); font-weight: var(--fw-semibold); line-height: var(--lh-tight); color: var(--c-ink); white-space: pre-line; }
+.hero-hrt-panel { position: relative; width: 100%; max-width: var(--w-col); aspect-ratio: 20 / 23; margin-bottom: var(--sp-6); background: var(--c-tint); }
+.hero-hrt-dot { position: absolute; z-index: 1; aspect-ratio: 1; border-radius: 50%; background: var(--c-accent); }
+/* 하트 모양 사진 (원본 색) */
+.hero-hrt-photo {
+  position: absolute;
+  left: 3%;
+  top: 11%;
+  width: 94%;
+  aspect-ratio: 100 / 92;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 92'%3E%3Cpath d='M50 92 9.5 47C-1.5 34.5.5 11 20 4.5 33.5 0 44.5 6.5 50 17.5 55.5 6.5 66.5 0 80 4.5 99.5 11 101.5 34.5 90.5 47Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 92'%3E%3Cpath d='M50 92 9.5 47C-1.5 34.5.5 11 20 4.5 33.5 0 44.5 6.5 50 17.5 55.5 6.5 66.5 0 80 4.5 99.5 11 101.5 34.5 90.5 47Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+.hero-hrt-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.hero-hrt-photo .hero-img--empty { display: grid; place-items: center; height: 100%; padding-top: 20%; background: var(--c-ink-8); color: var(--c-ink-60); }
+/* 동그라미 글자: 글자마다 포인트 동그라미, 물결처럼 어긋나며 살짝 겹친다 */
+.hero-hrt-words { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.hero-hrt-word { position: absolute; display: flex; margin: 0; }
+.hero-hrt-word.is-1 { left: 3%; top: 27%; }
+.hero-hrt-word.is-2 { right: 3%; top: 60%; }
+.hero-hrt-word.is-3 { left: 10%; top: 79%; }
+.hero-hrt-word span {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  margin-left: -2px;
+  border-radius: 50%;
+  background: var(--c-accent);
+  color: var(--c-cream);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-none);
+  transform: translateY(var(--dy, 0));
+}
+.hero-hrt-word span:first-child { margin-left: 0; }
+.hero-hrt-names { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; margin: 0; font-size: var(--fs-section); font-weight: var(--fw-semibold); line-height: var(--lh-tight); color: var(--c-ink); }
+.hero-hrt-names > span { display: inline-flex; align-items: center; }
+.hero-hrt-amp { margin: 0 var(--sp-2); }
+
 /* ---- 음악 재생 바 (히어로 하단) ---- */
 .music-bar {
   display: flex;

@@ -36,6 +36,7 @@ export const SHAPES: Record<ThemeShape, ShapeTokens> = {
 export const FAMILY_LABELS: Record<ThemeFamily, string> = {
   basic: '기본',
   editorial: '에디토리얼',
+  dots: '도트',
 };
 
 /** 계열별 글꼴 토큰 */
@@ -43,6 +44,8 @@ const FAMILY_FONTS: Record<ThemeFamily, { title: string; display: string }> = {
   basic: { title: 'inherit', display: 'inherit' },
   // 에디토리얼: 숫자·장식 문구까지 모두 고딕(Pretendard)
   editorial: { title: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif", display: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif" },
+  // 도트: 에디토리얼과 같은 고딕
+  dots: { title: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif", display: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif" },
 };
 
 /** 팔레트·모양·계열 → CSS 변수 */

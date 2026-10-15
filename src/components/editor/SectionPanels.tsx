@@ -59,6 +59,7 @@ function HeroPanel({ doc, section, dispatch }: PanelProps<'hero'>) {
   const extraRoom = HERO_EXTRA_MAX - extras.length;
   const extraUpload = useImageUpload(doc, dispatch, 'hero-extra', extraRoom);
   const polaroid = section.data.layout === 'polaroid';
+  const heart = section.data.layout === 'heart';
   const current = section.data.imageId ? doc.images[section.data.imageId] : null;
   const used = new Set([section.data.imageId, ...extras]);
   const others = Object.values(doc.images).filter((i) => !used.has(i.id));
@@ -131,7 +132,7 @@ function HeroPanel({ doc, section, dispatch }: PanelProps<'hero'>) {
       )}
       <PanelSection title="문구">
         <TextArea
-          label={polaroid ? '작은 문구' : '헤드라인'}
+          label={polaroid || heart ? '작은 문구' : '헤드라인'}
           rows={polaroid ? 2 : 1}
           value={section.data.headline}
           onChange={(headline) => set({ headline })}
@@ -144,6 +145,16 @@ function HeroPanel({ doc, section, dispatch }: PanelProps<'hero'>) {
             value={section.data.script ?? ''}
             onChange={(script) => set({ script })}
             maxLength={24}
+          />
+        )}
+        {heart && (
+          <TextField
+            label="동그라미 글자 (영문, 띄어쓰기로 줄 나눔)"
+            placeholder="OUR WEDDING"
+            value={section.data.script ?? ''}
+            onChange={(script) => set({ script })}
+            maxLength={16}
+            hint="한 줄에 9글자까지가 보기 좋아요"
           />
         )}
       </PanelSection>
