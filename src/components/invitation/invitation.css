@@ -86,15 +86,15 @@
   animation: hero-fall var(--fall-dur) linear infinite;
   will-change: transform;
 }
-.hero-fall-item .heart-cut { display: block; width: var(--fall-size); height: auto; opacity: var(--fall-op); filter: blur(var(--fall-blur)); animation: hero-sway 4s ease-in-out infinite alternate; }
+.hero-fall-item > svg { display: block; width: var(--fall-size); height: auto; opacity: var(--fall-op); filter: blur(var(--fall-blur)); animation: hero-sway 4s ease-in-out infinite alternate; }
 .hero-fall-item.is-d1 { --fall-size: 8px; --fall-op: 0.14; --fall-blur: 0.8px; --fall-dur: 26s; }
 .hero-fall-item.is-d2 { --fall-size: 12px; --fall-op: 0.22; --fall-blur: 0.3px; --fall-dur: 19s; }
 .hero-fall-item.is-d3 { --fall-size: 17px; --fall-op: 0.3; --fall-blur: 0px; --fall-dur: 14s; }
-.hero-fall-item:nth-child(even) .heart-cut { animation-duration: 5s; animation-direction: alternate-reverse; }
+.hero-fall-item:nth-child(even) > svg { animation-duration: 5s; animation-direction: alternate-reverse; }
 @keyframes hero-fall { from { transform: translateY(-4%); } to { transform: translateY(100%); } }
 @keyframes hero-sway { from { transform: translateX(-10px) rotate(-18deg); } to { transform: translateX(10px) rotate(14deg); } }
 @media (prefers-reduced-motion: reduce) {
-  .hero-fall-item, .hero-fall-item .heart-cut { animation: none; }
+  .hero-fall-item, .hero-fall-item > svg { animation: none; }
   .hero-fall-item { transform: translateY(calc(var(--fall-op) * 200%)); }
 }
 /* 폴라로이드 3장: 기울여 겹친 사진 더미 */
@@ -177,10 +177,16 @@
   background: linear-gradient(to bottom, color-mix(in srgb, var(--c-ink) 55%, transparent), transparent 34%, transparent 70%, color-mix(in srgb, var(--c-ink) 50%, transparent));
   pointer-events: none;
 }
-.hero-cov-top { position: absolute; top: var(--sp-8); left: 0; right: 0; z-index: 1; display: grid; justify-items: center; gap: var(--sp-2); padding: 0 var(--sp-4); text-align: center; }
+/* 표지 사진 위 꽃잎: 크림색, 사진 위라 하트보다 진하게 · 조금 크게 (글자 아래) */
+.hero-fall.is-petals { z-index: 1; }
+.hero-fall.is-petals .hero-fall-item.is-d1 { --fall-size: 9px; --fall-op: 0.45; }
+.hero-fall.is-petals .hero-fall-item.is-d2 { --fall-size: 13px; --fall-op: 0.65; }
+.hero-fall.is-petals .hero-fall-item.is-d3 { --fall-size: 18px; --fall-op: 0.8; }
+.hero-petal { fill: var(--c-cream); }
+.hero-cov-top { position: absolute; top: var(--sp-8); left: 0; right: 0; z-index: 2; display: grid; justify-items: center; gap: var(--sp-2); padding: 0 var(--sp-4); text-align: center; }
 .hero-cov-label { margin: 0; font-size: var(--fs-small); font-weight: var(--fw-medium); line-height: var(--lh-tight); color: var(--c-cover-label); }
 .hero-cov-names { display: grid; justify-items: center; margin: 0; font-family: var(--ff-serif); font-size: var(--fs-cover); font-weight: var(--fw-regular); line-height: var(--lh-tight); color: var(--c-cream); }
-.hero-cov-date { position: absolute; left: var(--sp-5); right: var(--sp-5); bottom: var(--sp-5); z-index: 1; display: flex; justify-content: space-between; margin: 0; font-family: var(--ff-serif); font-size: var(--fs-section); line-height: var(--lh-none); color: var(--c-cream); }
+.hero-cov-date { position: absolute; left: var(--sp-5); right: var(--sp-5); bottom: var(--sp-5); z-index: 2; display: flex; justify-content: space-between; margin: 0; font-family: var(--ff-serif); font-size: var(--fs-section); line-height: var(--lh-none); color: var(--c-cream); }
 /* 올리브 띠: 흐르는 안내 문구 */
 .hero-cov-band { padding: var(--sp-2) 0; overflow: hidden; background: var(--c-accent); white-space: nowrap; }
 .hero-cov-track { display: inline-flex; gap: var(--sp-8); padding-right: var(--sp-8); font-size: var(--fs-small); line-height: var(--lh-body); color: var(--c-cream); animation: save-scroll 30s linear infinite; }
