@@ -23,8 +23,8 @@ const FALLING_HEARTS: { x: number; depth: 1 | 2 | 3; delay: number; shape: 'a' |
 ];
 
 /** 표지 히어로 아래 흐르는 띠 문구 */
-const COVER_BAND = '음악을 켜고 함께 들어 주세요';
-const BAND_REPEAT = 6;
+const COVER_BAND = 'OUR WEDDING';
+const BAND_REPEAT = 10;
 
 function FallingHearts() {
   return (

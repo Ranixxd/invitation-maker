@@ -32,7 +32,7 @@ function WeekStrip({ date }: { date: Date }) {
   );
 }
 
-/** 티켓: 노란 우표 테두리 카드에 예식일 앞뒤 하루씩(3칸), 예식일은 손으로 그린 동그라미 + 손글씨 메모 (calendarStyle = 'ticket') */
+/** 티켓: 흰 우표 테두리 카드에 예식일 앞뒤 하루씩(3칸), 예식일은 손으로 그린 동그라미 (calendarStyle = 'ticket') */
 function Ticket({ date }: { date: Date }) {
   const days = [-1, 0, 1].map((off) => {
     const d = new Date(date);
@@ -63,7 +63,6 @@ function Ticket({ date }: { date: Date }) {
           </div>
         ))}
       </div>
-      <p className="cal-ticket-note">이 날은 비워 두세요</p>
     </div>
   );
 }
