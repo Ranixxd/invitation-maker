@@ -156,6 +156,7 @@
   --ff-serif: var(--inv-font-display);
   --c-tint-soft: color-mix(in srgb, var(--c-accent) 10%, var(--inv-bg)); /* 포인트를 옅게 깐 면 (방명록) */
   --c-cover-label: #f7eba0; /* 히어로 사진 위 작은 문구 (장식 색) */
+  --c-slip: color-mix(in srgb, var(--c-accent) 14%, white); /* 방명록 종이 쪽지 */
   --sec-title: var(--c-ink);
 }
 .inv--fam-ticket .ui-title { font-family: var(--ff-serif); font-weight: var(--fw-regular); }
@@ -239,7 +240,7 @@
 .inv--fam-ticket .gallery-item:nth-child(4n) { transform: translateY(var(--sp-8)) rotate(-2deg); }
 
 /* 방명록: 포인트를 옅게 깐 면 위에, 마스킹 테이프로 붙인 가로 쪽지를 겹겹이 쌓는다 */
-.inv--fam-ticket .inv-section--guestbook { --sec-bg: var(--c-tint-soft); --c-slip: color-mix(in srgb, var(--c-accent) 14%, white); }
+.inv--fam-ticket .inv-section--guestbook { --sec-bg: var(--c-tint-soft); }
 .inv--fam-ticket .gb-notes { grid-template-columns: 1fr; gap: 0; width: 100%; max-width: var(--w-col); margin: 0 auto; padding-top: var(--sp-3); }
 .inv--fam-ticket .gb-notes li + li { margin-top: calc(-1 * var(--sp-3)); }
 .inv--fam-ticket .gb-note {
@@ -254,12 +255,13 @@
   background: none;
   text-align: center;
   transform: rotate(calc(var(--tilt, 0deg) * 0.7));
-  filter: drop-shadow(0 2px 3px color-mix(in srgb, var(--c-ink) 14%, transparent));
 }
-/* 종이: 아래 가장자리를 손으로 찢은 듯 */
-.inv--fam-ticket .gb-note::after { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--c-slip); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H100V90L97 94 94 89 90 95 86 90 82 96 78 91 74 97 70 92 65 95 61 89 57 94 52 91 48 97 44 92 39 95 35 90 31 94 27 91 22 96 18 92 14 95 9 90 5 94 0 91Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H100V90L97 94 94 89 90 95 86 90 82 96 78 91 74 97 70 92 65 95 61 89 57 94 52 91 48 97 44 92 39 95 35 90 31 94 27 91 22 96 18 92 14 95 9 90 5 94 0 91Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
-/* 마스킹 테이프: 반투명, 양 끝은 뜯은 톱니 */
-.inv--fam-ticket .gb-note::before {
+/* 종이: 아래 가장자리를 손으로 찢은 듯 (목록 쪽지·상세 카드 공통) */
+.inv--fam-ticket .gb-note::after,
+.inv--fam-ticket .ui-modal-card.gb-detail::after { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--c-slip); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H100V90L97 94 94 89 90 95 86 90 82 96 78 91 74 97 70 92 65 95 61 89 57 94 52 91 48 97 44 92 39 95 35 90 31 94 27 91 22 96 18 92 14 95 9 90 5 94 0 91Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H100V90L97 94 94 89 90 95 86 90 82 96 78 91 74 97 70 92 65 95 61 89 57 94 52 91 48 97 44 92 39 95 35 90 31 94 27 91 22 96 18 92 14 95 9 90 5 94 0 91Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
+/* 마스킹 테이프: 반투명, 양 끝은 뜯은 톱니 (목록 쪽지·상세 카드 공통) */
+.inv--fam-ticket .gb-note::before,
+.inv--fam-ticket .ui-modal-card.gb-detail::before {
   content: '';
   position: absolute;
   top: calc(-1 * var(--sp-3));
@@ -267,7 +269,6 @@
   width: 84px;
   height: 24px;
   background: color-mix(in srgb, color-mix(in srgb, var(--c-ink) 22%, var(--c-cream)) 70%, transparent);
-  box-shadow: 0 1px 2px color-mix(in srgb, var(--c-ink) 10%, transparent);
   clip-path: polygon(0 0, 100% 0, 96% 20%, 100% 40%, 96% 60%, 100% 80%, 96% 100%, 0 100%, 4% 80%, 0 60%, 4% 40%, 0 20%);
   transform: translateX(-50%) rotate(-4deg);
 }
@@ -277,6 +278,12 @@
 .inv--fam-ticket .gb-note-name .heart-cut,
 .inv--fam-ticket .gb-note .ui-divider { display: none; }
 .inv--fam-ticket .gb-note-text { margin-bottom: 0; -webkit-line-clamp: 2; font-size: var(--fs-body); }
+/* 쪽지 크게 보기: 목록 쪽지와 같은 종이·테이프, 기울기 없음 */
+.inv--fam-ticket .ui-modal-card.gb-detail { position: relative; isolation: isolate; overflow: visible; padding: var(--sp-8) var(--sp-5) var(--sp-10); border-radius: 0; background: none; text-align: center; }
+.inv--fam-ticket .gb-detail-name { justify-content: center; }
+.inv--fam-ticket .gb-detail > .ui-btn--chip { justify-self: center; }
+.inv--fam-ticket .gb-detail-name .heart-cut,
+.inv--fam-ticket .gb-detail > .ui-divider { display: none; }
 
 /* ---- 음악 재생 바 (히어로 하단) ---- */
 .music-bar {
