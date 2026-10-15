@@ -155,6 +155,7 @@
 .inv--fam-ticket {
   --ff-serif: var(--inv-font-display);
   --c-tint-soft: color-mix(in srgb, var(--c-accent) 10%, var(--inv-bg)); /* 포인트를 옅게 깐 면 (방명록) */
+  --c-cover-label: #f7eba0; /* 예외 하나: 히어로 사진 위 작은 문구만 노랑 */
   --sec-title: var(--c-ink);
 }
 .inv--fam-ticket .ui-title { font-family: var(--ff-serif); font-weight: var(--fw-regular); }
@@ -175,7 +176,7 @@
   pointer-events: none;
 }
 .hero-cov-top { position: absolute; top: var(--sp-8); left: 0; right: 0; z-index: 1; display: grid; justify-items: center; gap: var(--sp-2); padding: 0 var(--sp-4); text-align: center; }
-.hero-cov-label { margin: 0; font-size: var(--fs-small); font-weight: var(--fw-medium); line-height: var(--lh-tight); color: var(--c-cream); }
+.hero-cov-label { margin: 0; font-size: var(--fs-small); font-weight: var(--fw-medium); line-height: var(--lh-tight); color: var(--c-cover-label); }
 .hero-cov-names { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; margin: 0; font-family: var(--ff-serif); font-size: var(--fs-cover); font-weight: var(--fw-regular); line-height: var(--lh-tight); color: var(--c-cream); }
 .hero-cov-names > span { display: inline-flex; align-items: baseline; }
 .hero-cov-and { margin: 0 var(--sp-2); font-family: var(--ff-script); font-size: var(--fs-section); }
