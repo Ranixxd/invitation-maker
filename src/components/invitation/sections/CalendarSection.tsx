@@ -32,12 +32,14 @@ function WeekStrip({ date }: { date: Date }) {
   );
 }
 
-/** 티켓: 흰 우표 테두리 카드에 예식일 앞뒤 하루씩(3칸), 예식일은 손으로 그린 동그라미 (calendarStyle = 'ticket') */
+/** 티켓: 종이 카드에 예식일이 있는 한 주(월~일 7칸), 예식일은 손으로 그린 동그라미 (calendarStyle = 'ticket') */
 function Ticket({ date }: { date: Date }) {
-  const days = [-1, 0, 1].map((off) => {
-    const d = new Date(date);
-    d.setDate(date.getDate() + off);
-    return { off, d };
+  const monday = new Date(date);
+  monday.setDate(date.getDate() - ((date.getDay() + 6) % 7)); // 월요일 시작 (템플릿1 한 주 띠와 같음)
+  const days = WEEK_LABELS.map((label, i) => {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    return { label, d, isDay: d.toDateString() === date.toDateString() };
   });
   return (
     <div className="cal-ticket" role="img" aria-label={`${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일 ${weekdayKo(date)}요일`}>
@@ -48,12 +50,12 @@ function Ticket({ date }: { date: Date }) {
         <span>{date.getFullYear()}</span>
       </p>
       <div className="cal-ticket-days">
-        {days.map(({ off, d }) => (
-          <div key={off} className={`cal-ticket-day${off === 0 ? ' is-day' : ''}`}>
-            <span className="cal-ticket-wd">{weekdayKo(d)}요일</span>
+        {days.map(({ label, d, isDay }) => (
+          <div key={label} className={`cal-ticket-day${isDay ? ' is-day' : ''}`}>
+            <span className="cal-ticket-wd">{label}</span>
             <span className="cal-ticket-n">
               {d.getDate()}
-              {off === 0 && (
+              {isDay && (
                 <svg className="cal-ticket-circle" viewBox="0 0 64 52" aria-hidden>
                   <path d="M35 7C19 4 5 13 5 27c0 13 13 21 27 20 15-1 27-10 26-23C57 12 46 5 31 6c-6 1-11 3-14 7" />
                   <path d="M50 4.5c1.5-2.5 5-2 5 .8 0 2.4-3.4 4.4-5 6-1.6-1.6-5-3.6-5-6 0-2.8 3.5-3.3 5-.8z" />
