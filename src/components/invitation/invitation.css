@@ -186,7 +186,7 @@
 .hero-fall.is-petals .hero-fall-item.is-d3 { --fall-size: 18px; --fall-op: 0.8; }
 .hero-petal { fill: var(--c-cream); }
 .hero-cov-top { position: absolute; top: var(--sp-14); left: 0; right: 0; z-index: 2; display: grid; justify-items: center; gap: var(--sp-2); padding: 0 var(--sp-4); text-align: center; }
-.hero-cov-label { margin: 0; font-size: var(--fs-small); font-weight: var(--fw-medium); line-height: var(--lh-tight); color: var(--c-cover-label); }
+.hero-cov-label { margin: 0; font-size: var(--fs-body); font-weight: var(--fw-medium); line-height: var(--lh-tight); color: var(--c-cover-label); }
 /* h1 공통 굵기(.inv h1 = 600)보다 우선하도록 h1을 함께 지정 */
 h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: var(--fs-cover); font-weight: var(--fw-medium); line-height: var(--lh-tight); color: var(--c-cream); }
 .hero-cov-date { position: absolute; left: var(--sp-5); right: var(--sp-5); bottom: var(--sp-5); z-index: 2; display: flex; justify-content: space-between; margin: 0; font-size: var(--fs-section); font-weight: var(--fw-medium); line-height: var(--lh-none); color: var(--c-cream); }
@@ -214,7 +214,7 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
   color: var(--c-ink);
   text-align: left;
 }
-.cal-ticket-head { display: flex; justify-content: space-between; margin: 0 0 var(--sp-3); font-size: var(--fs-section); font-weight: var(--fw-medium); line-height: var(--lh-tight); color: var(--c-accent); }
+.cal-ticket-head { display: flex; justify-content: space-between; margin: 0 0 var(--sp-3); font-family: var(--ff-serif); font-size: var(--fs-section); font-weight: var(--fw-regular); line-height: var(--lh-tight); color: var(--c-accent); }
 .cal-ticket-days { display: grid; grid-template-columns: repeat(7, 1fr); border-top: var(--bw) solid var(--c-ink-20); }
 .cal-ticket-day { display: grid; justify-items: center; gap: var(--sp-3); padding: var(--sp-3) 0 var(--sp-5); }
 .cal-ticket-day:not(.is-day) .cal-ticket-n { color: var(--c-ink-60); } /* 앞뒤 날은 옅게 (템플릿1과 같음) */
@@ -301,7 +301,8 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 .inv--fam-ticket .gb-note .ui-divider { display: none; }
 .inv--fam-ticket .gb-note-text { margin-bottom: 0; -webkit-line-clamp: 2; font-size: var(--fs-small); }
 /* 쪽지 크게 보기: 목록 쪽지와 같은 종이·테이프, 기울기 없음 */
-.inv--fam-ticket .ui-modal-card.gb-detail { position: relative; isolation: isolate; overflow: visible; padding: var(--sp-8) var(--sp-5) var(--sp-10); border-radius: 0; background: none; text-align: center; }
+.inv--fam-ticket .ui-modal-card.gb-detail { position: relative; isolation: isolate; overflow: visible; padding: var(--sp-8) var(--sp-5) var(--sp-6); border-radius: 0; background: none; text-align: center; }
+.inv--fam-ticket .ui-modal-card.gb-detail::after { -webkit-mask: none; mask: none; } /* 크게 보기는 찢은 가장자리 없이 반듯한 종이 */
 .inv--fam-ticket .gb-detail-name { justify-content: center; }
 .inv--fam-ticket .gb-detail > .ui-btn--chip { justify-self: center; }
 .inv--fam-ticket .gb-detail-name .heart-cut,
