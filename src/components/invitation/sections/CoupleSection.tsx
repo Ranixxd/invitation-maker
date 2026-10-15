@@ -47,10 +47,6 @@ export function CoupleSection({ doc, section }: SectionProps<SectionOf<'couple'>
   return (
     // 제목 없음: 이름만 봐도 어떤 섹션인지 알 수 있다 (§4.1)
     <section className="inv-block couple" aria-label="신랑 신부">
-      {/* 섹션 구분: 하트 대신 우리의 이야기 리본과 같은 결의 짧은 선 + 고리 하나 */}
-      <svg className="couple-mark" viewBox="0 0 80 24" aria-hidden>
-        <path d="M2 14C14 14 22 8 32 10C42 12 47 19 41 21C35 23 33 13 42 9.5C52 5.5 63 13 78 11" />
-      </svg>
       <div className="couple-grid">
         {hosts.map((h, i) => (
           <div key={h.id} className="couple-cell">
