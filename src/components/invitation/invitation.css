@@ -203,14 +203,14 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-family
 .music-player .music-btn { width: 56px; height: 56px; }
 .music-player .music-btn svg { width: 22px; height: 22px; }
 
-/* 예식 일자: 방명록 쪽지와 같은 종이(찢은 아래 가장자리 + 마스킹 테이프, 종이·테이프 규칙은 방명록 쪽) */
+/* 예식 일자: 방명록 쪽지와 같은 종이(찢은 아래 가장자리, 테이프 없음 — 종이 규칙은 방명록 쪽) */
 .cal-ticket-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } /* 티켓 머리에 날짜가 있어 화면에선 숨김 */
 .cal-ticket {
   position: relative;
   isolation: isolate;
   width: 100%;
   max-width: var(--w-col);
-  padding: var(--sp-6) var(--sp-5) var(--sp-8);
+  padding: var(--sp-5) var(--sp-5) var(--sp-8);
   color: var(--c-ink);
   text-align: left;
 }
@@ -265,10 +265,9 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-family
 .inv--fam-ticket .gb-note::after,
 .inv--fam-ticket .ui-modal-card.gb-detail::after,
 .cal-ticket::after { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--c-slip); -webkit-mask: var(--paper-torn) center / 100% 100% no-repeat; mask: var(--paper-torn) center / 100% 100% no-repeat; }
-/* 마스킹 테이프: 반투명, 양 끝은 뜯은 톱니 (방명록 쪽지·상세 카드·예식 일자 티켓 공통) */
+/* 마스킹 테이프: 반투명, 양 끝은 뜯은 톱니 (방명록 쪽지·상세 카드) */
 .inv--fam-ticket .gb-note::before,
-.inv--fam-ticket .ui-modal-card.gb-detail::before,
-.cal-ticket::before {
+.inv--fam-ticket .ui-modal-card.gb-detail::before {
   content: '';
   position: absolute;
   top: calc(-1 * var(--sp-3));
