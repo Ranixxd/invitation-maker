@@ -32,6 +32,42 @@ function WeekStrip({ date }: { date: Date }) {
   );
 }
 
+/** 티켓: 노란 우표 테두리 카드에 예식일 앞뒤 하루씩(3칸), 예식일은 손으로 그린 동그라미 + 손글씨 메모 (calendarStyle = 'ticket') */
+function Ticket({ date }: { date: Date }) {
+  const days = [-1, 0, 1].map((off) => {
+    const d = new Date(date);
+    d.setDate(date.getDate() + off);
+    return { off, d };
+  });
+  return (
+    <div className="cal-ticket" role="img" aria-label={`${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일 ${weekdayKo(date)}요일`}>
+      <p className="cal-ticket-head">
+        <span>
+          {date.getMonth() + 1}월 {date.getDate()}일
+        </span>
+        <span>{date.getFullYear()}</span>
+      </p>
+      <div className="cal-ticket-days">
+        {days.map(({ off, d }) => (
+          <div key={off} className={`cal-ticket-day${off === 0 ? ' is-day' : ''}`}>
+            <span className="cal-ticket-wd">{weekdayKo(d)}요일</span>
+            <span className="cal-ticket-n">
+              {d.getDate()}
+              {off === 0 && (
+                <svg className="cal-ticket-circle" viewBox="0 0 64 52" aria-hidden>
+                  <path d="M35 7C19 4 5 13 5 27c0 13 13 21 27 20 15-1 27-10 26-23C57 12 46 5 31 6c-6 1-11 3-14 7" />
+                  <path d="M50 4.5c1.5-2.5 5-2 5 .8 0 2.4-3.4 4.4-5 6-1.6-1.6-5-3.6-5-6 0-2.8 3.5-3.3 5-.8z" />
+                </svg>
+              )}
+            </span>
+          </div>
+        ))}
+      </div>
+      <p className="cal-ticket-note">이 날은 비워 두세요</p>
+    </div>
+  );
+}
+
 /** 좌우로 흐르는 SAVE THE DATE 두 줄 (장식) */
 function SaveTheDate() {
   const row = Array.from({ length: MARQUEE_REPEAT }, (_, i) => <span key={i}>SAVE THE DATE</span>);
@@ -70,7 +106,8 @@ export function CalendarSection({ doc, section }: SectionProps<SectionOf<'calend
   return (
     <section className={`inv-block calendar is-${style}`}>
       {/* 예식 일자: 날짜·시간이 제목 (§4.1) */}
-      <SectionHead title={formatDateKo(date)} />
+      {style === 'ticket' ? <h2 className="cal-ticket-title">{formatDateKo(date)}</h2> : <SectionHead title={formatDateKo(date)} />}
+      {showCalendar && style === 'ticket' && <Ticket date={date} />}
       {showCalendar && style === 'strip' && <WeekStrip date={date} />}
       {showCalendar && style === 'month' && (
         <table className="cal" aria-label={`${date.getFullYear()}년 ${date.getMonth() + 1}월 달력`}>

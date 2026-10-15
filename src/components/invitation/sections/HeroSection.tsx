@@ -1,4 +1,3 @@
-import type { CSSProperties } from 'react';
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
 import { formatDot, formatDateKo, formatKo, parseLocal } from '../../../lib/date';
@@ -23,31 +22,9 @@ const FALLING_HEARTS: { x: number; depth: 1 | 2 | 3; delay: number; shape: 'a' |
   { x: 88, depth: 3, delay: 11, shape: 'b' },
 ];
 
-/** 하트 히어로: 하늘색 면 둘레에 흩어진 동그라미 [x%, y%, 지름(면 폭 %)] — 면 가장자리에 걸치게 */
-const HEART_DOTS: [number, number, number][] = [
-  [-3, -2, 9], [48, 1, 9], [78, -4, 9], [94, 9, 9],
-  [95, 46, 9], [-4, 40, 9], [-3, 62, 9], [10, 80, 9],
-  [4, 90, 9], [20, 97, 9], [96, 72, 9],
-];
-const HEART_SCRIPT = 'OUR WEDDING';
-
-/** 동그라미 글자: 단어마다 한 줄, 글자마다 동그라미 하나. 물결처럼 위아래로 어긋난다 */
-function DotWords({ text }: { text: string }) {
-  const words = text.toUpperCase().split(/\s+/).filter(Boolean).slice(0, 3);
-  return (
-    <div className="hero-hrt-words" role="img" aria-label={text}>
-      {words.map((w, wi) => (
-        <p key={wi} className={`hero-hrt-word is-${wi + 1}`} aria-hidden>
-          {[...w].map((ch, ci) => (
-            <span key={ci} style={{ '--dy': `${Math.round(Math.sin(ci * 1.3 + wi) * 8)}px` } as CSSProperties}>
-              {ch}
-            </span>
-          ))}
-        </p>
-      ))}
-    </div>
-  );
-}
+/** 표지 히어로 아래 흐르는 띠 문구 */
+const COVER_BAND = '음악을 켜고 함께 들어 주세요';
+const BAND_REPEAT = 6;
 
 function FallingHearts() {
   return (
@@ -124,34 +101,45 @@ export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
     );
   }
 
-  // 하트: 하늘색 면 위 하트 모양 사진 · 둘레의 동그라미 · 동그라미 글자 · 이름 · 일시·장소 · 음악 (§3.5 러브 레터)
-  if (layout === 'heart') {
-    const script = section.data.script?.trim() || HEART_SCRIPT;
+  // 표지: 꽉 찬 사진 위 작은 문구·명조 이름(and)·날짜/연도 → 올리브 띠 → 플레이어 (§3.5 크림 티켓)
+  if (layout === 'cover') {
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const band = Array.from({ length: BAND_REPEAT }, (_, i) => <span key={i}>{COVER_BAND}</span>);
     return (
-      <div className="hero hero--heart">
-        {headline && <p className="hero-hrt-label">{headline}</p>}
-        <div className="hero-hrt-panel">
-          {HEART_DOTS.map(([x, y, d], i) => (
-            <span key={i} className="hero-hrt-dot" style={{ left: `${x}%`, top: `${y}%`, width: `${d}%` }} aria-hidden />
-          ))}
-          <div className="hero-hrt-photo">{img ? <img src={img.src} alt="대표 사진" /> : <div className="hero-img--empty">대표 사진을 추가해 주세요</div>}</div>
-          <DotWords text={script} />
+      <div className="hero hero--cover">
+        <div className="hero-cov-photo">
+          {img ? <img src={img.src} alt="대표 사진" /> : <div className="hero-img--empty">대표 사진을 추가해 주세요</div>}
+          <div className="hero-cov-top">
+            {headline && <p className="hero-cov-label">{headline}</p>}
+            <h1 className="hero-cov-names">
+              {names.map((n, i) => (
+                <span key={i}>
+                  {i > 0 && (
+                    <span className="hero-cov-and" lang="en">
+                      and
+                    </span>
+                  )}
+                  {n}
+                </span>
+              ))}
+            </h1>
+          </div>
+          {date && (
+            <p className="hero-cov-date">
+              <span>
+                {pad(date.getMonth() + 1)}.{pad(date.getDate())}
+              </span>
+              <span>{date.getFullYear()}</span>
+            </p>
+          )}
         </div>
-        <h1 className="hero-hrt-names">
-          {names.map((n, i) => (
-            <span key={i}>
-              {i > 0 && <span className="hero-hrt-amp">&amp;</span>}
-              {n}
-            </span>
-          ))}
-        </h1>
-        {(date || venue) && (
-          <p className="hero-pol-when">
-            {date && <span>{formatDateKo(date)}</span>}
-            {venue && <span>{venue}</span>}
-          </p>
-        )}
-        <MusicBar title={section.data.music?.title || 'Our Wedding Song'} src={section.data.music?.src} />
+        <div className="hero-cov-band" aria-hidden>
+          <div className="hero-cov-track">
+            {band}
+            {band}
+          </div>
+        </div>
+        <MusicBar variant="player" title={section.data.music?.title || 'Our Wedding Song'} src={section.data.music?.src} />
       </div>
     );
   }

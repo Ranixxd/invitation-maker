@@ -150,74 +150,112 @@
 .hero-pol-names-heart { width: 16px; height: 15px; margin: 0 var(--sp-2); transform: rotate(-8deg); }
 .hero-pol-when { display: grid; font-weight: var(--fw-medium); color: var(--c-ink-60); }
 
-/* ---- 도트 계열 (러브 레터, §3.5 PRD-0020) ----
-   원톤: 포인트(진한 색) 하나에서 하늘색 면(--c-tint)과 연한 섹션 바탕(--c-tint-soft)을 만든다 */
-.inv--fam-dots {
-  --c-tint: color-mix(in srgb, var(--c-accent) 34%, white);
-  --c-tint-soft: color-mix(in srgb, var(--c-accent) 13%, var(--inv-bg));
+/* ---- 티켓 계열 (크림 티켓, §3.5 PRD-0021) ----
+   크림 바탕 + 올리브 포인트. 핑크·노랑은 이 계열의 고정 보조색. 제목·이름·숫자는 명조, 본문은 고딕 */
+.inv--fam-ticket {
+  --c-pop: #f4c5c8; /* 핑크: 버튼·재생 버튼 */
+  --c-pop-line: #e08a92; /* 진한 핑크: 손그림 동그라미·점선 */
+  --c-ticket: #f7eba0; /* 노랑: 티켓 달력·방명록 면 */
+  --ff-serif: var(--inv-font-display);
+  --ff-hand: 'Nanum Pen Script', cursive; /* 한글 손글씨 (SIL OFL, Google Fonts) */
+  --sec-title: var(--c-ink);
 }
-.inv--fam-dots .inv-section--profile,
-.inv--fam-dots .inv-section--gallery,
-.inv--fam-dots .inv-section--guestbook {
-  --sec-bg: var(--c-tint-soft);
-  --sec-paper: var(--c-paper-hi);
-}
-/* 하트 자리에 동그라미 (HeartCut이 둘 다 그리고 계열에 따라 하나만 보인다) */
-.heart-cut .hc-dot { display: none; }
-.inv--fam-dots .heart-cut .hc-heart { display: none; }
-.inv--fam-dots .heart-cut .hc-dot { display: inline; }
-.inv--fam-dots .heart-cut.ui-heart { width: 12px; height: 11px; }
+.inv--fam-ticket .ui-title { font-family: var(--ff-serif); font-weight: var(--fw-regular); }
+.inv--fam-ticket .heart-cut.ui-heart { display: none; } /* 섹션 머리 장식 없음 */
+.inv--fam-ticket .ui-btn--primary { background: var(--c-pop); color: var(--c-ink); }
+.inv--fam-ticket .map-links-row .ui-btn { border-color: transparent; background: var(--c-pop); }
 
-/* 히어로: 하트 */
-.hero--heart {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--sp-title);
-  padding: var(--sp-hero) var(--sp-gutter) var(--sp-section);
-  overflow: hidden;
-}
-.hero-hrt-label { margin: 0 0 var(--sp-4); font-size: var(--fs-body); font-weight: var(--fw-semibold); line-height: var(--lh-tight); color: var(--c-ink); white-space: pre-line; }
-.hero-hrt-panel { position: relative; width: 100%; max-width: var(--w-col); aspect-ratio: 20 / 24; margin-bottom: var(--sp-6); background: var(--c-tint); }
-.hero-hrt-dot { position: absolute; z-index: 1; aspect-ratio: 1; border-radius: 50%; background: var(--c-accent); }
-/* 하트 모양 사진 (원본 색): 가위로 오린 듯 짧은 직선 마디·좌우 비대칭·가위 자국 두 군데 */
-.hero-hrt-photo {
+/* 히어로: 표지 */
+.hero--cover { display: flex; flex-direction: column; padding-bottom: var(--sp-section); }
+.hero-cov-photo { position: relative; aspect-ratio: 9 / 14; overflow: hidden; background: var(--c-ink); }
+.hero-cov-photo > img,
+.hero-cov-photo > .hero-img--empty { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero-cov-photo > .hero-img--empty { display: grid; place-items: center; background: var(--c-ink-60); color: var(--c-cream); }
+/* 글자가 읽히도록 위아래만 살짝 어둡게 */
+.hero-cov-photo::after {
+  content: '';
   position: absolute;
-  left: 3%;
-  top: 11%;
-  width: 94%;
-  aspect-ratio: 100 / 92;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 92'%3E%3Cpath d='M52 91 41 81 30 69.5 19 57 10 46 4.5 35.5 7.5 33 2.5 28 1.5 19 6 10 13.5 4 23 1 32.5 2 40.5 6.5 46 12 49.5 19.5 53.5 11 60 4.5 69 1 78.5 0.5 87.5 4 94.5 10.5 98.5 19.5 98 30 94.5 39.5 88 49 80.5 57.5 77.5 55.5 76.5 60.5 68 69 59.5 78.5 55 84Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 92'%3E%3Cpath d='M52 91 41 81 30 69.5 19 57 10 46 4.5 35.5 7.5 33 2.5 28 1.5 19 6 10 13.5 4 23 1 32.5 2 40.5 6.5 46 12 49.5 19.5 53.5 11 60 4.5 69 1 78.5 0.5 87.5 4 94.5 10.5 98.5 19.5 98 30 94.5 39.5 88 49 80.5 57.5 77.5 55.5 76.5 60.5 68 69 59.5 78.5 55 84Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  inset: 0;
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--c-ink) 55%, transparent), transparent 34%, transparent 70%, color-mix(in srgb, var(--c-ink) 50%, transparent));
+  pointer-events: none;
 }
-.hero-hrt-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.hero-hrt-photo .hero-img--empty { display: grid; place-items: center; height: 100%; padding-top: 20%; background: var(--c-ink-8); color: var(--c-ink-60); }
-/* 동그라미 글자: 글자마다 포인트 동그라미, 물결처럼 어긋나며 살짝 겹친다 */
-.hero-hrt-words { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
-.hero-hrt-word { position: absolute; display: flex; margin: 0; }
-/* 사진을 가리지 않게: 첫 줄은 하트 위, 둘째 줄은 하트 아래 */
-.hero-hrt-word.is-1 { left: 8%; top: 1.5%; }
-.hero-hrt-word.is-2 { right: 4%; top: 88.5%; }
-.hero-hrt-word.is-3 { left: 6%; top: 76%; }
-.hero-hrt-word span {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 28px;
-  height: 28px;
-  margin-left: -2px;
-  border-radius: 50%;
-  background: var(--c-accent);
-  color: var(--c-cream);
-  font-size: var(--fs-body);
-  font-weight: var(--fw-semibold);
-  line-height: var(--lh-none);
-  transform: translateY(var(--dy, 0));
+.hero-cov-top { position: absolute; top: var(--sp-8); left: 0; right: 0; z-index: 1; display: grid; justify-items: center; gap: var(--sp-2); padding: 0 var(--sp-4); text-align: center; }
+.hero-cov-label { margin: 0; font-size: var(--fs-small); font-weight: var(--fw-medium); line-height: var(--lh-tight); color: var(--c-ticket); }
+.hero-cov-names { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; margin: 0; font-family: var(--ff-serif); font-size: var(--fs-cover); font-weight: var(--fw-regular); line-height: var(--lh-tight); color: var(--c-cream); }
+.hero-cov-names > span { display: inline-flex; align-items: baseline; }
+.hero-cov-and { margin: 0 var(--sp-2); font-family: var(--ff-script); font-size: var(--fs-section); }
+.hero-cov-date { position: absolute; left: var(--sp-5); right: var(--sp-5); bottom: var(--sp-5); z-index: 1; display: flex; justify-content: space-between; margin: 0; font-family: var(--ff-serif); font-size: var(--fs-section); line-height: var(--lh-none); color: var(--c-cream); }
+/* 올리브 띠: 흐르는 안내 문구 */
+.hero-cov-band { padding: var(--sp-2) 0; overflow: hidden; background: var(--c-accent); white-space: nowrap; }
+.hero-cov-track { display: inline-flex; gap: var(--sp-8); padding-right: var(--sp-8); font-size: var(--fs-small); line-height: var(--lh-body); color: var(--c-cream); animation: save-scroll 30s linear infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-cov-track { animation: none; }
 }
-.hero-hrt-word span:first-child { margin-left: 0; }
-.hero-hrt-names { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; margin: 0; font-size: var(--fs-section); font-weight: var(--fw-semibold); line-height: var(--lh-tight); color: var(--c-ink); }
-.hero-hrt-names > span { display: inline-flex; align-items: center; }
-.hero-hrt-amp { margin: 0 var(--sp-2); }
+/* 플레이어: 가운데 큰 핑크 재생 버튼 + 양옆 장식 아이콘 */
+.music-player { display: flex; align-items: center; justify-content: center; gap: var(--sp-6); padding-top: var(--sp-8); color: var(--c-accent); }
+.music-player-side { display: flex; gap: var(--sp-6); }
+.music-player-side svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; opacity: 0.6; }
+.music-player .music-btn { width: 56px; height: 56px; background: var(--c-pop); color: var(--c-accent); }
+.music-player .music-btn svg { width: 22px; height: 22px; }
+
+/* 예식 일자: 노란 우표 테두리 티켓 */
+.cal-ticket-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } /* 티켓 머리에 날짜가 있어 화면에선 숨김 */
+.cal-ticket {
+  width: 100%;
+  max-width: var(--w-col);
+  padding: var(--sp-5) var(--sp-5) var(--sp-4);
+  /* 가장자리 반원 구멍(바탕색) = 우표처럼 뜯는 테두리 */
+  background:
+    radial-gradient(circle 4px at 6px 0, var(--inv-bg) 96%, transparent) top left / 12px 6px repeat-x,
+    radial-gradient(circle 4px at 6px 6px, var(--inv-bg) 96%, transparent) bottom left / 12px 6px repeat-x,
+    radial-gradient(circle 4px at 0 6px, var(--inv-bg) 96%, transparent) top left / 6px 12px repeat-y,
+    radial-gradient(circle 4px at 6px 6px, var(--inv-bg) 96%, transparent) top right / 6px 12px repeat-y,
+    var(--c-ticket);
+  color: var(--c-ink);
+  text-align: left;
+}
+.cal-ticket-head { display: flex; justify-content: space-between; margin: 0 0 var(--sp-3); font-family: var(--ff-serif); font-size: var(--fs-section); line-height: var(--lh-tight); }
+.cal-ticket-days { display: grid; grid-template-columns: repeat(3, 1fr); border-top: var(--bw) solid var(--c-ink-20); border-bottom: var(--bw) solid var(--c-ink-20); }
+.cal-ticket-day { display: grid; justify-items: center; gap: var(--sp-3); padding: var(--sp-3) 0 var(--sp-5); }
+.cal-ticket-day + .cal-ticket-day { border-left: var(--bw) solid var(--c-ink-20); }
+.cal-ticket-wd { font-size: var(--fs-small); color: var(--c-ink-60); }
+.cal-ticket-n { position: relative; font-family: var(--ff-serif); font-size: var(--fs-numeral); line-height: var(--lh-none); }
+.cal-ticket-circle { position: absolute; left: 50%; top: 50%; width: 64px; height: 52px; overflow: visible; fill: none; stroke: var(--c-pop-line); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transform: translate(-50%, -50%) rotate(-4deg); }
+.cal-ticket-note { margin: var(--sp-4) 0 0; font-family: var(--ff-hand); font-size: var(--fs-note); line-height: var(--lh-tight); color: var(--c-ink-60); transform: rotate(-3deg); transform-origin: left; }
+
+/* 우리의 이야기: 세로 타임라인(날짜 · 점 · 내용), 리본 대신 */
+.inv--fam-ticket .story-ribbon { display: none; }
+.inv--fam-ticket .story { grid-template-columns: 1fr; row-gap: var(--sp-6); width: 100%; max-width: var(--w-col); margin: 0 auto; padding: 0; overflow: visible; }
+.inv--fam-ticket .story::before { content: ''; position: absolute; top: var(--sp-2); bottom: var(--sp-2); left: 88px; width: var(--bw); background: var(--c-ink-20); }
+.inv--fam-ticket .story > .story-item { grid-column: 1 !important; display: grid; grid-template-columns: 76px 1fr; column-gap: var(--sp-6); align-items: center; justify-self: stretch; text-align: left; }
+.inv--fam-ticket .story > .story-item::before { content: ''; position: absolute; top: 50%; left: 85px; width: 7px; height: 7px; border-radius: 50%; background: var(--c-ink); transform: translateY(-50%); }
+.inv--fam-ticket .story-date { font-family: var(--ff-serif); font-size: var(--fs-body); color: var(--c-ink); }
+.inv--fam-ticket .story-text { grid-column: 2; }
+
+/* 갤러리: 테두리 없는 세로 사진 2열 */
+.inv--fam-ticket .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: var(--sp-2); }
+.inv--fam-ticket .gallery-item { aspect-ratio: 3 / 4; border: 0; }
+
+/* 오시는 길: 찢은 종이 모양 지도 + 핑크 점선 장식 */
+.inv--fam-ticket .map-preview { border-radius: 0; -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M3 2 18 4 27 1 41 3 55 0 68 3 80 1 97 3 99 18 96 29 100 43 97 57 99 70 96 84 98 98 83 96 70 99 57 97 43 100 30 97 16 99 2 97 4 83 1 70 3 56 0 42 3 29 1 15Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M3 2 18 4 27 1 41 3 55 0 68 3 80 1 97 3 99 18 96 29 100 43 97 57 99 70 96 84 98 98 83 96 70 99 57 97 43 100 30 97 16 99 2 97 4 83 1 70 3 56 0 42 3 29 1 15Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
+.inv--fam-ticket .inv-section--location {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60'%3E%3Cpath d='M2 44C34 8 70 58 108 30S170 2 198 18' fill='none' stroke='%23e08a92' stroke-width='1.6' stroke-dasharray='5 6' stroke-linecap='round'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60'%3E%3Cpath d='M2 16C40 50 84 4 124 28S176 58 198 40' fill='none' stroke='%23e08a92' stroke-width='1.6' stroke-dasharray='5 6' stroke-linecap='round'/%3E%3C/svg%3E"), var(--tex-paper);
+  background-size: 62% auto, 62% auto, 200px 200px;
+  background-position: right top, left bottom, 0 0;
+  background-repeat: no-repeat, no-repeat, repeat;
+}
+
+/* 방명록: 노란 면, 위 가장자리는 우표처럼 */
+.inv--fam-ticket .inv-section--guestbook { --sec-bg: var(--c-ticket); --sec-paper: var(--c-paper-hi); position: relative; }
+.inv--fam-ticket .inv-section--guestbook::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: radial-gradient(circle 4px at 6px 0, var(--inv-bg) 96%, transparent) top left / 12px 6px repeat-x;
+}
 
 /* ---- 음악 재생 바 (히어로 하단) ---- */
 .music-bar {

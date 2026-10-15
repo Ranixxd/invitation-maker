@@ -77,18 +77,18 @@ export const THEME_PRESETS: Record<ThemePreset, ThemePresetDef> = {
     board: '#870505',
     font: 'sans',
   },
-  sky: {
-    label: '스카이',
-    // 원톤: 포인트(진한 파랑) 하나에서 하늘색 면·연한 바탕을 만든다 (§3.5 러브 레터)
-    bg: '#fbfbf9',
-    surface: '#f1f3f7',
-    text: '#1f2024',
-    muted: '#7a7c82',
-    accent: '#3d63a8',
-    band: '#3d63a8',
-    onBand: '#fbfbf9',
-    paper: '#fbfbf9',
-    board: '#3d63a8',
+  cream: {
+    label: '크림',
+    // 크림 바탕 + 올리브 포인트. 핑크(버튼·재생)·노랑(티켓)은 계열 CSS의 고정 보조색 (§3.5 크림 티켓)
+    bg: '#fdf9ec',
+    surface: '#f5efdc',
+    text: '#2b2724',
+    muted: '#7d766d',
+    accent: '#6b6f2f',
+    band: '#6b6f2f',
+    onBand: '#fdf9ec',
+    paper: '#fffdf6',
+    board: '#f7eba0',
     font: 'sans',
   },
   romantic: {
