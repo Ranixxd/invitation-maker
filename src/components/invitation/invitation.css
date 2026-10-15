@@ -218,15 +218,18 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 .cal-ticket-days { display: grid; grid-template-columns: repeat(7, 1fr); border-top: var(--bw) solid var(--c-ink-20); }
 .cal-ticket-day { display: grid; justify-items: center; gap: var(--sp-3); padding: var(--sp-3) 0 var(--sp-5); }
 .cal-ticket-day:not(.is-day) .cal-ticket-n { color: var(--c-ink-60); } /* 앞뒤 날은 옅게 (템플릿1과 같음) */
-.cal-ticket-day.is-day .cal-ticket-wd { color: var(--c-accent); }
+.cal-ticket-day.is-day .cal-ticket-wd,
+.cal-ticket-day.is-day .cal-ticket-n { color: var(--c-accent); }
+.cal-ticket-day.is-day .cal-ticket-n { font-weight: var(--fw-medium); }
 .cal-ticket-wd { font-size: var(--fs-small); color: var(--c-ink-60); }
-.cal-ticket-n { position: relative; font-size: var(--fs-numeral); line-height: var(--lh-none); }
-.cal-ticket-circle { position: absolute; left: 50%; top: 50%; width: 40px; height: 33px; overflow: visible; fill: none; stroke: var(--c-accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transform: translate(-50%, -50%) rotate(-4deg); }
+.cal-ticket-n { position: relative; font-size: var(--fs-section); line-height: var(--lh-none); }
+.cal-ticket-circle { position: absolute; left: 50%; top: 50%; width: 46px; height: 38px; overflow: visible; fill: none; stroke: var(--c-accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transform: translate(-50%, -50%) rotate(-4deg); }
 
 /* 우리의 이야기: 날짜 | 세로선 위 작은 손그림 꽃 | 내용 (리본 대신) */
 .inv--fam-ticket .story-ribbon { display: none; }
 .inv--fam-ticket .story { grid-template-columns: 1fr; row-gap: var(--sp-8); width: 100%; max-width: var(--w-col); margin: 0 auto; padding: var(--sp-2) 0; overflow: visible; }
-.inv--fam-ticket .story::before { content: ''; position: absolute; top: 0; bottom: 0; left: 84px; border-left: var(--bw) solid var(--c-accent); }
+/* 선은 첫 꽃에서 시작해 마지막 꽃에서 끝난다 (한 줄 항목의 가운데 = 여백 8 + 줄 높이 절반 약 11) */
+.inv--fam-ticket .story::before { content: ''; position: absolute; top: calc(var(--sp-2) + 11px); bottom: calc(var(--sp-2) + 11px); left: 84px; border-left: var(--bw) solid var(--c-accent); }
 .inv--fam-ticket .story > .story-item { grid-column: 1 !important; display: grid; grid-template-columns: 64px 1fr; column-gap: var(--sp-10); align-items: center; justify-self: stretch; text-align: left; }
 /* 선 위 꽃: 바탕색 원으로 선을 가리고(::before) 그 위에 꽃(::after) */
 .inv--fam-ticket .story > .story-item::before,
