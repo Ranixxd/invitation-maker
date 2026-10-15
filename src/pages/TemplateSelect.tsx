@@ -22,7 +22,6 @@ export default function TemplateSelect() {
                 <Link to={`/templates/${t.id}`} className="tpl-link">
                   <b>{t.name}</b>
                 </Link>
-                <span>{t.tagline}</span>
               </span>
             </li>
           ))}

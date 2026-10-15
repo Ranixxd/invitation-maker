@@ -22,7 +22,6 @@ export default function TemplateDetail() {
       <div className="tpl-detail-body">
         <div className="tpl-detail-info">
           <h1>{template.name}</h1>
-          <p className="lead">{template.tagline}</p>
         </div>
         <div className="tpl-detail-preview">
           <PhoneFrame>

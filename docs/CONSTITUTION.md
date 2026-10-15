@@ -3,7 +3,7 @@
 > **살아있는 마스터 문서.** 시스템 전체의 로직·정책·규칙의 *현재 유효한* 상태를 기록한다.
 > 코드와 이 문서가 다르면 **둘 중 하나가 버그**다. 정책을 바꾸는 커밋은 반드시 이 문서도 같은 커밋에서 고친다.
 >
-> - 현재 판: **v0.82** (2026-10-15)
+> - 현재 판: **v0.83** (2026-10-15)
 > - 설계의 *배경과 당시 판단*은 [PRD 스냅샷](./prd/)에 남긴다. 이 문서는 "지금 무엇이 참인가"만 다룬다.
 
 ---
@@ -80,16 +80,15 @@
 - `doc.version`은 유지한다. 저장 기능이 다시 생기면(§7.1) 스키마 변경 시 마이그레이션을 함께 도입한다.
 
 ### §3.5 디자인 템플릿
-- 정의 위치: `src/data/designTemplates.ts`의 `DESIGN_TEMPLATES` (6종). 현재 목록:
+- 정의 위치: `src/data/designTemplates.ts`의 `DESIGN_TEMPLATES` (**2종**). 현재 목록:
 
 | 순서 | id | 이름 | 프리셋 | 히어로 | 상태 |
 |---|---|---|---|---|---|
-| 1 | `modern-mono` | 모던 모노 | `mono` · 계열 `editorial` · `round` | `polaroid` + 달력 `strip` | **1번 테마** — Figma 시안 기준(PRD-0018) |
-| 2 | `classic-frame` | 클래식 액자 | `classic` | `frame` | 임시 |
-| 3 | `modern-full` | 모던 시네마 | `modern` | `full` | 임시 |
-| 4 | `modern-frame` | 모던 미니멀 | `modern` | `frame` | 임시 |
-| 5 | `romantic-arch` | 로맨틱 아치 | `romantic` | `arch` | 임시 |
-| 6 | `romantic-full` | 로맨틱 블룸 | `romantic` | `full` | 임시 |
+| 1 | `modern-mono` | 템플릿1 | `mono` · 계열 `editorial` · `round` | `polaroid` + 달력 `strip` | **1번 테마** — Figma 시안 기준(PRD-0018) |
+| 2 | `cream-ticket` | 템플릿2 | `cream` · 계열 `ticket` · `round` | `cover` + 달력 `ticket` | **2번 테마**(PRD-0021) |
+
+- 이름은 임시(`템플릿1`·`템플릿2`, 나중에 정함), **템플릿 소개 문구는 두지 않는다**(목록·미리보기 화면 모두 이름만).
+- 예전 임시 템플릿 5종(`classic-frame`·`modern-full`·`modern-frame`·`romantic-arch`·`romantic-full`)은 목록에서 뺐다. 렌더러의 기본 계열(`basic`)·히어로 `full`/`frame`/`arch`·팔레트 `classic`/`modern`/`romantic`은 이미 만든 문서가 깨지지 않도록 남겨 둔다.
 
 - **테마 고유 스타일:** 고유 표현(폰트·장식·레이아웃 세부)은 디자인 시스템의 **계열 클래스 `.inv--fam-<family>`** 아래에 토큰으로만 둔다(§3.6). 다른 계열에 새지 않게 한다.
   - **섹션 제목은 한글만** 쓴다. 섹션 위의 영문 보조 제목(`Invitation`, `Bride & Groom` 등)은 두지 않는다(모든 테마). 섹션 기본 제목도 한글(`갤러리`, `게스트 스냅`). 영문은 히어로 헤드라인(`WEDDING DAY` 등)과 장식 문구(예: 1번 테마의 흐르는 `SAVE THE DATE`)에만 허용.
@@ -121,7 +120,7 @@
 
 ### §3.6 템플릿 디자인 시스템 (PRD-0017, PRD-0018)
 - **템플릿 = 계열(family) + 팔레트(palette) + 모양(shape)** (+ 히어로·갤러리·예식 일자 레이아웃). 정의: `src/data/designSystem.ts`, 토큰 주입: `src/components/invitation/theme.tsx`.
-- **계열** `Theme.family`: `basic`(기본, 3~7번) / `editorial`(에디토리얼, 1번) / `ticket`(티켓, 2번). 렌더러 루트에 `.inv--fam-<family>`. 계열 CSS는 **토큰으로만** 쓴다 — 색 값을 직접 쓰지 않는다. 계열이 정하는 것: 연분홍 바탕 섹션(섹션 문맥 토큰), 디스플레이 글꼴.
+- **계열** `Theme.family`: `basic`(기본, 목록에서 뺀 예전 템플릿 — 기존 문서 호환용) / `editorial`(에디토리얼, 1번) / `ticket`(티켓, 2번). 렌더러 루트에 `.inv--fam-<family>`. 계열 CSS는 **토큰으로만** 쓴다 — 색 값을 직접 쓰지 않는다. 계열이 정하는 것: 연분홍 바탕 섹션(섹션 문맥 토큰), 디스플레이 글꼴.
 - **팔레트** `Theme.preset` → `THEME_PRESETS`(`bg`·`surface`·`text`·`muted`·`accent`·`band`·`onBand`·`paper`·`board`) → CSS 변수 `--inv-*`. 렌더러 색은 이 중 **`--inv-accent`(포인트)·`--inv-text`(잉크)·`--inv-bg`(크림) 세 가지에서만** 파생한다.
 - **모양** `Theme.shape`: `round` = control `8px`(버튼·선택 칩·입력)·card `20px`·paper `8px`·media `0` / `square` = 모두 `0`. CSS 변수 `--inv-r-control`·`--inv-r-card`·`--inv-r-paper`·`--inv-r-media`.
 - **포인트 색 바꾸기** (PRD-0019, `src/components/editor/AccentPicker.tsx`): 렌더러 색이 모두 `--inv-accent`에서 파생되므로 `doc.theme.accent` 하나만 바꾼다. 추천 색 8개(버건디·로즈·테라코타·브라운·세이지·네이비·라벤더·차콜, 템플릿 기본색이 목록에 없으면 맨 앞) + 직접 고르기(색 선택기). 크림 글자와 대비 4.5:1 미만이면 기준을 넘을 때까지 자동으로 어둡게 저장하고 안내한다(`readableAccent`, `src/lib/color.ts`).
@@ -548,3 +547,4 @@ Refs: PRD-XXXX, §조항
 | v0.80 | 2026-10-15 | §3.5 크림 티켓: 이름 두 줄(and 삭제), 갤러리 흩어 놓은 폴라로이드, 우리의 이야기 두 칸 목록, 방명록 마스킹 테이프 종이 쪽지 쌓기. §4.4 티켓 계열 방명록 5개씩 | — |
 | v0.81 | 2026-10-15 | §3.5 크림 티켓 섹션 머리에 손그림 꽃, 방명록 흰 종이·잔잔한 찢은 가장자리·그림자 없음·크게 보기 같은 종이 | — |
 | v0.82 | 2026-10-15 | §3.5 크림 티켓 꽃잎 흩날림·명조 리디바탕, §8 리디바탕 웹폰트(OFL, 부분 글꼴 WOFF2)와 웹폰트 금지 글꼴 배제 원칙 | — |
+| v0.83 | 2026-10-15 | §3.5 템플릿 목록을 작업한 2종으로 축소(예전 임시 4종 제외, 렌더러는 호환 유지), 이름 임시 `템플릿1`·`템플릿2`, 소개 문구 삭제. §3.5 크림 티켓 예식 일자 종이 통일 | — |

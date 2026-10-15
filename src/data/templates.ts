@@ -79,7 +79,7 @@ export const THEME_PRESETS: Record<ThemePreset, ThemePresetDef> = {
   },
   cream: {
     label: '크림',
-    // 크림 바탕 + 올리브 포인트. 핑크(버튼·재생)·노랑(티켓)은 계열 CSS의 고정 보조색 (§3.5 크림 티켓)
+    // 크림 바탕 + 올리브 포인트 원톤 (§3.5 2번 테마)
     bg: '#fdf9ec',
     surface: '#f5efdc',
     text: '#2b2724',

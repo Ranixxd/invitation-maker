@@ -5,7 +5,6 @@ import { THEME_PRESETS } from './templates';
 export interface DesignTemplate {
   id: string;
   name: string;
-  tagline: string;
   /** 색 구성(팔레트) */
   preset: ThemePreset;
   /** 스타일 계열 · 모양 (디자인 시스템 §3.6, 없으면 basic · round) */
@@ -24,10 +23,9 @@ export interface DesignTemplate {
 
 export const DESIGN_TEMPLATES: DesignTemplate[] = [
   {
-    // 1번 테마: 모던 모노 — 흑백 사진, 버건디 포인트, 매거진 같은 구성 (§3.5, PRD-0016)
+    // 1번 테마(작업명 모던 모노) — 폴라로이드 사진·필기체, 레드 포인트 (§3.5, PRD-0018)
     id: 'modern-mono',
-    name: '모던 모노',
-    tagline: '폴라로이드 사진과 필기체, 레드 포인트',
+    name: '템플릿1', // 이름은 나중에 정한다
     preset: 'mono',
     family: 'editorial',
     shape: 'round',
@@ -40,10 +38,9 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
     sample: ['#d6d6d6', '#262626'],
   },
   {
-    // 2번 테마: 크림 티켓 — 사진 위 명조 이름, 올리브 띠·플레이어, 노란 티켓 달력, 핑크 버튼 (§3.5, PRD-0021)
+    // 2번 테마(작업명 크림 티켓) — 사진 위 명조 이름·꽃잎, 올리브 띠·플레이어, 종이 티켓 달력, 올리브 원톤 (§3.5, PRD-0021)
     id: 'cream-ticket',
-    name: '크림 티켓',
-    tagline: '명조 이름과 티켓 달력, 올리브 원톤',
+    name: '템플릿2', // 이름은 나중에 정한다
     preset: 'cream',
     family: 'ticket',
     shape: 'round',
@@ -54,66 +51,6 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
     calendarStyle: 'ticket',
     headline: "WE'RE GETTING MARRIED",
     sample: ['#3a3f2a', '#f7eba0'],
-  },
-  {
-    id: 'classic-frame',
-    name: '클래식 액자',
-    tagline: '날짜를 크게, 사진은 액자처럼',
-    preset: 'classic',
-    font: 'serif',
-    accent: '#7a6a55',
-    heroLayout: 'frame',
-    galleryLayout: 'slide',
-    headline: 'Save the date',
-    sample: ['#e8dccb', '#a28c6e'],
-  },
-  {
-    id: 'modern-full',
-    name: '모던 시네마',
-    tagline: '흑백 사진에 어울리는 또렷한 고딕',
-    preset: 'modern',
-    font: 'sans',
-    accent: '#2f2f33',
-    heroLayout: 'full',
-    galleryLayout: 'grid',
-    headline: 'The wedding of',
-    sample: ['#bdbdc2', '#2a2a2e'],
-  },
-  {
-    id: 'modern-frame',
-    name: '모던 미니멀',
-    tagline: '여백을 살린 깔끔한 구성',
-    preset: 'modern',
-    font: 'sans',
-    accent: '#3d5a80',
-    heroLayout: 'frame',
-    galleryLayout: 'slide',
-    headline: 'Wedding invitation',
-    sample: ['#cfd8e3', '#5b7088'],
-  },
-  {
-    id: 'romantic-arch',
-    name: '로맨틱 아치',
-    tagline: '아치형 사진과 부드러운 핑크',
-    preset: 'romantic',
-    font: 'serif',
-    accent: THEME_PRESETS.romantic.accent,
-    heroLayout: 'arch',
-    galleryLayout: 'grid',
-    headline: 'Our wedding day',
-    sample: ['#f6d6d8', '#c98a96'],
-  },
-  {
-    id: 'romantic-full',
-    name: '로맨틱 블룸',
-    tagline: '화사한 사진을 위한 풀스크린',
-    preset: 'romantic',
-    font: 'serif',
-    accent: '#a85f74',
-    heroLayout: 'full',
-    galleryLayout: 'slide',
-    headline: 'Two hearts, one love',
-    sample: ['#f3c9cf', '#8e5466'],
   },
 ];
 
