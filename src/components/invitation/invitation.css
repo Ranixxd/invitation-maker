@@ -155,7 +155,7 @@
 .inv--fam-ticket {
   --ff-serif: var(--inv-font-display);
   --c-tint-soft: color-mix(in srgb, var(--c-accent) 10%, var(--inv-bg)); /* 포인트를 옅게 깐 면 (방명록) */
-  --c-cover-label: #f7eba0; /* 예외 하나: 히어로 사진 위 작은 문구만 노랑 */
+  --c-cover-label: #f7eba0; /* 히어로 사진 위 작은 문구 (장식 색) */
   --sec-title: var(--c-ink);
 }
 .inv--fam-ticket .ui-title { font-family: var(--ff-serif); font-weight: var(--fw-regular); }
