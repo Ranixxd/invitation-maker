@@ -1,7 +1,7 @@
 // 방명록: 남겨진 쪽지를 먼저 보여주고(9개씩), [방명록 남기기]로만 작성. 작성·삭제는 비밀번호 필수 (CONSTITUTION §4.4)
 // - 버튼은 어디서나 섹션 안(쪽지 보드 아래)에 둔다
 // 서버 연동 전 데모: 메시지는 보는 사람의 브라우저(localStorage)에만 저장
-import { useEffect, useMemo, useState, type FormEvent } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties, type FormEvent } from 'react';
 import type { GuestMessage, InvitationDoc, SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
 import { toast } from '../../common/toast';
@@ -13,6 +13,8 @@ import { HeartCut } from '../HeartCut';
 const NAME_MAX = 20;
 const TEXT_MAX = 300;
 export const NOTES_PER_PAGE = 9;
+/** 티켓 계열은 가로로 긴 쪽지를 쌓으므로 한 쪽에 5장 */
+const perPage = (doc: InvitationDoc) => (doc.theme.family === 'ticket' ? 5 : NOTES_PER_PAGE);
 const key = (docId: string) => `guestbook:${docId}`;
 
 function load(docId: string): GuestMessage[] {
@@ -56,9 +58,10 @@ export function GuestbookSection({ doc, section, mode }: SectionProps<SectionOf<
     () => [...local, ...seed.filter((m) => !hiddenSeeds.includes(m.id)).sort((a, b) => b.at - a.at)],
     [local, seed, hiddenSeeds],
   );
-  const pages = Math.max(1, Math.ceil(messages.length / NOTES_PER_PAGE));
+  const per = perPage(doc);
+  const pages = Math.max(1, Math.ceil(messages.length / per));
   const current = Math.min(page, pages - 1);
-  const visible = messages.slice(current * NOTES_PER_PAGE, (current + 1) * NOTES_PER_PAGE);
+  const visible = messages.slice(current * per, (current + 1) * per);
 
   const save = (next: GuestMessage[]) => {
     setLocal(next);
@@ -105,7 +108,7 @@ export function GuestbookSection({ doc, section, mode }: SectionProps<SectionOf<
               <button
                 type="button"
                 className="gb-note"
-                style={{ transform: `rotate(${tiltOf(m.id, i).toFixed(2)}deg)` }}
+                style={{ '--tilt': `${tiltOf(m.id, i).toFixed(2)}deg` } as CSSProperties}
                 onClick={() => setOpened(m)}
                 aria-label={`${m.name}님의 방명록 보기`}
               >
