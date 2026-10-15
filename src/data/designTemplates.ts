@@ -43,7 +43,7 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
     // 2번 테마: 크림 티켓 — 사진 위 명조 이름, 올리브 띠·플레이어, 노란 티켓 달력, 핑크 버튼 (§3.5, PRD-0021)
     id: 'cream-ticket',
     name: '크림 티켓',
-    tagline: '명조 이름과 노란 티켓 달력, 올리브·핑크',
+    tagline: '명조 이름과 티켓 달력, 올리브 원톤',
     preset: 'cream',
     family: 'ticket',
     shape: 'round',
