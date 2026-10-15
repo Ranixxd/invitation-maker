@@ -156,7 +156,7 @@
   --ff-serif: var(--inv-font-display);
   --c-tint-soft: color-mix(in srgb, var(--c-accent) 10%, var(--inv-bg)); /* 포인트를 옅게 깐 면 (방명록) */
   --c-cover-label: #f7eba0; /* 히어로 사진 위 작은 문구 (장식 색) */
-  --c-slip: color-mix(in srgb, var(--c-accent) 14%, white); /* 방명록 종이 쪽지 */
+  --c-slip: var(--c-paper-hi); /* 방명록 종이 쪽지: 옅은 포인트 면 위에서 또렷하게 흰 종이 */
   --sec-title: var(--c-ink);
 }
 .inv--fam-ticket .ui-title { font-family: var(--ff-serif); font-weight: var(--fw-regular); }
@@ -242,7 +242,7 @@
 /* 방명록: 포인트를 옅게 깐 면 위에, 마스킹 테이프로 붙인 가로 쪽지를 겹겹이 쌓는다 */
 .inv--fam-ticket .inv-section--guestbook { --sec-bg: var(--c-tint-soft); }
 .inv--fam-ticket .gb-notes { grid-template-columns: 1fr; gap: 0; width: 100%; max-width: var(--w-col); margin: 0 auto; padding-top: var(--sp-3); }
-.inv--fam-ticket .gb-notes li + li { margin-top: calc(-1 * var(--sp-3)); }
+.inv--fam-ticket .gb-notes li + li { margin-top: var(--sp-4); }
 .inv--fam-ticket .gb-note {
   position: relative;
   isolation: isolate;
@@ -256,9 +256,9 @@
   text-align: center;
   transform: rotate(calc(var(--tilt, 0deg) * 0.7));
 }
-/* 종이: 아래 가장자리를 손으로 찢은 듯 (목록 쪽지·상세 카드 공통) */
+/* 종이: 아래 가장자리를 잔잔하게 찢은 듯 (목록 쪽지·상세 카드 공통) */
 .inv--fam-ticket .gb-note::after,
-.inv--fam-ticket .ui-modal-card.gb-detail::after { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--c-slip); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H100V90L97 94 94 89 90 95 86 90 82 96 78 91 74 97 70 92 65 95 61 89 57 94 52 91 48 97 44 92 39 95 35 90 31 94 27 91 22 96 18 92 14 95 9 90 5 94 0 91Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H100V90L97 94 94 89 90 95 86 90 82 96 78 91 74 97 70 92 65 95 61 89 57 94 52 91 48 97 44 92 39 95 35 90 31 94 27 91 22 96 18 92 14 95 9 90 5 94 0 91Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
+.inv--fam-ticket .ui-modal-card.gb-detail::after { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--c-slip); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H100V97L100.0 96.6 98.1 97.8 96.4 97.4 94.0 95.7 91.3 95.6 88.7 95.7 86.9 97.0 83.4 95.9 81.3 97.7 77.5 97.5 75.0 98.9 73.3 98.5 71.1 96.0 69.3 96.6 65.8 96.1 62.8 97.7 60.4 97.4 58.7 95.7 56.7 97.9 54.2 96.6 51.2 97.1 48.9 98.3 45.7 96.4 42.8 97.3 39.1 98.1 36.9 98.9 35.1 97.0 31.7 96.0 28.9 95.6 25.8 98.2 22.8 98.6 20.6 97.9 17.6 97.5 14.9 98.4 11.1 97.2 7.9 95.7 4.7 97.8 0.7 98.4 0 97.5Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H100V97L100.0 96.6 98.1 97.8 96.4 97.4 94.0 95.7 91.3 95.6 88.7 95.7 86.9 97.0 83.4 95.9 81.3 97.7 77.5 97.5 75.0 98.9 73.3 98.5 71.1 96.0 69.3 96.6 65.8 96.1 62.8 97.7 60.4 97.4 58.7 95.7 56.7 97.9 54.2 96.6 51.2 97.1 48.9 98.3 45.7 96.4 42.8 97.3 39.1 98.1 36.9 98.9 35.1 97.0 31.7 96.0 28.9 95.6 25.8 98.2 22.8 98.6 20.6 97.9 17.6 97.5 14.9 98.4 11.1 97.2 7.9 95.7 4.7 97.8 0.7 98.4 0 97.5Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
 /* 마스킹 테이프: 반투명, 양 끝은 뜯은 톱니 (목록 쪽지·상세 카드 공통) */
 .inv--fam-ticket .gb-note::before,
 .inv--fam-ticket .ui-modal-card.gb-detail::before {
