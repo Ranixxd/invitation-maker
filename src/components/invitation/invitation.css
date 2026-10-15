@@ -160,7 +160,8 @@
   --sec-title: var(--c-ink);
 }
 .inv--fam-ticket .ui-title { font-family: var(--ff-serif); font-weight: var(--fw-regular); }
-.inv--fam-ticket .heart-cut.ui-heart { display: none; } /* 섹션 머리 장식 없음 */
+.inv--fam-ticket .heart-cut.ui-heart { display: none; } /* 섹션 머리: 하트 대신 손그림 꽃(포인트색) */
+.inv--fam-ticket .ui-flower { display: block; stroke: var(--c-accent); transform: rotate(-6deg); }
 
 /* 히어로: 표지 */
 .hero--cover { display: flex; flex-direction: column; padding-bottom: var(--sp-section); }

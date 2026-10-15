@@ -26,8 +26,30 @@ export const IconMapPin = () =>
   );
 
 /* ---------- 섹션 머리: (하트) 제목 · 설명 ---------- */
+/** 손그림 꽃(꽃잎 다섯 · 줄기 · 잎 하나). 티켓 계열(크림 티켓)에서 하트 대신 보인다 */
+function FlowerDoodle() {
+  return (
+    <svg className="ui-flower" viewBox="0 0 32 36" aria-hidden>
+      <path d="M16 9C13.8 5 15 2 16.8 2.4s1.6 3.6-.6 6.6" />
+      <path d="M17.8 10.2C21 7.6 24.2 8 24.4 9.8c.2 2-3 2.8-6.4 1.6" />
+      <path d="M17.4 12.6c2.2 2.8 2 5.8.2 6s-2.2-2.8-1.2-5.8" />
+      <path d="M15.2 12.4c-2.6 2.6-5.6 2.8-6 1s2.4-2.8 5.4-2" />
+      <path d="M14.6 9.8C11.4 8.6 10 6 11.4 4.8s3.6 1 4.2 4.2" />
+      <circle cx="16.1" cy="10.9" r="1.7" />
+      <path d="M16.4 19c-.4 5 .4 10-.8 15" />
+      <path d="M16.2 27.4c2.4-2.4 6.2-2.6 7-1.6-1.6 2.2-4.6 2.8-7 1.6" />
+    </svg>
+  );
+}
+
+/** 섹션 구분 표시: 하트(기본) · 손그림 꽃(티켓 계열). 둘 다 그리고 계열 CSS가 하나만 보여준다 */
 export function HeartMark() {
-  return <HeartCut shape="a" className="ui-heart" />;
+  return (
+    <>
+      <HeartCut shape="a" className="ui-heart" />
+      <FlowerDoodle />
+    </>
+  );
 }
 
 /** 섹션 머리: 제목 위 오린 하트(섹션 구분 표시, 기본 켬) · 제목 · 설명 */
