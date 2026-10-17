@@ -309,68 +309,65 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 .inv--fam-ticket .gb-detail > .ui-divider { display: none; }
 
 /* ---- 블룸 계열 (템플릿3, §3.5 PRD-0022) ----
-   색은 포인트 하나 + 잉크 + 아이보리에서만. 섹션 제목·이름·이야기 날짜는 붓글씨, 본문 고딕.
-   포인트 이미지 = 선 그림 백합(LilyDoodle) */
-.lily { display: block; fill: none; stroke: currentColor; stroke-width: 1; stroke-linecap: round; stroke-linejoin: round; overflow: visible; pointer-events: none; }
-.lily path, .lily ellipse { vector-effect: non-scaling-stroke; }
-.gb-note-lily { display: none; }
-.inv--fam-bloom {
-  --ff-brush: var(--inv-font-display);
-  --fs-brush-title: 34px; /* 섹션 제목 (붓글씨는 같은 크기에서 작아 보여 키운다) */
-  --fs-brush-name: 56px; /* 히어로 이름 */
-  --fs-brush-sm: 26px; /* 이야기 날짜 · 방명록 이름 */
-  font-synthesis-weight: none; /* 붓글씨는 400 하나뿐 */
-}
-/* 꽃이 가장자리 밖으로 걸쳐도 가로 스크롤이 생기지 않게 (clip은 스크롤 상자를 만들지 않아 히어로 sticky에 영향 없음) */
-.inv--fam-bloom .inv-section { overflow-x: clip; }
-.inv--fam-bloom .heart-cut.ui-heart { display: none; } /* 섹션 머리 표시 없음: 붓글씨 제목만 */
-.inv--fam-bloom .ui-title { font-family: var(--ff-brush); font-size: var(--fs-brush-title); font-weight: var(--fw-regular); line-height: var(--lh-tight); color: var(--c-ink); }
+   색은 포인트 하나 + 잉크 + 아이보리에서만. 글꼴은 고딕 하나, 종이 질감 없음 */
+.inv--fam-bloom .inv-section,
+.inv-portal.inv--fam-bloom .ui-modal-card { background-image: none; }
+.inv--fam-bloom .heart-cut.ui-heart { display: none; } /* 섹션 머리 표시 없음 (꽃 이미지는 사용자가 준비 중) */
 
-/* 히어로: 펼침 — 무대(화면 높이)가 붙어 있는 동안 스크롤하면 사진 틀이 넓어져 꽉 찬다 (--p 0 → 1, HeroSection useUnfold) */
-.hero--unfold { --p: 0; --unf-in: 22%; height: calc(var(--stage-h, 680px) * 1.7); }
+/* 히어로: 펼침 — 무대(화면 높이)가 붙어 있는 동안 스크롤하면 작은 틀의 사진이 통째로 커져 꽉 찬다
+   (--p 0 → 1, 배율 --s0 → 1, 위치 --unf-top → 0: HeroSection useUnfold가 잰다) */
+.hero--unfold { --p: 0; --s0: 0.6; --unf-top: 160px; --unf-s: calc(var(--s0) + (1 - var(--s0)) * var(--p));
+  /* 문구 색 전환: 사진 위끝이 문구 아래끝에 닿는 순간(--unf-pc) 잉크 → 크림으로 한 번에 바꾸고 0.25초 페이드 (중간 회색 없음) */
+  --unf-q: clamp(0, (var(--p) - var(--unf-pc, 0.1)) * 1000, 1);
+  height: calc(var(--stage-h, 680px) * 1.7); }
 .hero-unf-stage { position: sticky; top: 0; height: var(--stage-h, 680px); overflow: hidden; }
+/* 사진: 무대 크기 그대로 두고 배율만 바꾼다 → 작을 때도 잘리지 않고 같은 사진이 작게 보임. 라운드는 배율로 나눠 화면에서 16px 유지 */
 .hero-unf-photo {
   position: absolute;
   inset: 0;
   z-index: 1;
   overflow: hidden;
+  border-radius: calc((1 - var(--p)) * var(--sp-4) / var(--unf-s));
   background: var(--c-ink-8);
-  clip-path: inset(calc((1 - var(--p)) * var(--unf-in)) calc((1 - var(--p)) * var(--sp-gutter)) round calc((1 - var(--p)) * var(--sp-4)));
+  transform: translateY(calc((1 - var(--p)) * var(--unf-top))) scale(var(--unf-s));
+  transform-origin: 50% 0;
 }
 .hero-unf-photo > img,
-.hero-unf-photo > .hero-img--empty { width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; transform: scale(calc(1.12 - var(--p) * 0.12)); }
-/* 펼친 사진 위 크림 이름이 읽히도록 위쪽만 살짝 어둡게 (펼칠수록 진해짐) */
-.hero-unf-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, color-mix(in srgb, var(--c-ink) 50%, transparent), transparent 40%); opacity: var(--p); }
-.inv .hero-unf-names {
+.hero-unf-photo > .hero-img--empty { width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; }
+/* 펼친 사진 위 문구가 읽히도록 위쪽만 살짝 어둡게 (펼칠수록 진해짐) */
+.hero-unf-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, color-mix(in srgb, var(--c-ink) 55%, transparent), transparent 36%); opacity: var(--unf-q); transition: opacity 0.25s; }
+/* 맨 위 문구: 작은 문구 / 신랑 / 신부 가운데 정렬, 항상 사진 위 */
+.inv .hero-unf-text {
   position: absolute;
-  top: calc(var(--unf-in) - 0.95 * var(--fs-brush-name));
-  left: var(--sp-6);
-  right: var(--sp-6);
+  top: var(--sp-hero);
+  left: var(--sp-gutter);
+  right: var(--sp-gutter);
   z-index: 2;
   display: grid;
+  justify-items: center;
+  gap: var(--sp-1);
   margin: 0;
-  font-family: var(--ff-brush);
-  font-size: var(--fs-brush-name);
-  font-weight: var(--fw-regular);
-  line-height: 0.9;
-  color: var(--c-accent);
-  transform: rotate(-5deg);
-  opacity: calc(1 - var(--p));
+  font-weight: var(--fw-medium);
+  text-align: center;
+  color: var(--c-ink);
+  opacity: calc(1 - var(--unf-q));
+  transition: opacity 0.25s;
   pointer-events: none;
 }
-.hero-unf-names > span:first-child { justify-self: start; padding-left: 10%; }
-.hero-unf-names > span:last-child { justify-self: end; padding-right: 10%; }
-.inv .hero-unf-names.is-light { color: var(--c-cream); opacity: var(--p); }
-/* 사진 아래(틀일 때만 보임 — 펼치면 사진이 덮는다): 작은 문구 · 일시 */
-.hero-unf-foot { position: absolute; left: 0; right: 0; bottom: 0; height: var(--unf-in); display: grid; align-content: center; justify-items: center; gap: var(--sp-1); padding: var(--sp-8) var(--sp-gutter) 0; text-align: center; }
-.hero-unf-label { font-size: var(--fs-body); font-weight: var(--fw-medium); line-height: var(--lh-body); color: var(--c-ink); white-space: pre-line; }
-.hero-unf-date { font-size: var(--fs-small); line-height: var(--lh-body); color: var(--c-ink-60); }
-/* 백합: 위 오른쪽 · 아래 왼쪽 모서리에 걸쳐, 사진 뒤 (펼치면 덮인다) */
-.hero-unf-lily { position: absolute; width: 128px; height: auto; color: var(--c-accent); opacity: 0.7; }
-.hero-unf-lily.is-top { top: -34px; right: -36px; transform: rotate(196deg); }
-.hero-unf-lily.is-bottom { bottom: -44px; left: -40px; transform: rotate(28deg); }
+.hero-unf-label { margin-bottom: var(--sp-2); font-size: var(--fs-body); line-height: var(--lh-body); color: var(--c-ink-60); }
+.hero-unf-name { font-size: var(--fs-cover); line-height: var(--lh-tight); }
+.inv .hero-unf-text.is-light { color: var(--c-cream); opacity: var(--unf-q); text-shadow: 0 1px 8px color-mix(in srgb, var(--c-ink) 30%, transparent); }
+.inv .hero-unf-text.is-light .hero-unf-label { color: var(--c-cream); }
+/* 틀 아래 일시 (펼치면 사진이 덮는다) */
+.hero-unf-date { position: absolute; left: 0; right: 0; bottom: var(--sp-6); margin: 0; font-size: var(--fs-small); line-height: var(--lh-body); text-align: center; color: var(--c-ink-60); }
 /* 재생 버튼: 사진 아래 가장자리 가운데에 반쯤 걸침 → 펼치면 아래쪽 안으로 */
-.hero-unf-music { position: absolute; left: 50%; bottom: calc((1 - var(--p)) * var(--unf-in) + var(--p) * var(--sp-8)); z-index: 3; transform: translate(-50%, calc((1 - var(--p)) * 50%)); }
+.hero-unf-music {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--stage-h, 680px) - (1 - var(--p)) * var(--unf-top) - var(--unf-s) * var(--stage-h, 680px) + var(--p) * var(--sp-8));
+  z-index: 3;
+  transform: translate(-50%, calc((1 - var(--p)) * 50%));
+}
 .music-dot .music-btn { width: var(--h-control); height: var(--h-control); }
 .music-dot .music-btn svg { width: 18px; height: 18px; }
 @media (prefers-reduced-motion: reduce) {
@@ -381,18 +378,17 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 .inv--fam-bloom .story { row-gap: var(--sp-16); padding: var(--sp-12) var(--sp-5) var(--sp-16); }
 .inv--fam-bloom .story-item { align-items: flex-start; justify-self: stretch; text-align: left; }
 .inv--fam-bloom .story-item.is-right { padding-left: var(--sp-4); }
-.inv--fam-bloom .story-date { font-family: var(--ff-brush); font-size: var(--fs-brush-sm); line-height: var(--lh-none); color: var(--c-accent); }
+.inv--fam-bloom .story-date { font-weight: var(--fw-medium); color: var(--c-accent); }
 .inv--fam-bloom .story-ribbon path { stroke: var(--c-accent); stroke-width: 1; transition-duration: 3.6s; }
-.story-lily { position: absolute; top: var(--sp-4); right: calc(-1 * var(--sp-6)); width: 112px; height: auto; color: var(--c-accent); opacity: 0.7; transform: rotate(-24deg); }
 
-/* 예식 일자: 선 없는 한 주 띠, 예식일은 선으로 그린 하트(채우지 않음), SAVE THE DATE 없음 */
+/* 예식 일자: 선 없는 한 주 띠, 예식일은 선 하트(채우지 않음), SAVE THE DATE 없음 */
 .inv--fam-bloom .cal-strip { border: 0; }
 .inv--fam-bloom .save-marquee { display: none; }
 .inv--fam-bloom .cal-strip-day.is-day .cal-strip-n { color: var(--c-accent); }
 .inv--fam-bloom .heart-cut.cal-heart { inset: calc(-1 * var(--sp-2)); width: calc(100% + 2 * var(--sp-2)); height: calc(100% + 2 * var(--sp-2)); fill: none; stroke: var(--c-accent); }
 .inv--fam-bloom .heart-cut.cal-heart path { stroke-width: 1.2; vector-effect: non-scaling-stroke; }
 
-/* 방명록: 포인트색 테두리 카드 2열, 위 가운데 반원 홈(사진 틀 모양), 모서리에 옅은 백합 */
+/* 방명록: 포인트색 테두리 카드 2열, 위 가운데 반원 홈(사진 틀 모양) */
 .inv--fam-bloom .gb-notes { grid-template-columns: repeat(2, 1fr); gap: var(--sp-4) var(--sp-3); width: 100%; max-width: var(--w-col); margin: 0 auto; }
 .inv--fam-bloom .gb-note {
   position: relative;
@@ -407,14 +403,10 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 }
 /* 홈: 바탕색 원 + 포인트 테두리, 카드 밖으로 나간 위 반쪽은 overflow로 잘려 반원만 남는다 */
 .inv--fam-bloom .gb-note::before { content: ''; position: absolute; top: calc(-1 * var(--sp-4)); left: 50%; width: var(--sp-8); height: var(--sp-8); border: var(--bw-strong) solid var(--c-accent); border-radius: 50%; background: var(--inv-bg); transform: translateX(-50%); }
-.inv--fam-bloom .gb-note-name { font-family: var(--ff-brush); font-size: var(--fs-brush-sm); font-weight: var(--fw-regular); line-height: var(--lh-tight); color: var(--c-accent); }
 .inv--fam-bloom .gb-note-name .heart-cut,
 .inv--fam-bloom .gb-note .ui-divider { display: none; }
 .inv--fam-bloom .gb-note-text { -webkit-line-clamp: 4; }
-.inv--fam-bloom .gb-note-lily { display: block; position: absolute; right: calc(-1 * var(--sp-6)); bottom: calc(-1 * var(--sp-8)); width: 76px; height: auto; color: var(--c-accent-20); transform: rotate(-22deg); }
-.inv--fam-bloom .gb-note > :not(.gb-note-lily) { position: relative; z-index: 1; }
 .inv--fam-bloom .ui-modal-card.gb-detail { border: var(--bw-strong) solid var(--c-accent); }
-.inv--fam-bloom .gb-detail-name { font-family: var(--ff-brush); font-size: var(--fs-brush-sm); font-weight: var(--fw-regular); }
 .inv--fam-bloom .gb-detail-name .heart-cut { display: none; }
 
 /* ---- 갤러리: 캐러셀 (하트 모양으로 흐르는 글자 앞, 가로로 넘기는 사진) ---- */

@@ -6,7 +6,6 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
 import { SectionHead } from '../ui';
-import { LilyDoodle } from '../LilyDoodle';
 
 interface Anchor {
   l: number; // 날짜 글자 왼쪽
@@ -169,7 +168,6 @@ export function ProfileSection({ doc, section, mode }: SectionProps<SectionOf<'p
           </li>
         ))}
       </ol>
-      {loop && <LilyDoodle className="story-lily" />}
     </section>
   );
 }

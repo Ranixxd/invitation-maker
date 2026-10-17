@@ -4,7 +4,6 @@ import type { SectionProps } from '../InvitationView';
 import { formatDot, formatDateKo, formatKo, parseLocal } from '../../../lib/date';
 import { HeartCut } from '../HeartCut';
 import { MusicBar } from '../MusicBar';
-import { LilyDoodle } from '../LilyDoodle';
 
 const DEFAULT_SCRIPT = 'Our Wedding Day';
 
@@ -60,6 +59,10 @@ function scrollParent(el: HTMLElement): HTMLElement | null {
   return null;
 }
 
+/** 펼침 히어로 작은 틀의 위(문구와 사이)·아래(일시·재생 버튼 자리) 여백 */
+const UNFOLD_GAP = 24;
+const UNFOLD_BOTTOM = 112;
+
 /** 펼침 히어로: 무대 높이(--stage-h)를 화면 높이에 맞추고, 스크롤 진행도(--p, 0~1)를 CSS 변수로 넘긴다.
  *  React 상태를 거치지 않고 스타일만 바꿔 스크롤 중 다시 그리기를 피한다 */
 function useUnfold() {
@@ -85,7 +88,14 @@ function useUnfold() {
       parent = scrollParent(el);
       const w = el.offsetWidth;
       const h = parent ? parent.clientHeight : window.innerHeight;
-      el.style.setProperty('--stage-h', `${Math.round(Math.min(w * 2, Math.max(w * 1.4, h)))}px`);
+      const stageH = Math.round(Math.min(w * 2, Math.max(w * 1.4, h)));
+      el.style.setProperty('--stage-h', `${stageH}px`);
+      // 작은 틀: 문구 아래(--unf-top)부터 아래 여백(일시·재생 버튼)까지 들어가는 배율(--s0)
+      const text = el.querySelector<HTMLElement>('.hero-unf-text');
+      const top = text ? text.offsetTop + text.offsetHeight + UNFOLD_GAP : 0;
+      el.style.setProperty('--unf-top', `${top}px`);
+      el.style.setProperty('--unf-pc', top ? (UNFOLD_GAP / top).toFixed(4) : '0'); // 사진 위끝이 문구 아래끝에 닿는 진행도
+      el.style.setProperty('--s0', Math.max(0.3, (stageH - top - UNFOLD_BOTTOM) / stageH).toFixed(4));
       update();
     };
     const onScroll = () => {
@@ -107,31 +117,35 @@ function useUnfold() {
   return ref;
 }
 
-/** 펼침(템플릿3): 처음엔 둥근 사각 틀 안의 사진이 스크롤할수록 넓어져 무대를 꽉 채운다.
- *  붓글씨 이름이 사진 위쪽에 걸치고(펼치면 크림색), 아래에 작은 문구·날짜, 모서리에 선 그림 백합 */
+/** 펼침(템플릿3): 맨 위 문구(작은 문구 · 신랑 · 신부)는 항상 보이고, 그 아래 작은 틀의 사진이
+ *  스크롤할수록 통째로 커져(잘리지 않고 비율 그대로 확대) 무대를 꽉 채운다. 틀 아래 일시, 아래 가장자리 재생 버튼 */
 function UnfoldHero({ doc, section }: SectionProps<SectionOf<'hero'>>) {
   const ref = useUnfold();
   const { imageId, headline } = section.data;
   const img = imageId ? doc.images[imageId] : null;
   const date = parseLocal(doc.core.datetime);
   const names = doc.core.hosts.map((h) => h.name || h.label);
-  const nameLines = names.map((n, i) => <span key={i}>{n}</span>);
+  const lines = (
+    <>
+      {headline && <span className="hero-unf-label">{headline}</span>}
+      {names.map((n, i) => (
+        <span key={i} className="hero-unf-name">
+          {n}
+        </span>
+      ))}
+    </>
+  );
   return (
     <div ref={ref} className="hero hero--unfold">
       <div className="hero-unf-stage">
-        <LilyDoodle className="hero-unf-lily is-top" />
-        <LilyDoodle className="hero-unf-lily is-bottom" />
-        <div className="hero-unf-foot">
-          {headline && <p className="hero-unf-label">{headline}</p>}
-          {date && <p className="hero-unf-date">{formatDateKo(date)}</p>}
-        </div>
+        {date && <p className="hero-unf-date">{formatDateKo(date)}</p>}
         <div className="hero-unf-photo">
           {img ? <img src={img.src} alt="대표 사진" /> : <div className="hero-img--empty">대표 사진을 추가해 주세요</div>}
         </div>
-        {/* 이름: 포인트색(틀 안) → 크림색(펼친 사진 위)으로 겹쳐 바뀐다 */}
-        <h1 className="hero-unf-names">{nameLines}</h1>
-        <p className="hero-unf-names is-light" aria-hidden>
-          {nameLines}
+        {/* 문구: 바탕 위에선 잉크, 펼친 사진 위에선 크림색으로 겹쳐 바뀐다 (사진에 묻히지 않게 항상 맨 위) */}
+        <h1 className="hero-unf-text">{lines}</h1>
+        <p className="hero-unf-text is-light" aria-hidden>
+          {lines}
         </p>
         <div className="hero-unf-music">
           <MusicBar variant="dot" title={section.data.music?.title || 'Our Wedding Song'} src={section.data.music?.src} />

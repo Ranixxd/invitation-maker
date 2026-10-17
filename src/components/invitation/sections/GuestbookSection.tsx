@@ -9,7 +9,6 @@ import { checkPassword, hashPassword, PW_MAX, PW_MIN } from '../../../lib/guestb
 import { Button, Divider, Field, Modal, SectionHead } from '../ui';
 import { formatShortDot } from '../../../lib/date';
 import { HeartCut } from '../HeartCut';
-import { LilyDoodle } from '../LilyDoodle';
 
 const NAME_MAX = 20;
 const TEXT_MAX = 300;
@@ -120,7 +119,6 @@ export function GuestbookSection({ doc, section, mode }: SectionProps<SectionOf<
                 <Divider />
                 <span className="gb-note-text">{m.text}</span>
                 <span className="gb-note-date">{fmtDate(m.at)}</span>
-                <LilyDoodle className="gb-note-lily" />
               </button>
             </li>
           ))}
