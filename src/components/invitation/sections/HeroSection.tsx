@@ -97,7 +97,10 @@ function useUnfold() {
       const top = text ? text.offsetTop + text.getBoundingClientRect().height / scale + UNFOLD_GAP : 0;
       el.style.setProperty('--unf-top', `${top}px`);
       el.style.setProperty('--unf-pc', top ? (UNFOLD_GAP / top).toFixed(4) : '0'); // 사진 위끝이 문구 아래끝에 닿는 진행도
-      el.style.setProperty('--s0', Math.max(0.3, (stageH - top - UNFOLD_BOTTOM) / stageH).toFixed(4));
+      const s0 = Math.max(0.3, (stageH - top - UNFOLD_BOTTOM) / stageH);
+      el.style.setProperty('--s0', s0.toFixed(4));
+      // 사진 아래끝((1-p)·top + 배율·무대)이 일시 위끝(top + s0·무대 + 간격)에 닿는 진행도
+      el.style.setProperty('--unf-pd', Math.min(1, UNFOLD_GAP / Math.max(1, (1 - s0) * stageH - top)).toFixed(4));
       update();
     };
     const onScroll = () => {
@@ -140,7 +143,6 @@ function UnfoldHero({ doc, section }: SectionProps<SectionOf<'hero'>>) {
   return (
     <div ref={ref} className="hero hero--unfold">
       <div className="hero-unf-stage">
-        {date && <p className="hero-unf-date">{formatDateKo(date)}</p>}
         <div className="hero-unf-photo">
           {img ? <img src={img.src} alt="대표 사진" /> : <div className="hero-img--empty">대표 사진을 추가해 주세요</div>}
         </div>
@@ -149,6 +151,15 @@ function UnfoldHero({ doc, section }: SectionProps<SectionOf<'hero'>>) {
         <p className="hero-unf-text is-light" aria-hidden>
           {lines}
         </p>
+        {/* 일시: 자리는 그대로, 펼쳐지는 사진이 닿으면 크림색으로 (사진 위에서도 보임) */}
+        {date && (
+          <>
+            <p className="hero-unf-date">{formatDateKo(date)}</p>
+            <p className="hero-unf-date is-light" aria-hidden>
+              {formatDateKo(date)}
+            </p>
+          </>
+        )}
         <div className="hero-unf-music">
           <MusicBar variant="dot" title={section.data.music?.title || 'Our Wedding Song'} src={section.data.music?.src} />
         </div>

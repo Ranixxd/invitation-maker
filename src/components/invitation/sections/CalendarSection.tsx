@@ -7,7 +7,7 @@ import { dday, formatDateKo, monthMatrix, parseLocal, weekdayKo } from '../../..
 const HEAD = ['일', '월', '화', '수', '목', '금', '토'];
 const MARQUEE_REPEAT = 6;
 
-/** 예식일이 있는 한 주(월~일) 띠. 예식일은 오린 하트 위에 흰 숫자 (템플릿 calendarStyle = 'strip') */
+/** 예식일이 있는 한 주(월~일) 띠. 예식일은 오린 하트 위에 흰 숫자, 블룸 계열은 손그림 점선 동그라미 (템플릿 calendarStyle = 'strip') */
 const WEEK_LABELS = ['월', '화', '수', '목', '금', '토', '일'];
 function WeekStrip({ date }: { date: Date }) {
   const monday = new Date(date);
@@ -24,6 +24,12 @@ function WeekStrip({ date }: { date: Date }) {
           <span className="cal-strip-wd">{label}</span>
           <span className="cal-strip-num">
             {isDay && <HeartCut shape="b" className="cal-heart" />}
+            {/* 손으로 그린 점선 동그라미 (블룸 계열에서만 보임, 하트 대신) */}
+            {isDay && (
+              <svg className="cal-strip-circle" viewBox="0 0 64 56" aria-hidden>
+                <path d="M36 6C20 3 5 12 5 28c0 15 14 23 28 22 16-1 27-11 26-25C58 12 47 5 32 6c-6 1-12 4-15 8" />
+              </svg>
+            )}
             <span className="cal-strip-n">{d.getDate()}</span>
           </span>
         </div>

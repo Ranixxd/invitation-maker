@@ -46,31 +46,9 @@ function ribbonPath(pts: Anchor[], width: number) {
   return d;
 }
 
-/** 블룸 계열(템플릿3): 항목을 피해 빈 쪽으로 흐르는 가는 곡선(고리 없이 선만).
- *  ys = 항목 세로 가운데들(항목은 왼쪽부터 번갈아), 선은 항목 반대쪽 칸을 지나 항목 사이에서 반대편으로 크게 건너간다 */
-function flowPath(ys: number[], width: number, height: number) {
-  const side = (i: number) => (i % 2 === 0 ? width * 0.74 : width * 0.26); // 왼쪽 항목이면 선은 오른쪽 칸
-  let x = side(0);
-  let y = ys[0];
-  // 시작: 왼쪽 가장자리 위에서 크게 휘어 들어온다
-  let d = `M 0 ${y * 0.7} C ${width * 0.3} ${y * 0.1}, ${x + 50} ${y * 0.2}, ${x} ${y}`;
-  ys.slice(1).forEach((ny, k) => {
-    const nx = side(k + 1);
-    const dy = ny - y;
-    d += ` C ${x} ${y + dy * 0.75}, ${nx} ${ny - dy * 0.75}, ${nx} ${ny}`;
-    x = nx;
-    y = ny;
-  });
-  // 끝: 반대편 아래 가장자리로 흘러 나간다
-  const ex = x > width / 2 ? 0 : width;
-  d += ` C ${x} ${y + 60}, ${(x + ex) / 2} ${height - 10}, ${ex} ${height - 30}`;
-  return d;
-}
-
-export function ProfileSection({ doc, section, mode }: SectionProps<SectionOf<'profile'>>) {
+export function ProfileSection({ section, mode }: SectionProps<SectionOf<'profile'>>) {
   const { title, timeline } = section.data;
   const items = timeline.filter((t) => t.date || t.text);
-  const loop = doc.theme.family === 'bloom';
   const listRef = useRef<HTMLOListElement>(null);
   const [geo, setGeo] = useState<{ w: number; h: number; d: string } | null>(null);
   const [drawn, setDrawn] = useState(false);
@@ -96,18 +74,14 @@ export function ProfileSection({ doc, section, mode }: SectionProps<SectionOf<'p
       });
       if (!anchors.length) return;
       const w = ol.clientWidth;
-      const h = ol.clientHeight;
-      if (loop) {
-        const ys = Array.from(ol.querySelectorAll<HTMLElement>('.story-item')).map((el) => offsetIn(el).y + el.offsetHeight / 2);
-        setGeo({ w, h, d: flowPath(ys, w, h) });
-      } else setGeo({ w, h, d: ribbonPath(anchors, w) });
+      setGeo({ w, h: ol.clientHeight, d: ribbonPath(anchors, w) });
     };
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(ol);
     document.fonts?.ready.then(measure);
     return () => ro.disconnect();
-  }, [items.length, loop]);
+  }, [items.length]);
 
   // 화면에 들어오면 그리기
   useEffect(() => {
