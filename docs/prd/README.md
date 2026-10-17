@@ -34,3 +34,4 @@
 | [PRD-0019](./PRD-0019-accent-color.md) | 포인트 색 바꾸기 | 2026-10-14 | 확정 |
 | [PRD-0020](./PRD-0020-theme2-love-letters.md) | 2번 테마: 러브 레터 | 2026-10-15 | 대체됨 → PRD-0021 |
 | [PRD-0021](./PRD-0021-theme2-cream-ticket.md) | 2번 테마: 크림 티켓 (러브 레터 대체) | 2026-10-15 | 확정 |
+| [PRD-0022](./PRD-0022-theme3-burgundy-bloom.md) | 3번 테마: 버건디 블룸 | 2026-10-17 | 확정 |

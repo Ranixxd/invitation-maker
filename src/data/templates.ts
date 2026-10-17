@@ -91,6 +91,20 @@ export const THEME_PRESETS: Record<ThemePreset, ThemePresetDef> = {
     board: '#f7eba0',
     font: 'sans',
   },
+  wine: {
+    label: '와인',
+    // 아이보리 바탕 + 버건디 포인트 원톤 (§3.5 3번 테마)
+    bg: '#fbf8f4',
+    surface: '#f3ece6',
+    text: '#2b1d1f',
+    muted: '#80706f',
+    accent: '#7b1730',
+    band: '#7b1730',
+    onBand: '#fbf8f4',
+    paper: '#fffdfa',
+    board: '#fbf8f4',
+    font: 'sans',
+  },
   romantic: {
     label: '로맨틱',
     bg: '#fff7f6',

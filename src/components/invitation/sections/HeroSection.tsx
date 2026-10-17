@@ -1,8 +1,10 @@
+import { useLayoutEffect, useRef } from 'react';
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
 import { formatDot, formatDateKo, formatKo, parseLocal } from '../../../lib/date';
 import { HeartCut } from '../HeartCut';
 import { MusicBar } from '../MusicBar';
+import { LilyDoodle } from '../LilyDoodle';
 
 const DEFAULT_SCRIPT = 'Our Wedding Day';
 
@@ -49,8 +51,99 @@ function FallingHearts({ petals = false }: { petals?: boolean }) {
   );
 }
 
-export function HeroSection({ doc, section }: SectionProps<SectionOf<'hero'>>) {
+/** 스크롤 상자: 가장 가까운 세로 스크롤 조상(편집기·템플릿 미리보기 휴대폰 화면), 없으면 창 */
+function scrollParent(el: HTMLElement): HTMLElement | null {
+  for (let n = el.parentElement; n; n = n.parentElement) {
+    const oy = getComputedStyle(n).overflowY;
+    if ((oy === 'auto' || oy === 'scroll') && n.scrollHeight > n.clientHeight) return n;
+  }
+  return null;
+}
+
+/** 펼침 히어로: 무대 높이(--stage-h)를 화면 높이에 맞추고, 스크롤 진행도(--p, 0~1)를 CSS 변수로 넘긴다.
+ *  React 상태를 거치지 않고 스타일만 바꿔 스크롤 중 다시 그리기를 피한다 */
+function useUnfold() {
+  const ref = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let parent: HTMLElement | null = null;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const stage = el.firstElementChild as HTMLElement | null;
+      const range = el.offsetHeight - (stage?.offsetHeight ?? 0);
+      if (reduce || range <= 0) return el.style.setProperty('--p', '0');
+      const top = parent ? parent.getBoundingClientRect().top : 0;
+      // 화면 배율(템플릿 썸네일 축소)을 보정해 실제 레이아웃 단위로
+      const scale = el.getBoundingClientRect().height / el.offsetHeight || 1;
+      const p = Math.min(1, Math.max(0, (top - el.getBoundingClientRect().top) / scale / range));
+      el.style.setProperty('--p', (1 - (1 - p) ** 2).toFixed(4)); // 처음엔 빠르게, 끝에서 부드럽게
+    };
+    const measure = () => {
+      parent = scrollParent(el);
+      const w = el.offsetWidth;
+      const h = parent ? parent.clientHeight : window.innerHeight;
+      el.style.setProperty('--stage-h', `${Math.round(Math.min(w * 2, Math.max(w * 1.4, h)))}px`);
+      update();
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    // 스크롤 상자가 어디든 잡도록 캡처 단계에서 듣는다
+    window.addEventListener('scroll', onScroll, { capture: true, passive: true });
+    window.addEventListener('resize', measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('scroll', onScroll, { capture: true });
+      window.removeEventListener('resize', measure);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
+  return ref;
+}
+
+/** 펼침(템플릿3): 처음엔 둥근 사각 틀 안의 사진이 스크롤할수록 넓어져 무대를 꽉 채운다.
+ *  붓글씨 이름이 사진 위쪽에 걸치고(펼치면 크림색), 아래에 작은 문구·날짜, 모서리에 선 그림 백합 */
+function UnfoldHero({ doc, section }: SectionProps<SectionOf<'hero'>>) {
+  const ref = useUnfold();
+  const { imageId, headline } = section.data;
+  const img = imageId ? doc.images[imageId] : null;
+  const date = parseLocal(doc.core.datetime);
+  const names = doc.core.hosts.map((h) => h.name || h.label);
+  const nameLines = names.map((n, i) => <span key={i}>{n}</span>);
+  return (
+    <div ref={ref} className="hero hero--unfold">
+      <div className="hero-unf-stage">
+        <LilyDoodle className="hero-unf-lily is-top" />
+        <LilyDoodle className="hero-unf-lily is-bottom" />
+        <div className="hero-unf-foot">
+          {headline && <p className="hero-unf-label">{headline}</p>}
+          {date && <p className="hero-unf-date">{formatDateKo(date)}</p>}
+        </div>
+        <div className="hero-unf-photo">
+          {img ? <img src={img.src} alt="대표 사진" /> : <div className="hero-img--empty">대표 사진을 추가해 주세요</div>}
+        </div>
+        {/* 이름: 포인트색(틀 안) → 크림색(펼친 사진 위)으로 겹쳐 바뀐다 */}
+        <h1 className="hero-unf-names">{nameLines}</h1>
+        <p className="hero-unf-names is-light" aria-hidden>
+          {nameLines}
+        </p>
+        <div className="hero-unf-music">
+          <MusicBar variant="dot" title={section.data.music?.title || 'Our Wedding Song'} src={section.data.music?.src} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function HeroSection({ doc, section, mode }: SectionProps<SectionOf<'hero'>>) {
   const { imageId, layout, headline } = section.data;
+  if (layout === 'unfold') return <UnfoldHero doc={doc} section={section} mode={mode} />;
   const img = imageId ? doc.images[imageId] : null;
   const date = parseLocal(doc.core.datetime);
   const names = doc.core.hosts.map((h) => h.name || h.label);

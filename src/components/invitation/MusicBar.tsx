@@ -25,7 +25,7 @@ const IconPrev = () => line('M7 5v14 M18 6 9.5 12 18 18z');
 const IconNext = () => line('M17 5v14 M6 6l8.5 6L6 18z');
 const IconVolUp = () => line('M4 9.5h3l4-3.5v12l-4-3.5H4z M15 12h5 M17.5 9.5v5');
 
-export function MusicBar({ title, src, variant = 'bar' }: { title: string; src?: string; variant?: 'bar' | 'player' }) {
+export function MusicBar({ title, src, variant = 'bar' }: { title: string; src?: string; variant?: 'bar' | 'player' | 'dot' }) {
   const audio = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0); // 0~1 (실제 음악일 때)
@@ -57,6 +57,16 @@ export function MusicBar({ title, src, variant = 'bar' }: { title: string; src?:
       {playing ? <IconPause /> : <IconPlay />}
     </button>
   );
+
+  // 점: 재생 버튼 하나만 (펼침 히어로 사진 아래 가장자리)
+  if (variant === 'dot') {
+    return (
+      <div className={`music-dot${playing ? ' is-playing' : ''}`} title={title}>
+        {src && <audio ref={audio} src={src} preload="none" loop />}
+        {playButton}
+      </div>
+    );
+  }
 
   // 플레이어: 가운데 큰 재생 버튼, 양옆 장식 아이콘 (곡 제목은 버튼 이름으로만)
   if (variant === 'player') {

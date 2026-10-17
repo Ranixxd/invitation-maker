@@ -9,12 +9,14 @@ import { checkPassword, hashPassword, PW_MAX, PW_MIN } from '../../../lib/guestb
 import { Button, Divider, Field, Modal, SectionHead } from '../ui';
 import { formatShortDot } from '../../../lib/date';
 import { HeartCut } from '../HeartCut';
+import { LilyDoodle } from '../LilyDoodle';
 
 const NAME_MAX = 20;
 const TEXT_MAX = 300;
 export const NOTES_PER_PAGE = 9;
 /** 티켓 계열은 가로로 긴 쪽지를 쌓으므로 한 쪽에 5장 */
-const perPage = (doc: InvitationDoc) => (doc.theme.family === 'ticket' ? 5 : NOTES_PER_PAGE);
+/** 쪽지 수: 티켓 계열은 가로 쪽지 5개, 블룸 계열은 2열 카드 6개 */
+const perPage = (doc: InvitationDoc) => (doc.theme.family === 'ticket' ? 5 : doc.theme.family === 'bloom' ? 6 : NOTES_PER_PAGE);
 const key = (docId: string) => `guestbook:${docId}`;
 
 function load(docId: string): GuestMessage[] {
@@ -119,6 +121,7 @@ export function GuestbookSection({ doc, section, mode }: SectionProps<SectionOf<
                 <Divider />
                 <span className="gb-note-text">{m.text}</span>
                 <span className="gb-note-date">{fmtDate(m.at)}</span>
+                <LilyDoodle className="gb-note-lily" />
               </button>
             </li>
           ))}

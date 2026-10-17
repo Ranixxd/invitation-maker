@@ -37,6 +37,7 @@ export const FAMILY_LABELS: Record<ThemeFamily, string> = {
   basic: '기본',
   editorial: '에디토리얼',
   ticket: '티켓',
+  bloom: '블룸',
 };
 
 /** 계열별 글꼴 토큰 */
@@ -46,6 +47,8 @@ const FAMILY_FONTS: Record<ThemeFamily, { title: string; display: string }> = {
   editorial: { title: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif", display: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif" },
   // 티켓: 본문 고딕 + 제목·이름·숫자 명조(리디바탕, tokens.css @font-face)
   ticket: { title: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif", display: "'RIDIBatang', 'Gowun Batang', serif" },
+  // 블룸: 본문 고딕 + 섹션 제목·이름은 붓글씨(나눔손글씨 붓, SIL OFL, Google Fonts)
+  bloom: { title: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif", display: "'Nanum Brush Script', cursive" },
 };
 
 /** 팔레트·모양·계열 → CSS 변수 */
