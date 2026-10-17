@@ -361,15 +361,9 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 .inv .hero-unf-text.is-light { color: var(--c-cream); opacity: var(--unf-q); text-shadow: 0 1px 8px color-mix(in srgb, var(--c-ink) 30%, transparent); }
 .inv .hero-unf-text.is-light .hero-unf-label { color: var(--c-cream); }
 /* 틀 아래 일시 (펼치면 사진이 덮는다) */
-.hero-unf-date { position: absolute; left: 0; right: 0; bottom: var(--sp-6); margin: 0; font-size: var(--fs-small); line-height: var(--lh-body); text-align: center; color: var(--c-ink-60); }
-/* 재생 버튼: 사진 아래 가장자리 가운데에 반쯤 걸침 → 펼치면 아래쪽 안으로 */
-.hero-unf-music {
-  position: absolute;
-  left: 50%;
-  bottom: calc(var(--stage-h, 680px) - (1 - var(--p)) * var(--unf-top) - var(--unf-s) * var(--stage-h, 680px) + var(--p) * var(--sp-8));
-  z-index: 3;
-  transform: translate(-50%, calc((1 - var(--p)) * 50%));
-}
+.hero-unf-date { position: absolute; top: calc(var(--unf-top) + var(--s0) * var(--stage-h, 680px) + var(--sp-6)); left: 0; right: 0; margin: 0; font-family: var(--inv-font-display); font-size: var(--fs-body); font-weight: var(--fw-regular); line-height: var(--lh-body); text-align: center; color: var(--c-ink-60); } /* 작은 문구와 같은 글자, 틀과의 간격도 위와 같은 24 */
+/* 재생 버튼: 일시 아래, 무대 맨 아래 가운데 (펼친 뒤에도 사진 위에 남는다) */
+.hero-unf-music { position: absolute; left: 50%; bottom: var(--sp-6); z-index: 3; transform: translateX(-50%); }
 .music-dot .music-btn { width: var(--h-control); height: var(--h-control); }
 .music-dot .music-btn svg { width: 18px; height: 18px; }
 @media (prefers-reduced-motion: reduce) {
