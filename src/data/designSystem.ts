@@ -47,8 +47,8 @@ const FAMILY_FONTS: Record<ThemeFamily, { title: string; display: string }> = {
   editorial: { title: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif", display: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif" },
   // 티켓: 본문 고딕 + 제목·이름·숫자 명조(리디바탕, tokens.css @font-face)
   ticket: { title: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif", display: "'RIDIBatang', 'Gowun Batang', serif" },
-  // 블룸: 제목·숫자까지 모두 고딕(Pretendard)
-  bloom: { title: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif", display: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif" },
+  // 블룸: 본문 고딕 + 섹션 제목·히어로 작은 문구만 명조(리디바탕, tokens.css @font-face)
+  bloom: { title: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif", display: "'RIDIBatang', 'Gowun Batang', serif" },
 };
 
 /** 팔레트·모양·계열 → CSS 변수 */

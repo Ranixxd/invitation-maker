@@ -46,14 +46,9 @@ function ribbonPath(pts: Anchor[], width: number) {
   return d;
 }
 
-/** 블룸 계열(템플릿3): 항목을 피해 빈 쪽으로 흐르는 가는 자유 곡선. 항목 사이에서 반대편으로 건너가며 고리를 하나씩 그린다
- *  (고리 크기·위아래 방향·자리를 조금씩 달리해 손으로 그은 느낌). ys = 항목 세로 가운데들(항목은 왼쪽부터 번갈아) */
-const LOOPS = [
-  { w: 18, h: 30, at: 0.44, up: true },
-  { w: 28, h: 44, at: 0.58, up: false },
-  { w: 22, h: 34, at: 0.5, up: true },
-];
-function loopPath(ys: number[], width: number, height: number) {
+/** 블룸 계열(템플릿3): 항목을 피해 빈 쪽으로 흐르는 가는 곡선(고리 없이 선만).
+ *  ys = 항목 세로 가운데들(항목은 왼쪽부터 번갈아), 선은 항목 반대쪽 칸을 지나 항목 사이에서 반대편으로 크게 건너간다 */
+function flowPath(ys: number[], width: number, height: number) {
   const side = (i: number) => (i % 2 === 0 ? width * 0.74 : width * 0.26); // 왼쪽 항목이면 선은 오른쪽 칸
   let x = side(0);
   let y = ys[0];
@@ -61,15 +56,8 @@ function loopPath(ys: number[], width: number, height: number) {
   let d = `M 0 ${y * 0.7} C ${width * 0.3} ${y * 0.1}, ${x + 50} ${y * 0.2}, ${x} ${y}`;
   ys.slice(1).forEach((ny, k) => {
     const nx = side(k + 1);
-    const dir = nx > x ? 1 : -1;
-    const lp = LOOPS[k % LOOPS.length];
-    const my = (y + ny) / 2;
-    const mx = width * (dir > 0 ? lp.at : 1 - lp.at) - (dir * lp.w) / 2;
-    const lh = lp.up ? -lp.h : lp.h;
-    // 항목 옆을 세로로 지나 → 가운데로 건너가며 → 고리 → 다음 항목 옆으로
-    d += ` C ${x} ${y + (my - y) * 0.8}, ${mx - dir * 60} ${my}, ${mx} ${my}`;
-    d += ` C ${mx + dir * lp.w * 2.6} ${my + lh}, ${mx - dir * lp.w * 1.6} ${my + lh}, ${mx + dir * lp.w} ${my}`;
-    d += ` C ${mx + dir * (lp.w + 60)} ${my}, ${nx} ${ny - (ny - my) * 0.8}, ${nx} ${ny}`;
+    const dy = ny - y;
+    d += ` C ${x} ${y + dy * 0.75}, ${nx} ${ny - dy * 0.75}, ${nx} ${ny}`;
     x = nx;
     y = ny;
   });
@@ -111,7 +99,7 @@ export function ProfileSection({ doc, section, mode }: SectionProps<SectionOf<'p
       const h = ol.clientHeight;
       if (loop) {
         const ys = Array.from(ol.querySelectorAll<HTMLElement>('.story-item')).map((el) => offsetIn(el).y + el.offsetHeight / 2);
-        setGeo({ w, h, d: loopPath(ys, w, h) });
+        setGeo({ w, h, d: flowPath(ys, w, h) });
       } else setGeo({ w, h, d: ribbonPath(anchors, w) });
     };
     measure();
