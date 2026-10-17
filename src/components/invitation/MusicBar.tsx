@@ -14,7 +14,7 @@ const IconPause = () => (
   </svg>
 );
 
-/** 플레이어 변형(크림 티켓)의 양옆 장식 아이콘: 소리 작게 · 이전 · 다음 · 소리 크게 */
+/** 플레이어 변형(템플릿2)의 양옆 장식 아이콘: 소리 작게 · 이전 · 다음 · 소리 크게 */
 const line = (d: string) => (
   <svg viewBox="0 0 24 24" aria-hidden>
     <path d={d} />

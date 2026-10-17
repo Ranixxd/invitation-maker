@@ -150,7 +150,7 @@
 .hero-pol-names-heart { width: 16px; height: 15px; margin: 0 var(--sp-2); transform: rotate(-8deg); }
 .hero-pol-when { display: grid; font-weight: var(--fw-medium); color: var(--c-ink-60); }
 
-/* ---- 티켓 계열 (크림 티켓, §3.5 PRD-0021) ----
+/* ---- 티켓 계열 (템플릿2, §3.5 PRD-0021) ----
    1번 템플릿과 같은 구조: 색은 포인트(올리브) 하나 + 잉크 + 크림에서만. 제목·이름·숫자는 명조, 본문은 고딕 */
 .inv--fam-ticket {
   --ff-serif: var(--inv-font-display);
@@ -308,8 +308,8 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 .inv--fam-ticket .gb-detail-name .heart-cut,
 .inv--fam-ticket .gb-detail > .ui-divider { display: none; }
 
-/* ---- 블룸 계열 (버건디 블룸, 템플릿3 §3.5 PRD-0022) ----
-   색은 포인트(버건디) 하나 + 잉크 + 아이보리에서만. 섹션 제목·이름·이야기 날짜는 붓글씨, 본문 고딕.
+/* ---- 블룸 계열 (템플릿3, §3.5 PRD-0022) ----
+   색은 포인트 하나 + 잉크 + 아이보리에서만. 섹션 제목·이름·이야기 날짜는 붓글씨, 본문 고딕.
    포인트 이미지 = 선 그림 백합(LilyDoodle) */
 .lily { display: block; fill: none; stroke: currentColor; stroke-width: 1; stroke-linecap: round; stroke-linejoin: round; overflow: visible; pointer-events: none; }
 .lily path, .lily ellipse { vector-effect: non-scaling-stroke; }

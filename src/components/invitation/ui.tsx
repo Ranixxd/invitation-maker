@@ -26,7 +26,7 @@ export const IconMapPin = () =>
   );
 
 /* ---------- 섹션 머리: (하트) 제목 · 설명 ---------- */
-/** 손그림 꽃(꽃잎 다섯 · 줄기 · 잎 하나). 티켓 계열(크림 티켓)에서 하트 대신 보인다 */
+/** 손그림 꽃(꽃잎 다섯 · 줄기 · 잎 하나). 티켓 계열(템플릿2)에서 하트 대신 보인다 */
 function FlowerDoodle() {
   return (
     <svg className="ui-flower" viewBox="0 0 32 36" aria-hidden>

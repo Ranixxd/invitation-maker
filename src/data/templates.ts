@@ -79,7 +79,7 @@ export const THEME_PRESETS: Record<ThemePreset, ThemePresetDef> = {
   },
   cream: {
     label: '크림',
-    // 크림 바탕 + 올리브 포인트 원톤 (§3.5 2번 테마)
+    // 크림 바탕 + 올리브 포인트 원톤 (§3.5 템플릿2)
     bg: '#fdf9ec',
     surface: '#f5efdc',
     text: '#2b2724',
@@ -93,7 +93,7 @@ export const THEME_PRESETS: Record<ThemePreset, ThemePresetDef> = {
   },
   wine: {
     label: '와인',
-    // 아이보리 바탕 + 버건디 포인트 원톤 (§3.5 3번 테마)
+    // 아이보리 바탕 + 버건디 포인트 원톤 (§3.5 템플릿3)
     bg: '#fbf8f4',
     surface: '#f3ece6',
     text: '#2b1d1f',

@@ -28,7 +28,7 @@ const FALLING_HEARTS: { x: number; depth: 1 | 2 | 3; delay: number; shape: 'a' |
 const COVER_BAND = 'OUR WEDDING';
 const BAND_REPEAT = 10;
 
-/** 흩날리는 장식: 폴라로이드는 오린 하트, 표지(크림 티켓)는 꽃잎. 자리·깊이·시간은 같은 표를 쓴다 */
+/** 흩날리는 장식: 폴라로이드는 오린 하트, 표지(템플릿2)는 꽃잎. 자리·깊이·시간은 같은 표를 쓴다 */
 function FallingHearts({ petals = false }: { petals?: boolean }) {
   return (
     <div className={`hero-fall${petals ? ' is-petals' : ''}`} aria-hidden>
@@ -201,7 +201,7 @@ export function HeroSection({ doc, section, mode }: SectionProps<SectionOf<'hero
     );
   }
 
-  // 표지: 꽉 찬 사진 위 작은 문구·명조 이름(두 줄)·날짜/연도 → 올리브 띠 → 플레이어 (§3.5 크림 티켓)
+  // 표지: 꽉 찬 사진 위 작은 문구·명조 이름(두 줄)·날짜/연도 → 포인트 띠 → 플레이어 (§3.5 템플릿2)
   if (layout === 'cover') {
     const pad = (n: number) => String(n).padStart(2, '0');
     const band = Array.from({ length: BAND_REPEAT }, (_, i) => <span key={i}>{COVER_BAND}</span>);

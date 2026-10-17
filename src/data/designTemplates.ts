@@ -23,8 +23,8 @@ export interface DesignTemplate {
 
 export const DESIGN_TEMPLATES: DesignTemplate[] = [
   {
-    // 1번 테마(작업명 모던 모노) — 폴라로이드 사진·필기체, 레드 포인트 (§3.5, PRD-0018)
-    id: 'modern-mono',
+    // 템플릿1 — 폴라로이드 사진·필기체 (§3.5, PRD-0018)
+    id: 'template1',
     name: '템플릿1', // 이름은 나중에 정한다
     preset: 'mono',
     family: 'editorial',
@@ -38,8 +38,8 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
     sample: ['#d6d6d6', '#262626'],
   },
   {
-    // 2번 테마(작업명 크림 티켓) — 사진 위 명조 이름·꽃잎, 올리브 띠·플레이어, 종이 티켓 달력, 올리브 원톤 (§3.5, PRD-0021)
-    id: 'cream-ticket',
+    // 템플릿2 — 사진 위 이름·꽃잎, 흐르는 띠·플레이어, 종이 티켓 달력 (§3.5, PRD-0021)
+    id: 'template2',
     name: '템플릿2', // 이름은 나중에 정한다
     preset: 'cream',
     family: 'ticket',
@@ -53,8 +53,8 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
     sample: ['#3a3f2a', '#f7eba0'],
   },
   {
-    // 3번 테마(작업명 버건디 블룸) — 스크롤하면 펼쳐지는 표지 사진, 붓글씨 제목, 선 그림 꽃, 하트 글자 띠 캐러셀 (§3.5, PRD-0022)
-    id: 'burgundy-bloom',
+    // 템플릿3 — 스크롤하면 펼쳐지는 표지 사진, 붓글씨 제목, 선 그림 꽃, 하트 글자 띠 캐러셀 (§3.5, PRD-0022)
+    id: 'template3',
     name: '템플릿3', // 이름은 나중에 정한다
     preset: 'wine',
     family: 'bloom',
@@ -71,8 +71,12 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
 
 export const DEFAULT_TEMPLATE_ID = DESIGN_TEMPLATES[0].id;
 
+/** 예전 id(색·작업명) → 새 id. 이미 열어 둔 링크가 깨지지 않도록 */
+const LEGACY_IDS: Record<string, string> = { 'modern-mono': 'template1', 'cream-ticket': 'template2', 'burgundy-bloom': 'template3' };
+
 export function getTemplate(id: string | null | undefined): DesignTemplate | undefined {
-  return DESIGN_TEMPLATES.find((t) => t.id === id);
+  const key = id ? (LEGACY_IDS[id] ?? id) : id;
+  return DESIGN_TEMPLATES.find((t) => t.id === key);
 }
 
 /** 템플릿의 디자인 값을 문서에 덮어쓴다. 내용(이름·날짜·사진·문구 본문)은 건드리지 않는다. */
