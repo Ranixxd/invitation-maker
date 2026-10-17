@@ -485,6 +485,9 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 .couple-cell { position: relative; display: grid; }
 .couple-person { display: grid; justify-items: center; gap: var(--sp-label); }
 .couple-role { font-weight: var(--fw-medium); color: var(--c-accent); }
+/* 템플릿2·3: 신랑·신부 레이블은 명조(리디바탕, 400 하나뿐) */
+.inv--fam-ticket .couple-role,
+.inv--fam-bloom .couple-role { font-family: var(--inv-font-display); font-weight: var(--fw-regular); }
 .couple-name { font-size: var(--fs-section); font-weight: var(--fw-semibold); line-height: var(--lh-tight); color: var(--c-ink); }
 .couple-parents { font-weight: var(--fw-medium); color: var(--c-ink-60); }
 .couple-amp {
