@@ -59,9 +59,9 @@ function scrollParent(el: HTMLElement): HTMLElement | null {
   return null;
 }
 
-/** 펼침 히어로 사진의 위·아래 여백. 문구 ↔ 사진 = 사진 ↔ 일시 = 24, 그 아래 일시(23) · 16 · 재생 버튼(48) · 24 */
+/** 펼침 히어로 사진의 위·아래 여백. 문구 ↔ 사진 = 사진 ↔ 일시 = 24, 그 아래 일시(23) · 16 · 재생 바(50) · 24 */
 const UNFOLD_GAP = 24;
-const UNFOLD_BOTTOM = UNFOLD_GAP + 23 + 16 + 48 + 24;
+const UNFOLD_BOTTOM = UNFOLD_GAP + 23 + 16 + 50 + 24;
 
 /** 펼침 히어로: 무대 높이(--stage-h)를 화면 높이에 맞추고, 스크롤 진행도(--p, 0~1)를 CSS 변수로 넘긴다.
  *  React 상태를 거치지 않고 스타일만 바꿔 스크롤 중 다시 그리기를 피한다 */
@@ -122,7 +122,7 @@ function useUnfold(aspect: number) {
 }
 
 /** 펼침(템플릿3): 맨 위 문구(작은 문구 · 신랑 · 신부)는 항상 보이고, 그 아래 사진은 처음엔 가로 꽉 찬 원래 비율(잘림 없음),
- *  스크롤할수록 위아래로 늘어나 무대의 아래 여백을 뺀 높이를 채운다(그만큼 확대되며 좌우가 잘림). 일시·재생 버튼은 늘 사진 아래 */
+ *  스크롤할수록 위아래로 늘어나 무대의 아래 여백을 뺀 높이를 채운다(그만큼 확대되며 좌우가 잘림). 일시·재생 바는 늘 사진 아래 */
 function UnfoldHero({ doc, section }: SectionProps<SectionOf<'hero'>>) {
   const { imageId, headline } = section.data;
   const img = imageId ? doc.images[imageId] : null;
@@ -150,10 +150,10 @@ function UnfoldHero({ doc, section }: SectionProps<SectionOf<'hero'>>) {
         <p className="hero-unf-text is-light" aria-hidden>
           {lines}
         </p>
-        {/* 일시·재생 버튼: 늘 사진 밖(아래), 사진이 늘어나는 만큼 함께 내려간다 */}
+        {/* 일시·재생 바: 늘 사진 밖(아래), 사진이 늘어나는 만큼 함께 내려간다 */}
         {date && <p className="hero-unf-date">{formatDateKo(date)}</p>}
         <div className="hero-unf-music">
-          <MusicBar variant="dot" title={section.data.music?.title || 'Our Wedding Song'} src={section.data.music?.src} />
+          <MusicBar title={section.data.music?.title || 'Our Wedding Song'} src={section.data.music?.src} />
         </div>
       </div>
     </div>
@@ -220,7 +220,7 @@ export function HeroSection({ doc, section, mode }: SectionProps<SectionOf<'hero
     );
   }
 
-  // 표지: 꽉 찬 사진 위 작은 문구·명조 이름(두 줄)·날짜/연도 → 포인트 띠 → 플레이어 (§3.5 템플릿2)
+  // 표지: 꽉 찬 사진 위 작은 문구·명조 이름(두 줄)·날짜/연도 → 포인트 띠 → 재생 바 (§3.5 템플릿2)
   if (layout === 'cover') {
     const pad = (n: number) => String(n).padStart(2, '0');
     const band = Array.from({ length: BAND_REPEAT }, (_, i) => <span key={i}>{COVER_BAND}</span>);
@@ -253,7 +253,7 @@ export function HeroSection({ doc, section, mode }: SectionProps<SectionOf<'hero
             {band}
           </div>
         </div>
-        <MusicBar variant="player" title={section.data.music?.title || 'Our Wedding Song'} src={section.data.music?.src} />
+        <MusicBar title={section.data.music?.title || 'Our Wedding Song'} src={section.data.music?.src} />
       </div>
     );
   }

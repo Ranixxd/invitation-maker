@@ -196,12 +196,8 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 @media (prefers-reduced-motion: reduce) {
   .hero-cov-track { animation: none; }
 }
-/* 플레이어: 가운데 큰 핑크 재생 버튼 + 양옆 장식 아이콘 */
-.music-player { display: flex; align-items: center; justify-content: center; gap: var(--sp-6); padding-top: var(--sp-8); color: var(--c-accent); }
-.music-player-side { display: flex; gap: var(--sp-6); }
-.music-player-side svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; opacity: 0.6; }
-.music-player .music-btn { width: 56px; height: 56px; }
-.music-player .music-btn svg { width: 22px; height: 22px; }
+/* 음악: 템플릿1과 같은 재생 바, 띠 아래 가운데 */
+.hero--cover .music-bar { align-self: center; width: calc(100% - 2 * var(--sp-gutter)); margin-top: var(--sp-8); }
 
 /* 예식 일자: 방명록 쪽지와 같은 종이(찢은 아래 가장자리, 테이프 없음 — 종이 규칙은 방명록 쪽) */
 .cal-ticket-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } /* 티켓 머리에 날짜가 있어 화면에선 숨김 */
@@ -366,10 +362,9 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 .inv .hero-unf-text.is-light .hero-unf-label { color: var(--c-cream); }
 /* 사진 아래 일시: 사진 아래끝에서 24 (문구 ↔ 사진 간격과 같음), 사진과 함께 내려간다 */
 .hero-unf-date { position: absolute; top: calc(var(--unf-end) + var(--sp-6)); left: 0; right: 0; margin: 0; font-family: var(--inv-font-display); font-size: var(--fs-body); font-weight: var(--fw-regular); line-height: var(--lh-body); text-align: center; color: var(--c-ink-60); } /* 작은 문구와 같은 글자, 사진과의 간격도 위와 같은 24 */
-/* 재생 버튼: 일시 16px 아래 가운데 (사진 밖) */
-.hero-unf-music { position: absolute; top: calc(var(--unf-end) + var(--sp-6) + var(--fs-body) * var(--lh-body) + var(--sp-4)); left: 50%; transform: translateX(-50%); }
-.music-dot .music-btn { width: var(--h-control); height: var(--h-control); }
-.music-dot .music-btn svg { width: 18px; height: 18px; }
+/* 음악: 템플릿1과 같은 재생 바, 일시 16px 아래 가운데 (사진 밖) */
+.hero-unf-music { position: absolute; top: calc(var(--unf-end) + var(--sp-6) + var(--fs-body) * var(--lh-body) + var(--sp-4)); left: var(--sp-gutter); right: var(--sp-gutter); display: flex; justify-content: center; }
+.hero-unf-music .music-bar { margin-top: 0; }
 @media (prefers-reduced-motion: reduce) {
   .hero--unfold { height: auto; }
 }
