@@ -99,8 +99,7 @@ function useUnfold(aspect: number) {
       el.style.setProperty('--unf-pc', top ? (UNFOLD_GAP / top).toFixed(4) : '0'); // 사진 위끝이 문구 아래끝에 닿는 진행도
       const h0 = Math.max(80, Math.min(w / aspect, stageH - top - UNFOLD_BOTTOM));
       el.style.setProperty('--unf-h0', `${h0}px`);
-      // 사진 아래끝((1-p)·top + h0 + (무대-h0)·p)이 일시 위끝(top + h0 + 간격)에 닿는 진행도
-      el.style.setProperty('--unf-pd', Math.min(1, UNFOLD_GAP / Math.max(1, stageH - h0 - top)).toFixed(4));
+      el.style.setProperty('--unf-bottom', `${UNFOLD_BOTTOM}px`);
       update();
     };
     const onScroll = () => {
@@ -123,7 +122,7 @@ function useUnfold(aspect: number) {
 }
 
 /** 펼침(템플릿3): 맨 위 문구(작은 문구 · 신랑 · 신부)는 항상 보이고, 그 아래 사진은 처음엔 가로 꽉 찬 원래 비율(잘림 없음),
- *  스크롤할수록 위아래로 늘어나 무대를 꽉 채운다(그만큼 확대되며 좌우가 잘림). 사진 아래 일시, 그 아래 재생 버튼 */
+ *  스크롤할수록 위아래로 늘어나 무대의 아래 여백을 뺀 높이를 채운다(그만큼 확대되며 좌우가 잘림). 일시·재생 버튼은 늘 사진 아래 */
 function UnfoldHero({ doc, section }: SectionProps<SectionOf<'hero'>>) {
   const { imageId, headline } = section.data;
   const img = imageId ? doc.images[imageId] : null;
@@ -151,15 +150,8 @@ function UnfoldHero({ doc, section }: SectionProps<SectionOf<'hero'>>) {
         <p className="hero-unf-text is-light" aria-hidden>
           {lines}
         </p>
-        {/* 일시: 자리는 그대로, 펼쳐지는 사진이 닿으면 크림색으로 (사진 위에서도 보임) */}
-        {date && (
-          <>
-            <p className="hero-unf-date">{formatDateKo(date)}</p>
-            <p className="hero-unf-date is-light" aria-hidden>
-              {formatDateKo(date)}
-            </p>
-          </>
-        )}
+        {/* 일시·재생 버튼: 늘 사진 밖(아래), 사진이 늘어나는 만큼 함께 내려간다 */}
+        {date && <p className="hero-unf-date">{formatDateKo(date)}</p>}
         <div className="hero-unf-music">
           <MusicBar variant="dot" title={section.data.music?.title || 'Our Wedding Song'} src={section.data.music?.src} />
         </div>
