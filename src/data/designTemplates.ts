@@ -56,16 +56,16 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
     // 템플릿3 — 스크롤하면 펼쳐지는 표지 사진, 붓글씨 제목, 선 그림 꽃, 하트 글자 띠 캐러셀 (§3.5, PRD-0022)
     id: 'template3',
     name: '템플릿3', // 이름은 나중에 정한다
-    preset: 'wine',
+    preset: 'violet',
     family: 'bloom',
     shape: 'round',
     font: 'sans',
-    accent: THEME_PRESETS.wine.accent,
+    accent: THEME_PRESETS.violet.accent,
     heroLayout: 'unfold',
     galleryLayout: 'carousel',
     calendarStyle: 'strip',
     headline: '저희 두 사람, 결혼합니다',
-    sample: ['#d9cfc8', '#7b1730'],
+    sample: ['#ddd3e8', '#5e3d8f'],
   },
 ];
 

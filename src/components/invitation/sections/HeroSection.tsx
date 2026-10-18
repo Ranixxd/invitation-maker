@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useLayoutEffect, useRef, type CSSProperties } from 'react';
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
 import { formatDot, formatDateKo, formatKo, parseLocal } from '../../../lib/date';
@@ -30,6 +30,9 @@ const BAND_REPEAT = 10;
 /** 흩날리는 장식: 폴라로이드(템플릿1)는 오린 하트, 표지(템플릿2)는 꽃잎, 펼침(템플릿3)은 긴 막대 컨페티. 자리·깊이·시간은 같은 표를 쓴다 */
 /** 컨페티는 하트·꽃잎보다 촘촘하게 두 배로 (같은 표를 옆으로 조금 비키고 시간을 반쯤 어긋나게) */
 const FALLING_CONFETTI = [...FALLING_HEARTS, ...FALLING_HEARTS.map((h) => ({ ...h, x: (h.x + 5) % 100, delay: h.delay + 5 }))];
+/** 컨페티 막대마다 굵기(px, 길이는 굵기 × 4.5)와 한 바퀴 도는 시간(초)을 다르게 → 크기·회전이 제각각 */
+const CONFETTI_W = [3, 7, 4.5, 9, 2.5, 5.5, 4, 8, 3.5, 6.5, 2.5, 5, 6, 3, 8.5, 4, 2.5, 7.5, 5, 3.5, 9, 4.5, 3, 6];
+const CONFETTI_SPIN = [5, 7.5, 4, 9, 6, 3.5, 8, 5.5, 4.5, 10, 6.5, 3.8];
 
 function FallingHearts({ kind = 'hearts' }: { kind?: 'hearts' | 'petals' | 'confetti' }) {
   return (
@@ -38,7 +41,16 @@ function FallingHearts({ kind = 'hearts' }: { kind?: 'hearts' | 'petals' | 'conf
         <span
           key={i}
           className={`hero-fall-item is-d${h.depth}`}
-          style={{ left: `${h.x}%`, animationDelay: `-${h.delay}s` }}
+          style={
+            kind === 'confetti'
+              ? ({
+                  left: `${h.x}%`,
+                  animationDelay: `-${h.delay}s`,
+                  '--fall-size': `${CONFETTI_W[i % CONFETTI_W.length]}px`,
+                  '--cf-spin': `${CONFETTI_SPIN[i % CONFETTI_SPIN.length]}s`,
+                } as CSSProperties)
+              : { left: `${h.x}%`, animationDelay: `-${h.delay}s` }
+          }
         >
           {kind === 'confetti' ? (
             <svg className="hero-confetti" viewBox="0 0 4 18">
