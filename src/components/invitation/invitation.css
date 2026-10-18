@@ -99,10 +99,10 @@
 }
 /* 폴라로이드 3장: 기울여 겹친 사진 더미 */
 /* 아래 여백: 필기체 문구가 사진에 조금만 걸치고 나머지는 사진 아래로 내려오는 자리 */
-.hero-pol-stack { position: relative; width: 100%; aspect-ratio: 295 / 380; margin-bottom: calc(var(--sp-16) + var(--sp-4)); }
+.hero-pol-stack { position: relative; width: calc(100% + 2 * var(--sp-4)); margin: 0 calc(-1 * var(--sp-4)) calc(var(--sp-16) + var(--sp-4)); aspect-ratio: 4 / 5; } /* 좌우 여백을 조금 넘겨 사진을 크게 */
 .hero-pol-card {
   position: absolute;
-  width: 54%;
+  width: 60%;
   margin: 0;
   padding: var(--sp-2) var(--sp-2) var(--sp-6);
   background: var(--c-paper-hi);
@@ -110,13 +110,13 @@
 }
 .hero-pol-card img, .hero-pol-card .hero-img--empty { display: block; width: 100%; aspect-ratio: 1 / 1.08; object-fit: cover; }
 .hero-pol-card .hero-img--empty { display: grid; place-items: center; background: var(--c-ink-4); color: var(--c-ink-60); }
-.hero-pol-card.is-1 { left: 0; top: 18%; transform: rotate(-5deg); z-index: 1; }
+.hero-pol-card.is-1 { left: 0; top: 16%; transform: rotate(-5deg); z-index: 1; }
 .hero-pol-card.is-2 { right: 0; top: 0; transform: rotate(4deg); }
-.hero-pol-card.is-3 { left: 24%; top: 44%; transform: rotate(2deg); z-index: 2; }
+.hero-pol-card.is-3 { left: 21%; top: 40%; transform: rotate(2deg); z-index: 2; }
 /* 사진이 1장뿐이면 가운데 크게 */
-.has-1 .hero-pol-stack { aspect-ratio: 295 / 330; }
-.has-1 .hero-pol-card.is-1 { left: 12%; top: 4%; width: 76%; transform: rotate(-3deg); }
-.has-2 .hero-pol-stack { aspect-ratio: 295 / 330; }
+.has-1 .hero-pol-stack { aspect-ratio: 20 / 21; }
+.has-1 .hero-pol-card.is-1 { left: 8%; top: 4%; width: 84%; transform: rotate(-3deg); }
+.has-2 .hero-pol-stack { aspect-ratio: 10 / 9; }
 /* 영문 필기체: 사진 더미 아래쪽에 걸쳐 */
 .hero-pol-script {
   position: absolute;
