@@ -309,8 +309,7 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 .inv--fam-bloom .inv-section,
 .inv-portal.inv--fam-bloom .ui-modal-card { background-image: none; }
 .inv--fam-bloom { font-synthesis-weight: none; } /* 명조(리디바탕)는 400 하나뿐: 가짜 굵게 막기 */
-.inv--fam-bloom .heart-cut.ui-heart { display: none; } /* 섹션 머리: 하트 대신 점선 라인(대표 이미지) */
-.inv--fam-bloom .ui-dline { display: block; width: 40px; height: auto; overflow: visible; fill: none; stroke: var(--c-accent); stroke-width: 1.6; stroke-linecap: round; stroke-dasharray: 2 6; }
+.inv--fam-bloom .heart-cut.ui-heart { display: none; } /* 섹션 머리 표시 없음 (대표 이미지 없음) */
 .inv--fam-bloom .ui-title { font-family: var(--inv-font-display); font-weight: var(--fw-regular); }
 
 /* 히어로: 펼침 — 무대(화면 높이)가 붙어 있는 동안 스크롤하면, 가로 꽉 찬 원래 비율의 사진이 위아래로 늘어난다
@@ -367,19 +366,16 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 .hero-unf-music { position: absolute; top: calc(var(--unf-end) + var(--sp-6) + var(--fs-body) * var(--lh-body) + var(--sp-4)); left: var(--sp-gutter); right: var(--sp-gutter); display: flex; justify-content: center; }
 .hero-unf-music .music-bar { margin-top: 0; }
 /* 긴 막대 컨페티: 흰 막대가 무대 전체(사진 위 포함, 문구 아래)에 흩날린다.
-   크기는 막대마다 다르고(--fall-size, HeroSection), 떨어지며 평면으로 자연스럽게 빙글 돈다(3D 뒤집힘 없음) */
+   크기는 막대마다 다르고(--fall-size, HeroSection), 떨어지며 좌우로 살랑이고 살짝 기울었다 돌아온다(3D 뒤집힘·빙글 회전 없음) */
 .hero-fall.is-confetti { z-index: 1; }
 .hero-fall.is-confetti .hero-fall-item.is-d1 { --fall-op: 0.5; --fall-blur: 0.4px; --fall-dur: 16s; }
 .hero-fall.is-confetti .hero-fall-item.is-d2 { --fall-op: 0.75; --fall-blur: 0px; --fall-dur: 12s; }
 .hero-fall.is-confetti .hero-fall-item.is-d3 { --fall-op: 0.95; --fall-blur: 0px; --fall-dur: 9s; }
-.hero-fall.is-confetti .hero-fall-item > svg { animation: hero-spin var(--cf-spin, 6s) linear infinite; }
-.hero-fall.is-confetti .hero-fall-item:nth-child(even) > svg { animation-direction: reverse; }
-@keyframes hero-spin {
-  from { transform: translateX(-10px) rotate(0deg); }
-  25% { transform: translateX(0) rotate(90deg); }
-  50% { transform: translateX(10px) rotate(180deg); }
-  75% { transform: translateX(0) rotate(270deg); }
-  to { transform: translateX(-10px) rotate(360deg); }
+.hero-fall.is-confetti .hero-fall-item > svg { animation: hero-tilt var(--cf-spin, 6s) ease-in-out infinite alternate; }
+.hero-fall.is-confetti .hero-fall-item:nth-child(even) > svg { animation-direction: alternate-reverse; }
+@keyframes hero-tilt {
+  from { transform: translateX(-10px) rotate(-35deg); }
+  to { transform: translateX(10px) rotate(40deg); }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-fall.is-confetti .hero-fall-item > svg { animation: none; transform: rotate(24deg); }

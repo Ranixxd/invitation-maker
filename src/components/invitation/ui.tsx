@@ -42,22 +42,12 @@ function FlowerDoodle() {
   );
 }
 
-/** 점선 라인(블룸 계열 · 템플릿3의 대표 이미지): 반듯한 가로 점선 한 줄 */
-function DashedLineDoodle() {
-  return (
-    <svg className="ui-dline" viewBox="0 0 40 4" aria-hidden>
-      <path d="M2 2H38" />
-    </svg>
-  );
-}
-
-/** 섹션 구분 표시: 하트(기본) · 손그림 꽃(티켓 계열) · 점선 라인(블룸 계열). 모두 그리고 계열 CSS가 하나만 보여준다 */
+/** 섹션 구분 표시: 하트(기본) · 손그림 꽃(티켓 계열) (블룸 계열은 표시 없음). 모두 그리고 계열 CSS가 하나만 보여준다 */
 export function HeartMark() {
   return (
     <>
       <HeartCut shape="a" className="ui-heart" />
       <FlowerDoodle />
-      <DashedLineDoodle />
     </>
   );
 }
