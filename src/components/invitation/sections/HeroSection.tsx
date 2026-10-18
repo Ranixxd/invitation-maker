@@ -27,17 +27,24 @@ const FALLING_HEARTS: { x: number; depth: 1 | 2 | 3; delay: number; shape: 'a' |
 const COVER_BAND = 'OUR WEDDING';
 const BAND_REPEAT = 10;
 
-/** 흩날리는 장식: 폴라로이드는 오린 하트, 표지(템플릿2)는 꽃잎. 자리·깊이·시간은 같은 표를 쓴다 */
-function FallingHearts({ petals = false }: { petals?: boolean }) {
+/** 흩날리는 장식: 폴라로이드(템플릿1)는 오린 하트, 표지(템플릿2)는 꽃잎, 펼침(템플릿3)은 긴 막대 컨페티. 자리·깊이·시간은 같은 표를 쓴다 */
+/** 컨페티는 위쪽에만 보이므로 두 배로 (같은 표를 옆으로 조금 비키고 시간을 반쯤 어긋나게) */
+const FALLING_CONFETTI = [...FALLING_HEARTS, ...FALLING_HEARTS.map((h) => ({ ...h, x: (h.x + 5) % 100, delay: h.delay + 5 }))];
+
+function FallingHearts({ kind = 'hearts' }: { kind?: 'hearts' | 'petals' | 'confetti' }) {
   return (
-    <div className={`hero-fall${petals ? ' is-petals' : ''}`} aria-hidden>
-      {FALLING_HEARTS.map((h, i) => (
+    <div className={`hero-fall is-${kind}`} aria-hidden>
+      {(kind === 'confetti' ? FALLING_CONFETTI : FALLING_HEARTS).map((h, i) => (
         <span
           key={i}
           className={`hero-fall-item is-d${h.depth}`}
           style={{ left: `${h.x}%`, animationDelay: `-${h.delay}s` }}
         >
-          {petals ? (
+          {kind === 'confetti' ? (
+            <svg className="hero-confetti" viewBox="0 0 4 18">
+              <rect width="4" height="18" rx="1" />
+            </svg>
+          ) : kind === 'petals' ? (
             <svg className="hero-petal" viewBox="0 0 12 16">
               <path d={h.shape === 'a' ? 'M6 0C9.6 3.4 10.4 9 6 16 1.8 9.4 2.6 3.6 6 0Z' : 'M5.4 0C10 2.6 11.6 8.8 6.4 16 1.4 10.6 1.2 3.8 5.4 0Z'} />
             </svg>
@@ -142,6 +149,7 @@ function UnfoldHero({ doc, section }: SectionProps<SectionOf<'hero'>>) {
   return (
     <div ref={ref} className="hero hero--unfold">
       <div className="hero-unf-stage">
+        <FallingHearts kind="confetti" />
         <div className="hero-unf-photo">
           {img ? <img src={img.src} alt="대표 사진" /> : <div className="hero-img--empty">대표 사진을 추가해 주세요</div>}
         </div>
@@ -228,7 +236,7 @@ export function HeroSection({ doc, section, mode }: SectionProps<SectionOf<'hero
       <div className="hero hero--cover">
         <div className="hero-cov-photo">
           {img ? <img src={img.src} alt="대표 사진" /> : <div className="hero-img--empty">대표 사진을 추가해 주세요</div>}
-          <FallingHearts petals />
+          <FallingHearts kind="petals" />
           <div className="hero-cov-top">
             {headline && <p className="hero-cov-label">{headline}</p>}
             {/* 이름은 한 줄에 한 사람씩 */}

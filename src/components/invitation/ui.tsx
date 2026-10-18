@@ -42,11 +42,11 @@ function FlowerDoodle() {
   );
 }
 
-/** 점선 라인(블룸 계열 · 템플릿3의 대표 이미지): 왼쪽 아래에서 오른쪽 위로 살짝 휘어 올라가는 점선 한 줄 */
+/** 점선 라인(블룸 계열 · 템플릿3의 대표 이미지): 반듯한 가로 점선 한 줄 */
 function DashedLineDoodle() {
   return (
-    <svg className="ui-dline" viewBox="0 0 80 20" aria-hidden>
-      <path d="M2 17C18 17 28 6 42 8S64 15 78 3" />
+    <svg className="ui-dline" viewBox="0 0 80 4" aria-hidden>
+      <path d="M2 2H78" />
     </svg>
   );
 }
