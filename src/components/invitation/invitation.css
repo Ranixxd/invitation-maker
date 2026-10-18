@@ -366,22 +366,14 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 /* 음악: 템플릿1과 같은 재생 바, 일시 16px 아래 가운데 (사진 밖) */
 .hero-unf-music { position: absolute; top: calc(var(--unf-end) + var(--sp-6) + var(--fs-body) * var(--lh-body) + var(--sp-4)); left: var(--sp-gutter); right: var(--sp-gutter); display: flex; justify-content: center; }
 .hero-unf-music .music-bar { margin-top: 0; }
-/* 긴 막대 컨페티: 무대 위쪽(문구 주변)에만 흩날림, 사진 뒤 · 막대가 빙글빙글 뒤집히며 떨어진다 */
-.hero-fall.is-confetti { z-index: 1; -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 6%, #000 38%, transparent 52%); mask-image: linear-gradient(to bottom, transparent 0, #000 6%, #000 38%, transparent 52%); }
-.hero-fall.is-confetti .hero-fall-item.is-d1 { --fall-size: 4px; --fall-op: 0.35; --fall-blur: 0.4px; --fall-dur: 16s; }
-.hero-fall.is-confetti .hero-fall-item.is-d2 { --fall-size: 5px; --fall-op: 0.55; --fall-blur: 0px; --fall-dur: 12s; }
-.hero-fall.is-confetti .hero-fall-item.is-d3 { --fall-size: 6px; --fall-op: 0.75; --fall-blur: 0px; --fall-dur: 9s; }
-.hero-confetti { fill: var(--c-accent); }
-.hero-fall.is-confetti .hero-fall-item > svg { animation: hero-tumble 2.6s linear infinite; }
-.hero-fall.is-confetti .hero-fall-item:nth-child(even) > svg { animation-duration: 3.4s; animation-direction: reverse; }
-@keyframes hero-tumble {
-  from { transform: translateX(-8px) rotate(0deg) rotateX(0deg); }
-  50% { transform: translateX(8px) rotate(180deg) rotateX(180deg); }
-  to { transform: translateX(-8px) rotate(360deg) rotateX(360deg); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero-fall.is-confetti .hero-fall-item > svg { animation: none; transform: rotate(24deg); }
-}
+/* 긴 막대 컨페티: 흰 막대가 무대 전체(사진 위 포함, 문구 아래)에 흩날린다. 뒤집힘 없이 하트·꽃잎과 같은 살랑임만 */
+.hero-fall.is-confetti { z-index: 1; }
+.hero-fall.is-confetti .hero-fall-item.is-d1 { --fall-size: 4px; --fall-op: 0.5; --fall-blur: 0.4px; --fall-dur: 16s; }
+.hero-fall.is-confetti .hero-fall-item.is-d2 { --fall-size: 5px; --fall-op: 0.75; --fall-blur: 0px; --fall-dur: 12s; }
+.hero-fall.is-confetti .hero-fall-item.is-d3 { --fall-size: 6px; --fall-op: 0.95; --fall-blur: 0px; --fall-dur: 9s; }
+/* 흰색: 아이보리 바탕 위에서도 보이도록 아주 옅은 잉크 테두리 */
+.hero-confetti rect { fill: #fff; stroke: var(--c-ink-8); stroke-width: 0.6; }
+
 @media (prefers-reduced-motion: reduce) {
   .hero--unfold { height: auto; }
 }

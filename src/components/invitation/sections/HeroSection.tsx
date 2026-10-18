@@ -28,7 +28,7 @@ const COVER_BAND = 'OUR WEDDING';
 const BAND_REPEAT = 10;
 
 /** 흩날리는 장식: 폴라로이드(템플릿1)는 오린 하트, 표지(템플릿2)는 꽃잎, 펼침(템플릿3)은 긴 막대 컨페티. 자리·깊이·시간은 같은 표를 쓴다 */
-/** 컨페티는 위쪽에만 보이므로 두 배로 (같은 표를 옆으로 조금 비키고 시간을 반쯤 어긋나게) */
+/** 컨페티는 하트·꽃잎보다 촘촘하게 두 배로 (같은 표를 옆으로 조금 비키고 시간을 반쯤 어긋나게) */
 const FALLING_CONFETTI = [...FALLING_HEARTS, ...FALLING_HEARTS.map((h) => ({ ...h, x: (h.x + 5) % 100, delay: h.delay + 5 }))];
 
 function FallingHearts({ kind = 'hearts' }: { kind?: 'hearts' | 'petals' | 'confetti' }) {
@@ -149,10 +149,11 @@ function UnfoldHero({ doc, section }: SectionProps<SectionOf<'hero'>>) {
   return (
     <div ref={ref} className="hero hero--unfold">
       <div className="hero-unf-stage">
-        <FallingHearts kind="confetti" />
         <div className="hero-unf-photo">
           {img ? <img src={img.src} alt="대표 사진" /> : <div className="hero-img--empty">대표 사진을 추가해 주세요</div>}
         </div>
+        {/* 흰 막대 컨페티: 사진 위로도 떨어진다 (문구 아래) */}
+        <FallingHearts kind="confetti" />
         {/* 문구: 바탕 위에선 잉크, 펼친 사진 위에선 크림색으로 겹쳐 바뀐다 (사진에 묻히지 않게 항상 맨 위) */}
         <h1 className="hero-unf-text">{lines}</h1>
         <p className="hero-unf-text is-light" aria-hidden>
