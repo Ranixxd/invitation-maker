@@ -54,7 +54,8 @@ interface Box {
 }
 
 /** 블룸 계열(템플릿3): 항목과 다음 항목 사이에만 짧은 곡선 하나씩.
- *  항목의 안쪽(가운데 쪽) 끝 글줄에서 옆으로 나와, 아래로 휘어 다음 항목의 안쪽 위 모서리 바로 앞에서 끝난다 */
+ *  항목의 안쪽(가운데 쪽) 끝 글줄에서 옆으로 나와, 다음 항목의 안쪽 위 모서리 바로 앞까지 고르게 완만한 활 모양으로 휜다.
+ *  (끝만 꺾이지 않도록 꼭짓점 P 하나로 만든 2차 곡선을 3차 곡선으로 바꿔 쓴다: 굽음이 선 전체에 고르게 퍼짐) */
 function linkPath(boxes: Box[]) {
   let d = '';
   for (let k = 0; k < boxes.length - 1; k++) {
@@ -67,7 +68,11 @@ function linkPath(boxes: Box[]) {
     const ey = b.t - 10;
     const dx = Math.abs(ex - sx);
     const dy = ey - sy;
-    d += `${d ? ' ' : ''}M ${sx} ${sy} C ${sx + dir * dx * 0.5} ${sy + dy * 0.1}, ${ex - dir * dx * 0.05} ${ey - dy * 0.45}, ${ex} ${ey}`;
+    const px = sx + dir * dx * 0.65; // 활의 꼭짓점: 옆으로 2/3쯤, 아래로 1/5쯤
+    const py = sy + dy * 0.2;
+    const c1 = [sx + ((px - sx) * 2) / 3, sy + ((py - sy) * 2) / 3];
+    const c2 = [ex + ((px - ex) * 2) / 3, ey + ((py - ey) * 2) / 3];
+    d += `${d ? ' ' : ''}M ${sx} ${sy} C ${c1[0]} ${c1[1]}, ${c2[0]} ${c2[1]}, ${ex} ${ey}`;
   }
   return d;
 }
