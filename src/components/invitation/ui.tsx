@@ -42,23 +42,22 @@ function FlowerDoodle() {
   );
 }
 
-/** 점선 하트(블룸 계열 · 템플릿3의 대표 이미지): 왼쪽 아래에서 올라온 점선이 하트 고리를 한 번 그리고 오른쪽 위 화살표로 끝난다 */
-function DashedHeartDoodle() {
+/** 점선 라인(블룸 계열 · 템플릿3의 대표 이미지): 왼쪽 아래에서 오른쪽 위로 살짝 휘어 올라가는 점선 한 줄 */
+function DashedLineDoodle() {
   return (
-    <svg className="ui-dheart" viewBox="0 0 80 48" aria-hidden>
-      <path className="ui-dheart-line" d="M2 46C12 42 26 37 34 32C44 24 46 10 38 6C34 4 30 8 29 12C27 6 20 4 16 9C12 15 20 24 34 32C44 38 58 30 69 17" />
-      <path className="ui-dheart-arrow" d="M76 8 65.5 13.5 72.5 19.5Z" />
+    <svg className="ui-dline" viewBox="0 0 80 20" aria-hidden>
+      <path d="M2 17C18 17 28 6 42 8S64 15 78 3" />
     </svg>
   );
 }
 
-/** 섹션 구분 표시: 하트(기본) · 손그림 꽃(티켓 계열) · 점선 하트(블룸 계열). 모두 그리고 계열 CSS가 하나만 보여준다 */
+/** 섹션 구분 표시: 하트(기본) · 손그림 꽃(티켓 계열) · 점선 라인(블룸 계열). 모두 그리고 계열 CSS가 하나만 보여준다 */
 export function HeartMark() {
   return (
     <>
       <HeartCut shape="a" className="ui-heart" />
       <FlowerDoodle />
-      <DashedHeartDoodle />
+      <DashedLineDoodle />
     </>
   );
 }
