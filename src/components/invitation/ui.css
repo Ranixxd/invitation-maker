@@ -20,6 +20,7 @@
 /* 섹션 머리 하트: 오린 하트, 예전 선 하트(53px)의 1/4 */
 .heart-cut.ui-heart { width: 14px; height: 13px; transform: rotate(-8deg); }
 /* 손그림 꽃: 티켓 계열에서만 보인다 (invitation.css) */
+.ui-dheart { display: none; }
 .ui-flower { display: none; width: 26px; height: 29px; fill: none; stroke: var(--sec-title); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
 
 .ui-icon { flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }

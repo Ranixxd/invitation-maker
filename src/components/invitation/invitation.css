@@ -309,7 +309,10 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 .inv--fam-bloom .inv-section,
 .inv-portal.inv--fam-bloom .ui-modal-card { background-image: none; }
 .inv--fam-bloom { font-synthesis-weight: none; } /* 명조(리디바탕)는 400 하나뿐: 가짜 굵게 막기 */
-.inv--fam-bloom .heart-cut.ui-heart { display: none; } /* 섹션 머리 표시 없음 (꽃 이미지는 사용자가 준비 중) */
+.inv--fam-bloom .heart-cut.ui-heart { display: none; } /* 섹션 머리: 하트 대신 점선 하트(대표 이미지) */
+.inv--fam-bloom .ui-dheart { display: block; width: 68px; height: auto; overflow: visible; }
+.ui-dheart-line { fill: none; stroke: var(--c-accent); stroke-width: 1.6; stroke-linecap: round; stroke-dasharray: 3.2 2.6; }
+.ui-dheart-arrow { fill: var(--c-accent); stroke: var(--c-accent); stroke-width: 1; stroke-linejoin: round; }
 .inv--fam-bloom .ui-title { font-family: var(--inv-font-display); font-weight: var(--fw-regular); }
 
 /* 히어로: 펼침 — 무대(화면 높이)가 붙어 있는 동안 스크롤하면, 가로 꽉 찬 원래 비율의 사진이 위아래로 늘어난다
@@ -369,9 +372,11 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
   .hero--unfold { height: auto; }
 }
 
-/* 우리의 이야기: 템플릿1과 같은 배치·리본 선(날짜 앞뒤로 끊겼다 이어지며 반대편으로 크게 휘어 돎), 선만 얇게 */
+/* 우리의 이야기: 템플릿1과 같은 배치·리본 선 경로, 시작 선 없이 날짜 사이에만 */
 .inv--fam-bloom .story-date { font-weight: var(--fw-medium); color: var(--c-accent); }
-.inv--fam-bloom .story-ribbon path { stroke: var(--c-accent); stroke-width: 1.2; }
+/* 날짜와 날짜 사이에만 점선 (보이는 점선 + 위에서부터 드러나는 실선 마스크) */
+.story-ribbon .story-ribbon-dash { stroke: var(--c-accent); stroke-width: 1.4; stroke-dasharray: 4 4; stroke-dashoffset: 0; transition: none; }
+.story-ribbon .story-ribbon-reveal { stroke: #fff; stroke-width: 8; } /* 마스크 전용(화면에 보이지 않음) */
 
 /* 예식 일자: 선 없는 한 주 띠, 예식일은 손그림 점선 동그라미, SAVE THE DATE 없음 */
 .inv--fam-bloom .cal-strip { border: 0; }

@@ -2,7 +2,7 @@
 // - 선은 각 날짜 글자의 실제 위치를 재서 계산한다 → 항목 수·글 길이·화면 폭이 바뀌어도 맞는다
 // - 날짜 글자 앞에서 끊기고 뒤에서 다시 이어진다(글자를 가리지 않음)
 // - 섹션이 화면에 들어오면 선이 위에서부터 그려진다(움직임 줄이기면 바로 다 그려진 상태)
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
 import { SectionHead } from '../ui';
@@ -15,8 +15,9 @@ interface Anchor {
 
 const GAP = 10; // 선과 날짜 글자 사이
 
-/** 날짜 글자 위치들 → 리본 경로. 왼쪽 항목은 바깥(왼쪽)에서 들어와 안쪽(오른쪽)으로, 오른쪽 항목은 반대 */
-function ribbonPath(pts: Anchor[], width: number) {
+/** 날짜 글자 위치들 → 리본 경로. 왼쪽 항목은 바깥(왼쪽)에서 들어와 안쪽(오른쪽)으로, 오른쪽 항목은 반대.
+ *  lead = false면 가장자리에서 들어오는 시작 선 없이 날짜와 날짜 사이에만 긋는다(블룸 계열) */
+function ribbonPath(pts: Anchor[], width: number, lead = true) {
   const clamp = (x: number) => Math.min(width - 6, Math.max(6, x));
   let d = '';
   let prev = { x: 0, y: 0, dir: 1 };
@@ -26,7 +27,9 @@ function ribbonPath(pts: Anchor[], width: number) {
     const enter = left ? p.l - GAP : p.r + GAP;
     const exit = left ? p.r + GAP : p.l - GAP;
 
-    if (i === 0) {
+    if (i === 0 && !lead) {
+      // 시작 선 없음: 첫 날짜 뒤에서 바로 시작
+    } else if (i === 0) {
       // 시작: 바깥 가장자리 위쪽에서 흘러 들어온다
       const sx = left ? 0 : width;
       const sy = p.y - 44;
@@ -46,9 +49,12 @@ function ribbonPath(pts: Anchor[], width: number) {
   return d;
 }
 
-export function ProfileSection({ section, mode }: SectionProps<SectionOf<'profile'>>) {
+export function ProfileSection({ doc, section, mode }: SectionProps<SectionOf<'profile'>>) {
   const { title, timeline } = section.data;
   const items = timeline.filter((t) => t.date || t.text);
+  // 블룸 계열(템플릿3): 날짜 사이에만, 점선으로
+  const dashed = doc.theme.family === 'bloom';
+  const maskId = `story-reveal${useId().replace(/:/g, '')}`;
   const listRef = useRef<HTMLOListElement>(null);
   const [geo, setGeo] = useState<{ w: number; h: number; d: string } | null>(null);
   const [drawn, setDrawn] = useState(false);
@@ -74,14 +80,14 @@ export function ProfileSection({ section, mode }: SectionProps<SectionOf<'profil
       });
       if (!anchors.length) return;
       const w = ol.clientWidth;
-      setGeo({ w, h: ol.clientHeight, d: ribbonPath(anchors, w) });
+      setGeo({ w, h: ol.clientHeight, d: ribbonPath(anchors, w, !dashed) });
     };
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(ol);
     document.fonts?.ready.then(measure);
     return () => ro.disconnect();
-  }, [items.length]);
+  }, [items.length, dashed]);
 
   // 화면에 들어오면 그리기
   useEffect(() => {
@@ -120,7 +126,17 @@ export function ProfileSection({ section, mode }: SectionProps<SectionOf<'profil
       <ol ref={listRef} className={`story${drawn ? ' is-drawn' : ''}`}>
         {geo && (
           <svg className="story-ribbon" width={geo.w} height={geo.h} viewBox={`0 0 ${geo.w} ${geo.h}`} aria-hidden>
-            <path d={geo.d} pathLength={1} />
+            {dashed ? (
+              <>
+                {/* 점선은 그대로 두고, 위에서부터 드러나는 실선 마스크로 '그려지는' 효과를 낸다 */}
+                <mask id={maskId} maskUnits="userSpaceOnUse">
+                  <path className="story-ribbon-reveal" d={geo.d} pathLength={1} />
+                </mask>
+                <path className="story-ribbon-dash" d={geo.d} mask={`url(#${maskId})`} />
+              </>
+            ) : (
+              <path d={geo.d} pathLength={1} />
+            )}
           </svg>
         )}
         {items.map((t, i) => (
