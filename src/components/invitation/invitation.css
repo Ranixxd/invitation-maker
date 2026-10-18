@@ -219,7 +219,6 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 /* 한 달: 요일 머리 한 줄 + 날짜 칸(일요일 시작) */
 .cal-ticket-day { display: grid; justify-items: center; padding: var(--sp-2) 0; }
 .cal-ticket-day:not(.is-day) .cal-ticket-n { color: var(--c-ink-60); } /* 예식일 외 날짜는 옅게 (템플릿1과 같음) */
-.cal-ticket-wd.is-day,
 .cal-ticket-day.is-day .cal-ticket-n { color: var(--c-accent); }
 .cal-ticket-day.is-day .cal-ticket-n { font-weight: var(--fw-medium); }
 .cal-ticket-wd { padding: var(--sp-3) 0 var(--sp-1); font-size: var(--fs-small); text-align: center; color: var(--c-ink-60); }
@@ -564,7 +563,6 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 .cal-strip-wd { padding: var(--sp-3) 0 var(--sp-2); font-weight: var(--fw-regular); text-align: center; color: var(--c-ink-60); }
 .cal-strip-num { position: relative; display: grid; place-items: center; width: var(--sp-10); height: var(--sp-10); font-size: var(--fs-section); font-weight: var(--fw-regular); line-height: var(--lh-none); }
 .cal-strip-n { position: relative; }
-.cal-strip-wd.is-day { color: var(--c-accent); font-weight: var(--fw-medium); }
 /* 예식일: 오린 하트 위에 흰(크림) 숫자 */
 .cal-strip-day.is-day .cal-strip-n { color: var(--c-cream); font-weight: var(--fw-medium); }
 .heart-cut.cal-heart { position: absolute; inset: calc(-1 * var(--sp-1)); width: calc(100% + 2 * var(--sp-1)); height: calc(100% + 2 * var(--sp-1)); transform: rotate(-6deg); }

@@ -15,11 +15,10 @@ function monthCells(date: Date) {
 /** 한 달 달력 (템플릿 calendarStyle = 'strip'). 예식일은 오린 하트 위에 흰 숫자, 블룸 계열은 손그림 점선 동그라미 */
 function MonthStrip({ date }: { date: Date }) {
   const day = date.getDate();
-  const wd = date.getDay();
   return (
     <div className="cal-strip" role="img" aria-label={`${date.getFullYear()}년 ${date.getMonth() + 1}월 달력, ${day}일 ${weekdayKo(date)}요일`}>
-      {HEAD.map((label, i) => (
-        <span key={label} className={`cal-strip-wd${i === wd ? ' is-day' : ''}`}>
+      {HEAD.map((label) => (
+        <span key={label} className="cal-strip-wd">
           {label}
         </span>
       ))}
@@ -46,7 +45,6 @@ function MonthStrip({ date }: { date: Date }) {
 /** 티켓: 종이 카드에 예식일이 있는 한 달, 예식일은 손으로 그린 동그라미 (calendarStyle = 'ticket') */
 function Ticket({ date }: { date: Date }) {
   const day = date.getDate();
-  const wd = date.getDay();
   return (
     <div className="cal-ticket" role="img" aria-label={`${date.getFullYear()}년 ${date.getMonth() + 1}월 ${day}일 ${weekdayKo(date)}요일`}>
       <p className="cal-ticket-head">
@@ -56,8 +54,8 @@ function Ticket({ date }: { date: Date }) {
         <span>{date.getFullYear()}</span>
       </p>
       <div className="cal-ticket-days">
-        {HEAD.map((label, i) => (
-          <span key={label} className={`cal-ticket-wd${i === wd ? ' is-day' : ''}`}>
+        {HEAD.map((label) => (
+          <span key={label} className="cal-ticket-wd">
             {label}
           </span>
         ))}
