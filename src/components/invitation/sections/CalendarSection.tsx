@@ -7,68 +7,74 @@ import { dday, formatDateKo, monthMatrix, parseLocal, weekdayKo } from '../../..
 const HEAD = ['일', '월', '화', '수', '목', '금', '토'];
 const MARQUEE_REPEAT = 6;
 
-/** 예식일이 있는 한 주(월~일) 띠. 예식일은 오린 하트 위에 흰 숫자, 블룸 계열은 손그림 점선 동그라미 (템플릿 calendarStyle = 'strip') */
-const WEEK_LABELS = ['월', '화', '수', '목', '금', '토', '일'];
-function WeekStrip({ date }: { date: Date }) {
-  const monday = new Date(date);
-  monday.setDate(date.getDate() - ((date.getDay() + 6) % 7)); // 월요일 시작
-  const days = WEEK_LABELS.map((label, i) => {
-    const d = new Date(monday);
-    d.setDate(monday.getDate() + i);
-    return { label, d, isDay: d.toDateString() === date.toDateString() };
-  });
+/** 예식일이 있는 달의 날짜 칸 (일요일 시작, 앞뒤 빈칸 포함) — 몇째 주인지도 보이도록 한 달 전체를 그린다 */
+function monthCells(date: Date) {
+  return monthMatrix(date.getFullYear(), date.getMonth()).flat();
+}
+
+/** 한 달 달력 (템플릿 calendarStyle = 'strip'). 예식일은 오린 하트 위에 흰 숫자, 블룸 계열은 손그림 점선 동그라미 */
+function MonthStrip({ date }: { date: Date }) {
+  const day = date.getDate();
+  const wd = date.getDay();
   return (
-    <div className="cal-strip" role="img" aria-label={`${date.getMonth() + 1}월 ${date.getDate()}일 ${weekdayKo(date)}요일`}>
-      {days.map(({ label, d, isDay }) => (
-        <div key={label} className={`cal-strip-day${isDay ? ' is-day' : ''}`}>
-          <span className="cal-strip-wd">{label}</span>
-          <span className="cal-strip-num">
-            {isDay && <HeartCut shape="b" className="cal-heart" />}
-            {/* 손으로 그린 점선 동그라미 (블룸 계열에서만 보임, 하트 대신) */}
-            {isDay && (
-              <svg className="cal-strip-circle" viewBox="0 0 64 56" aria-hidden>
-                <path d="M36 6C20 3 5 12 5 28c0 15 14 23 28 22 16-1 27-11 26-25C58 12 47 5 32 6c-6 1-12 4-15 8" />
-              </svg>
-            )}
-            <span className="cal-strip-n">{d.getDate()}</span>
-          </span>
-        </div>
+    <div className="cal-strip" role="img" aria-label={`${date.getFullYear()}년 ${date.getMonth() + 1}월 달력, ${day}일 ${weekdayKo(date)}요일`}>
+      {HEAD.map((label, i) => (
+        <span key={label} className={`cal-strip-wd${i === wd ? ' is-day' : ''}`}>
+          {label}
+        </span>
+      ))}
+      {monthCells(date).map((d, i) => (
+        <span key={i} className={`cal-strip-day${d === day ? ' is-day' : ''}`}>
+          {d && (
+            <span className="cal-strip-num">
+              {d === day && <HeartCut shape="b" className="cal-heart" />}
+              {/* 손으로 그린 점선 동그라미 (블룸 계열에서만 보임, 하트 대신) */}
+              {d === day && (
+                <svg className="cal-strip-circle" viewBox="0 0 64 56" aria-hidden>
+                  <path d="M36 6C20 3 5 12 5 28c0 15 14 23 28 22 16-1 27-11 26-25C58 12 47 5 32 6c-6 1-12 4-15 8" />
+                </svg>
+              )}
+              <span className="cal-strip-n">{d}</span>
+            </span>
+          )}
+        </span>
       ))}
     </div>
   );
 }
 
-/** 티켓: 종이 카드에 예식일이 있는 한 주(월~일 7칸), 예식일은 손으로 그린 동그라미 (calendarStyle = 'ticket') */
+/** 티켓: 종이 카드에 예식일이 있는 한 달, 예식일은 손으로 그린 동그라미 (calendarStyle = 'ticket') */
 function Ticket({ date }: { date: Date }) {
-  const monday = new Date(date);
-  monday.setDate(date.getDate() - ((date.getDay() + 6) % 7)); // 월요일 시작 (템플릿1 한 주 띠와 같음)
-  const days = WEEK_LABELS.map((label, i) => {
-    const d = new Date(monday);
-    d.setDate(monday.getDate() + i);
-    return { label, d, isDay: d.toDateString() === date.toDateString() };
-  });
+  const day = date.getDate();
+  const wd = date.getDay();
   return (
-    <div className="cal-ticket" role="img" aria-label={`${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일 ${weekdayKo(date)}요일`}>
+    <div className="cal-ticket" role="img" aria-label={`${date.getFullYear()}년 ${date.getMonth() + 1}월 ${day}일 ${weekdayKo(date)}요일`}>
       <p className="cal-ticket-head">
         <span>
-          {date.getMonth() + 1}월 {date.getDate()}일
+          {date.getMonth() + 1}월 {day}일
         </span>
         <span>{date.getFullYear()}</span>
       </p>
       <div className="cal-ticket-days">
-        {days.map(({ label, d, isDay }) => (
-          <div key={label} className={`cal-ticket-day${isDay ? ' is-day' : ''}`}>
-            <span className="cal-ticket-wd">{label}</span>
-            <span className="cal-ticket-n">
-              {d.getDate()}
-              {isDay && (
-                <svg className="cal-ticket-circle" viewBox="0 0 64 52" aria-hidden>
-                  <path d="M35 7C19 4 5 13 5 27c0 13 13 21 27 20 15-1 27-10 26-23C57 12 46 5 31 6c-6 1-11 3-14 7" />
-                  <path d="M50 4.5c1.5-2.5 5-2 5 .8 0 2.4-3.4 4.4-5 6-1.6-1.6-5-3.6-5-6 0-2.8 3.5-3.3 5-.8z" />
-                </svg>
-              )}
-            </span>
-          </div>
+        {HEAD.map((label, i) => (
+          <span key={label} className={`cal-ticket-wd${i === wd ? ' is-day' : ''}`}>
+            {label}
+          </span>
+        ))}
+        {monthCells(date).map((d, i) => (
+          <span key={i} className={`cal-ticket-day${d === day ? ' is-day' : ''}`}>
+            {d && (
+              <span className="cal-ticket-n">
+                {d}
+                {d === day && (
+                  <svg className="cal-ticket-circle" viewBox="0 0 64 52" aria-hidden>
+                    <path d="M35 7C19 4 5 13 5 27c0 13 13 21 27 20 15-1 27-10 26-23C57 12 46 5 31 6c-6 1-11 3-14 7" />
+                    <path d="M50 4.5c1.5-2.5 5-2 5 .8 0 2.4-3.4 4.4-5 6-1.6-1.6-5-3.6-5-6 0-2.8 3.5-3.3 5-.8z" />
+                  </svg>
+                )}
+              </span>
+            )}
+          </span>
         ))}
       </div>
     </div>
@@ -115,7 +121,7 @@ export function CalendarSection({ doc, section }: SectionProps<SectionOf<'calend
       {/* 예식 일자: 날짜·시간이 제목 (§4.1) */}
       {style === 'ticket' ? <h2 className="cal-ticket-title">{formatDateKo(date)}</h2> : <SectionHead title={formatDateKo(date)} />}
       {showCalendar && style === 'ticket' && <Ticket date={date} />}
-      {showCalendar && style === 'strip' && <WeekStrip date={date} />}
+      {showCalendar && style === 'strip' && <MonthStrip date={date} />}
       {showCalendar && style === 'month' && (
         <table className="cal" aria-label={`${date.getFullYear()}년 ${date.getMonth() + 1}월 달력`}>
           <caption>{date.getMonth() + 1}월</caption>
