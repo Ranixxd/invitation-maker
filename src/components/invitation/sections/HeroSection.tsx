@@ -59,13 +59,13 @@ function scrollParent(el: HTMLElement): HTMLElement | null {
   return null;
 }
 
-/** 펼침 히어로 작은 틀의 위·아래 여백. 문구 ↔ 틀 = 틀 ↔ 일시 = 24, 그 아래 일시(23) · 16 · 재생 버튼(48) · 24 */
+/** 펼침 히어로 사진의 위·아래 여백. 문구 ↔ 사진 = 사진 ↔ 일시 = 24, 그 아래 일시(23) · 16 · 재생 버튼(48) · 24 */
 const UNFOLD_GAP = 24;
 const UNFOLD_BOTTOM = UNFOLD_GAP + 23 + 16 + 48 + 24;
 
 /** 펼침 히어로: 무대 높이(--stage-h)를 화면 높이에 맞추고, 스크롤 진행도(--p, 0~1)를 CSS 변수로 넘긴다.
  *  React 상태를 거치지 않고 스타일만 바꿔 스크롤 중 다시 그리기를 피한다 */
-function useUnfold() {
+function useUnfold(aspect: number) {
   const ref = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     const el = ref.current;
@@ -90,17 +90,17 @@ function useUnfold() {
       const h = parent ? parent.clientHeight : window.innerHeight;
       const stageH = Math.round(Math.min(w * 2, Math.max(w * 1.4, h)));
       el.style.setProperty('--stage-h', `${stageH}px`);
-      // 작은 틀: 문구 아래(--unf-top)부터 아래 여백(일시·재생 버튼)까지 들어가는 배율(--s0)
+      // 처음 사진: 문구 아래(--unf-top)에 가로 꽉, 높이는 사진 원래 비율(--unf-h0). 아래 여백(일시·재생 버튼)을 넘으면 그만큼만
       const text = el.querySelector<HTMLElement>('.hero-unf-text');
       // offsetHeight는 정수로 반올림돼 간격이 1px 어긋나므로 소수점까지 잰다 (화면 배율 보정)
       const scale = el.getBoundingClientRect().width / w || 1;
       const top = text ? text.offsetTop + text.getBoundingClientRect().height / scale + UNFOLD_GAP : 0;
       el.style.setProperty('--unf-top', `${top}px`);
       el.style.setProperty('--unf-pc', top ? (UNFOLD_GAP / top).toFixed(4) : '0'); // 사진 위끝이 문구 아래끝에 닿는 진행도
-      const s0 = Math.max(0.3, (stageH - top - UNFOLD_BOTTOM) / stageH);
-      el.style.setProperty('--s0', s0.toFixed(4));
-      // 사진 아래끝((1-p)·top + 배율·무대)이 일시 위끝(top + s0·무대 + 간격)에 닿는 진행도
-      el.style.setProperty('--unf-pd', Math.min(1, UNFOLD_GAP / Math.max(1, (1 - s0) * stageH - top)).toFixed(4));
+      const h0 = Math.max(80, Math.min(w / aspect, stageH - top - UNFOLD_BOTTOM));
+      el.style.setProperty('--unf-h0', `${h0}px`);
+      // 사진 아래끝((1-p)·top + h0 + (무대-h0)·p)이 일시 위끝(top + h0 + 간격)에 닿는 진행도
+      el.style.setProperty('--unf-pd', Math.min(1, UNFOLD_GAP / Math.max(1, stageH - h0 - top)).toFixed(4));
       update();
     };
     const onScroll = () => {
@@ -118,16 +118,16 @@ function useUnfold() {
       window.removeEventListener('resize', measure);
       cancelAnimationFrame(frame);
     };
-  }, []);
+  }, [aspect]);
   return ref;
 }
 
-/** 펼침(템플릿3): 맨 위 문구(작은 문구 · 신랑 · 신부)는 항상 보이고, 그 아래 작은 틀의 사진이
- *  스크롤할수록 통째로 커져(잘리지 않고 비율 그대로 확대) 무대를 꽉 채운다. 틀 아래 일시, 그 아래 재생 버튼 */
+/** 펼침(템플릿3): 맨 위 문구(작은 문구 · 신랑 · 신부)는 항상 보이고, 그 아래 사진은 처음엔 가로 꽉 찬 원래 비율(잘림 없음),
+ *  스크롤할수록 위아래로 늘어나 무대를 꽉 채운다(그만큼 확대되며 좌우가 잘림). 사진 아래 일시, 그 아래 재생 버튼 */
 function UnfoldHero({ doc, section }: SectionProps<SectionOf<'hero'>>) {
-  const ref = useUnfold();
   const { imageId, headline } = section.data;
   const img = imageId ? doc.images[imageId] : null;
+  const ref = useUnfold(img?.aspect || 0.75); // 사진 가로/세로 비율 (없으면 3:4)
   const date = parseLocal(doc.core.datetime);
   const names = doc.core.hosts.map((h) => h.name || h.label);
   const lines = (

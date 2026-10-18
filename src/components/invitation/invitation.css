@@ -316,24 +316,24 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 .inv--fam-bloom .heart-cut.ui-heart { display: none; } /* 섹션 머리 표시 없음 (꽃 이미지는 사용자가 준비 중) */
 .inv--fam-bloom .ui-title { font-family: var(--inv-font-display); font-weight: var(--fw-regular); }
 
-/* 히어로: 펼침 — 무대(화면 높이)가 붙어 있는 동안 스크롤하면 작은 틀의 사진이 통째로 커져 꽉 찬다
-   (--p 0 → 1, 배율 --s0 → 1, 위치 --unf-top → 0: HeroSection useUnfold가 잰다) */
-.hero--unfold { --p: 0; --s0: 0.6; --unf-top: 160px; --unf-s: calc(var(--s0) + (1 - var(--s0)) * var(--p));
+/* 히어로: 펼침 — 무대(화면 높이)가 붙어 있는 동안 스크롤하면, 가로 꽉 찬 원래 비율의 사진이 위아래로 늘어나 꽉 찬다
+   (--p 0 → 1, 위끝 --unf-top → 0, 높이 --unf-h0 → 무대: HeroSection useUnfold가 잰다) */
+.hero--unfold { --p: 0; --unf-top: 160px; --unf-h0: 280px;
   /* 문구 색 전환: 사진 위끝이 문구 아래끝에 닿는 순간(--unf-pc) 잉크 → 크림으로 한 번에 바꾸고 0.25초 페이드 (중간 회색 없음) */
   --unf-q: clamp(0, (var(--p) - var(--unf-pc, 0.1)) * 1000, 1);
   --unf-qd: clamp(0, (var(--p) - var(--unf-pd, 0.1)) * 1000, 1); /* 일시도 같은 방식 (사진 아래끝이 닿을 때) */
   height: calc(var(--stage-h, 680px) * 1.7); }
 .hero-unf-stage { position: sticky; top: 0; height: var(--stage-h, 680px); overflow: hidden; }
-/* 사진: 무대 크기 그대로 두고 배율만 바꾼다 → 작을 때도 잘리지 않고 같은 사진이 작게 보임. 라운드는 배율로 나눠 화면에서 16px 유지 */
+/* 사진: 가로는 늘 꽉, 처음 높이는 사진 원래 비율(잘림 없음) → 위끝은 올라가고 높이는 무대만큼 늘어난다 (cover라 늘어날수록 확대·좌우 잘림) */
 .hero-unf-photo {
   position: absolute;
-  inset: 0;
+  top: calc((1 - var(--p)) * var(--unf-top));
+  left: 0;
+  right: 0;
   z-index: 1;
+  height: calc(var(--unf-h0) + (var(--stage-h, 680px) - var(--unf-h0)) * var(--p));
   overflow: hidden;
-  border-radius: calc((1 - var(--p)) * var(--sp-4) / var(--unf-s));
   background: var(--c-ink-8);
-  transform: translateY(calc((1 - var(--p)) * var(--unf-top))) scale(var(--unf-s));
-  transform-origin: 50% 0;
 }
 .hero-unf-photo > img,
 .hero-unf-photo > .hero-img--empty { width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; }
@@ -361,13 +361,19 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 .hero-unf-name { font-size: var(--fs-cover); line-height: var(--lh-tight); }
 .inv .hero-unf-text.is-light { color: var(--c-cream); opacity: var(--unf-q); text-shadow: 0 1px 8px color-mix(in srgb, var(--c-ink) 30%, transparent); }
 .inv .hero-unf-text.is-light .hero-unf-label { color: var(--c-cream); }
-/* 틀 아래 일시: 자리 고정, 사진이 닿으면 크림색으로 바뀌어 펼친 사진 위에서도 보인다 */
-.hero-unf-date { position: absolute; top: calc(var(--unf-top) + var(--s0) * var(--stage-h, 680px) + var(--sp-6)); left: 0; right: 0; z-index: 2; margin: 0; opacity: calc(1 - var(--unf-qd)); transition: opacity 0.25s; pointer-events: none; font-family: var(--inv-font-display); font-size: var(--fs-body); font-weight: var(--fw-regular); line-height: var(--lh-body); text-align: center; color: var(--c-ink-60); } /* 작은 문구와 같은 글자, 틀과의 간격도 위와 같은 24 */
+/* 사진 아래 일시: 자리 고정, 사진이 닿으면 크림색으로 바뀌어 펼친 사진 위에서도 보인다 */
+.hero-unf-date { position: absolute; top: calc(var(--unf-top) + var(--unf-h0) + var(--sp-6)); left: 0; right: 0; z-index: 2; margin: 0; opacity: calc(1 - var(--unf-qd)); transition: opacity 0.25s; pointer-events: none; font-family: var(--inv-font-display); font-size: var(--fs-body); font-weight: var(--fw-regular); line-height: var(--lh-body); text-align: center; color: var(--c-ink-60); } /* 작은 문구와 같은 글자, 사진과의 간격도 위와 같은 24 */
 .hero-unf-date.is-light { color: var(--c-cream); opacity: var(--unf-qd); text-shadow: 0 1px 8px color-mix(in srgb, var(--c-ink) 30%, transparent); }
 /* 펼친 사진 아래쪽도 살짝 어둡게 (일시·재생 버튼 자리) */
 .hero-unf-photo::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, color-mix(in srgb, var(--c-ink) 50%, transparent), transparent 30%); opacity: var(--unf-qd); transition: opacity 0.25s; }
-/* 재생 버튼: 일시 아래, 무대 맨 아래 가운데 (펼친 뒤에도 사진 위에 남는다) */
-.hero-unf-music { position: absolute; left: 50%; bottom: var(--sp-6); z-index: 3; transform: translateX(-50%); }
+/* 재생 버튼: 처음엔 일시 16px 아래 → 펼치면 무대 맨 아래 가운데로 (펼친 뒤에도 사진 위에 남는다) */
+.hero-unf-music {
+  position: absolute;
+  top: calc((1 - var(--p)) * (var(--unf-top) + var(--unf-h0) + var(--sp-6) + var(--fs-body) * var(--lh-body) + var(--sp-4)) + var(--p) * (var(--stage-h, 680px) - var(--sp-6) - var(--h-control)));
+  left: 50%;
+  z-index: 3;
+  transform: translateX(-50%);
+}
 .music-dot .music-btn { width: var(--h-control); height: var(--h-control); }
 .music-dot .music-btn svg { width: 18px; height: 18px; }
 @media (prefers-reduced-motion: reduce) {
