@@ -15,9 +15,8 @@ interface Anchor {
 
 const GAP = 10; // 선과 날짜 글자 사이
 
-/** 날짜 글자 위치들 → 리본 경로. 왼쪽 항목은 바깥(왼쪽)에서 들어와 안쪽(오른쪽)으로, 오른쪽 항목은 반대.
- *  lead = false면 가장자리에서 들어오는 시작 선 없이 날짜와 날짜 사이에만 긋는다(블룸 계열) */
-function ribbonPath(pts: Anchor[], width: number, lead = true) {
+/** 날짜 글자 위치들 → 리본 경로. 왼쪽 항목은 바깥(왼쪽)에서 들어와 안쪽(오른쪽)으로, 오른쪽 항목은 반대 */
+function ribbonPath(pts: Anchor[], width: number) {
   const clamp = (x: number) => Math.min(width - 6, Math.max(6, x));
   let d = '';
   let prev = { x: 0, y: 0, dir: 1 };
@@ -27,9 +26,7 @@ function ribbonPath(pts: Anchor[], width: number, lead = true) {
     const enter = left ? p.l - GAP : p.r + GAP;
     const exit = left ? p.r + GAP : p.l - GAP;
 
-    if (i === 0 && !lead) {
-      // 시작 선 없음: 첫 날짜 뒤에서 바로 시작
-    } else if (i === 0) {
+    if (i === 0) {
       // 시작: 바깥 가장자리 위쪽에서 흘러 들어온다
       const sx = left ? 0 : width;
       const sy = p.y - 44;
@@ -49,10 +46,36 @@ function ribbonPath(pts: Anchor[], width: number, lead = true) {
   return d;
 }
 
+interface Box {
+  l: number;
+  r: number;
+  t: number;
+  b: number;
+}
+
+/** 블룸 계열(템플릿3): 항목과 다음 항목 사이에만 짧은 곡선 하나씩.
+ *  항목의 안쪽(가운데 쪽) 끝 글줄에서 옆으로 나와, 아래로 휘어 다음 항목의 안쪽 위 모서리 바로 앞에서 끝난다 */
+function linkPath(boxes: Box[]) {
+  let d = '';
+  for (let k = 0; k < boxes.length - 1; k++) {
+    const a = boxes[k];
+    const b = boxes[k + 1];
+    const dir = k % 2 === 0 ? 1 : -1; // 왼쪽 항목 → 오른쪽 항목이면 오른쪽으로
+    const sx = dir > 0 ? a.r + 10 : a.l - 10;
+    const sy = a.b - 10; // 마지막 글줄 높이
+    const ex = dir > 0 ? b.l - 10 : b.r + 10;
+    const ey = b.t - 10;
+    const dx = Math.abs(ex - sx);
+    const dy = ey - sy;
+    d += `${d ? ' ' : ''}M ${sx} ${sy} C ${sx + dir * dx * 0.5} ${sy + dy * 0.1}, ${ex - dir * dx * 0.05} ${ey - dy * 0.45}, ${ex} ${ey}`;
+  }
+  return d;
+}
+
 export function ProfileSection({ doc, section, mode }: SectionProps<SectionOf<'profile'>>) {
   const { title, timeline } = section.data;
   const items = timeline.filter((t) => t.date || t.text);
-  // 블룸 계열(템플릿3): 날짜 사이에만, 점선으로
+  // 블룸 계열(템플릿3): 항목 사이에만 짧은 점선 곡선
   const dashed = doc.theme.family === 'bloom';
   const maskId = `story-reveal${useId().replace(/:/g, '')}`;
   const listRef = useRef<HTMLOListElement>(null);
@@ -80,7 +103,13 @@ export function ProfileSection({ doc, section, mode }: SectionProps<SectionOf<'p
       });
       if (!anchors.length) return;
       const w = ol.clientWidth;
-      setGeo({ w, h: ol.clientHeight, d: ribbonPath(anchors, w, !dashed) });
+      if (dashed) {
+        const boxes = Array.from(ol.querySelectorAll<HTMLElement>('.story-item')).map((el) => {
+          const o = offsetIn(el);
+          return { l: o.x, r: o.x + el.offsetWidth, t: o.y, b: o.y + el.offsetHeight };
+        });
+        setGeo({ w, h: ol.clientHeight, d: linkPath(boxes) });
+      } else setGeo({ w, h: ol.clientHeight, d: ribbonPath(anchors, w) });
     };
     measure();
     const ro = new ResizeObserver(measure);

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, type CSSProperties } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import type { SectionOf } from '../../../types/invitation';
 import type { SectionProps } from '../InvitationView';
 import { formatDot, formatDateKo, formatKo, parseLocal } from '../../../lib/date';
@@ -27,36 +27,17 @@ const FALLING_HEARTS: { x: number; depth: 1 | 2 | 3; delay: number; shape: 'a' |
 const COVER_BAND = 'OUR WEDDING';
 const BAND_REPEAT = 10;
 
-/** 흩날리는 장식: 폴라로이드(템플릿1)는 오린 하트, 표지(템플릿2)는 꽃잎, 펼침(템플릿3)은 긴 막대 컨페티. 자리·깊이·시간은 같은 표를 쓴다 */
-/** 컨페티는 하트·꽃잎보다 촘촘하게 두 배로 (같은 표를 옆으로 조금 비키고 시간을 반쯤 어긋나게) */
-const FALLING_CONFETTI = [...FALLING_HEARTS, ...FALLING_HEARTS.map((h) => ({ ...h, x: (h.x + 5) % 100, delay: h.delay + 5 }))];
-/** 컨페티 막대마다 굵기(px, 길이는 굵기 × 6)와 살랑이며 기우는 한 번의 시간(초)을 다르게 → 크기·움직임이 제각각 */
-const CONFETTI_W = [1.5, 3.5, 2.2, 4.5, 1.2, 2.8, 2, 4, 1.8, 3.2, 1.2, 2.5, 3, 1.5, 4.2, 2, 1.2, 3.8, 2.5, 1.8, 4.5, 2.2, 1.5, 3];
-const CONFETTI_SPIN = [5, 7.5, 4, 9, 6, 3.5, 8, 5.5, 4.5, 10, 6.5, 3.8];
-
-function FallingHearts({ kind = 'hearts' }: { kind?: 'hearts' | 'petals' | 'confetti' }) {
+/** 흩날리는 장식: 폴라로이드(템플릿1)는 오린 하트, 표지(템플릿2)는 꽃잎. 자리·깊이·시간은 같은 표를 쓴다 */
+function FallingHearts({ kind = 'hearts' }: { kind?: 'hearts' | 'petals' }) {
   return (
     <div className={`hero-fall is-${kind}`} aria-hidden>
-      {(kind === 'confetti' ? FALLING_CONFETTI : FALLING_HEARTS).map((h, i) => (
+      {FALLING_HEARTS.map((h, i) => (
         <span
           key={i}
           className={`hero-fall-item is-d${h.depth}`}
-          style={
-            kind === 'confetti'
-              ? ({
-                  left: `${h.x}%`,
-                  animationDelay: `-${h.delay}s`,
-                  '--fall-size': `${CONFETTI_W[i % CONFETTI_W.length]}px`,
-                  '--cf-spin': `${CONFETTI_SPIN[i % CONFETTI_SPIN.length]}s`,
-                } as CSSProperties)
-              : { left: `${h.x}%`, animationDelay: `-${h.delay}s` }
-          }
+          style={{ left: `${h.x}%`, animationDelay: `-${h.delay}s` }}
         >
-          {kind === 'confetti' ? (
-            <svg className="hero-confetti" viewBox="0 0 2 12">
-              <rect width="2" height="12" rx="0.6" />
-            </svg>
-          ) : kind === 'petals' ? (
+          {kind === 'petals' ? (
             <svg className="hero-petal" viewBox="0 0 12 16">
               <path d={h.shape === 'a' ? 'M6 0C9.6 3.4 10.4 9 6 16 1.8 9.4 2.6 3.6 6 0Z' : 'M5.4 0C10 2.6 11.6 8.8 6.4 16 1.4 10.6 1.2 3.8 5.4 0Z'} />
             </svg>
@@ -164,8 +145,6 @@ function UnfoldHero({ doc, section }: SectionProps<SectionOf<'hero'>>) {
         <div className="hero-unf-photo">
           {img ? <img src={img.src} alt="대표 사진" /> : <div className="hero-img--empty">대표 사진을 추가해 주세요</div>}
         </div>
-        {/* 흰 막대 컨페티: 사진 위로도 떨어진다 (문구 아래) */}
-        <FallingHearts kind="confetti" />
         {/* 문구: 바탕 위에선 잉크, 펼친 사진 위에선 크림색으로 겹쳐 바뀐다 (사진에 묻히지 않게 항상 맨 위) */}
         <h1 className="hero-unf-text">{lines}</h1>
         <p className="hero-unf-text is-light" aria-hidden>
