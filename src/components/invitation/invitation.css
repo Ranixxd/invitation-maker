@@ -310,7 +310,7 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 .inv-portal.inv--fam-bloom .ui-modal-card { background-image: none; }
 .inv--fam-bloom { font-synthesis-weight: none; } /* 명조(리디바탕)는 400 하나뿐: 가짜 굵게 막기 */
 .inv--fam-bloom .heart-cut.ui-heart { display: none; } /* 섹션 머리: 하트 대신 점선 라인(대표 이미지) */
-.inv--fam-bloom .ui-dline { display: block; width: 68px; height: auto; overflow: visible; fill: none; stroke: var(--c-accent); stroke-width: 1.6; stroke-linecap: round; stroke-dasharray: 3.2 2.6; }
+.inv--fam-bloom .ui-dline { display: block; width: 40px; height: auto; overflow: visible; fill: none; stroke: var(--c-accent); stroke-width: 1.6; stroke-linecap: round; stroke-dasharray: 2 6; }
 .inv--fam-bloom .ui-title { font-family: var(--inv-font-display); font-weight: var(--fw-regular); }
 
 /* 히어로: 펼침 — 무대(화면 높이)가 붙어 있는 동안 스크롤하면, 가로 꽉 찬 원래 비율의 사진이 위아래로 늘어난다
@@ -385,7 +385,7 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
   .hero-fall.is-confetti .hero-fall-item > svg { animation: none; transform: rotate(24deg); }
 }
 /* 흰색: 아이보리 바탕 위에서도 보이도록 아주 옅은 잉크 테두리 */
-.hero-confetti rect { fill: #fff; stroke: var(--c-ink-8); stroke-width: 0.6; }
+.hero-confetti rect { fill: #fff; stroke: var(--c-ink-8); stroke-width: 0.3; }
 
 @media (prefers-reduced-motion: reduce) {
   .hero--unfold { height: auto; }

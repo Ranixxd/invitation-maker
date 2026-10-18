@@ -45,8 +45,8 @@ function FlowerDoodle() {
 /** 점선 라인(블룸 계열 · 템플릿3의 대표 이미지): 반듯한 가로 점선 한 줄 */
 function DashedLineDoodle() {
   return (
-    <svg className="ui-dline" viewBox="0 0 80 4" aria-hidden>
-      <path d="M2 2H78" />
+    <svg className="ui-dline" viewBox="0 0 40 4" aria-hidden>
+      <path d="M2 2H38" />
     </svg>
   );
 }

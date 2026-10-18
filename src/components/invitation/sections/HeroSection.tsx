@@ -30,8 +30,8 @@ const BAND_REPEAT = 10;
 /** 흩날리는 장식: 폴라로이드(템플릿1)는 오린 하트, 표지(템플릿2)는 꽃잎, 펼침(템플릿3)은 긴 막대 컨페티. 자리·깊이·시간은 같은 표를 쓴다 */
 /** 컨페티는 하트·꽃잎보다 촘촘하게 두 배로 (같은 표를 옆으로 조금 비키고 시간을 반쯤 어긋나게) */
 const FALLING_CONFETTI = [...FALLING_HEARTS, ...FALLING_HEARTS.map((h) => ({ ...h, x: (h.x + 5) % 100, delay: h.delay + 5 }))];
-/** 컨페티 막대마다 굵기(px, 길이는 굵기 × 4.5)와 한 바퀴 도는 시간(초)을 다르게 → 크기·회전이 제각각 */
-const CONFETTI_W = [3, 7, 4.5, 9, 2.5, 5.5, 4, 8, 3.5, 6.5, 2.5, 5, 6, 3, 8.5, 4, 2.5, 7.5, 5, 3.5, 9, 4.5, 3, 6];
+/** 컨페티 막대마다 굵기(px, 길이는 굵기 × 9)와 한 바퀴 도는 시간(초)을 다르게 → 크기·회전이 제각각 */
+const CONFETTI_W = [1.5, 3.5, 2.2, 4.5, 1.2, 2.8, 2, 4, 1.8, 3.2, 1.2, 2.5, 3, 1.5, 4.2, 2, 1.2, 3.8, 2.5, 1.8, 4.5, 2.2, 1.5, 3];
 const CONFETTI_SPIN = [5, 7.5, 4, 9, 6, 3.5, 8, 5.5, 4.5, 10, 6.5, 3.8];
 
 function FallingHearts({ kind = 'hearts' }: { kind?: 'hearts' | 'petals' | 'confetti' }) {
@@ -53,8 +53,8 @@ function FallingHearts({ kind = 'hearts' }: { kind?: 'hearts' | 'petals' | 'conf
           }
         >
           {kind === 'confetti' ? (
-            <svg className="hero-confetti" viewBox="0 0 4 18">
-              <rect width="4" height="18" rx="1" />
+            <svg className="hero-confetti" viewBox="0 0 2 18">
+              <rect width="2" height="18" rx="0.6" />
             </svg>
           ) : kind === 'petals' ? (
             <svg className="hero-petal" viewBox="0 0 12 16">
