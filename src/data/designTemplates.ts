@@ -81,7 +81,7 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
     heroLayout: 'stack',
     galleryLayout: 'grid',
     calendarStyle: 'strip',
-    headline: 'THE WEDDING OF',
+    headline: '', // 이어 붙이기 히어로는 작은 문구를 쓰지 않는다
     heroCaptions: ['you are my today and all of my tomorrows', 'and so the adventure begins', 'together is a wonderful place to be'],
     sample: ['#c9d4b0', '#4d5a3a'],
   },

@@ -220,7 +220,7 @@ export function HeroSection({ doc, section, mode }: SectionProps<SectionOf<'hero
     );
   }
 
-  // 이어 붙이기(템플릿4): 사진 1~3장을 여백 없이 세로로, 사진마다 아래 가운데 영문 멘트 → 작은 문구 · 이름 · 일시·장소 · 음악 (§3.5)
+  // 이어 붙이기(템플릿4): 정해진 영역을 사진 1~3장이 나눠 갖고, 사진마다 아래 가운데 영문 멘트 → 이름 · 일시·장소 · 음악 (§3.5)
   if (layout === 'stack') {
     const extras = (section.data.extraImageIds ?? []).map((id) => doc.images[id]).filter(Boolean);
     const shots = [img, ...extras].filter(Boolean).slice(0, 3);
@@ -243,7 +243,6 @@ export function HeroSection({ doc, section, mode }: SectionProps<SectionOf<'hero
           })}
         </div>
         <div className="hero-stk-info">
-          {headline && <p className="hero-stk-label">{headline}</p>}
           <h1 className="hero-stk-names">
             {names.map((n, i) => (
               <span key={i}>{n}</span>

@@ -85,24 +85,27 @@ function HeroPanel({ doc, section, dispatch }: PanelProps<'hero'>) {
           ))}
         </PanelSection>
       )}
-      <PanelSection title="문구">
-        <TextArea
-          label={polaroid ? '작은 문구' : '헤드라인'}
-          rows={polaroid ? 2 : 1}
-          value={section.data.headline}
-          onChange={(headline) => set({ headline })}
-          maxLength={40}
-        />
-        {polaroid && (
-          <TextField
-            label="필기체 문구 (영문)"
-            placeholder="Our Wedding Day"
-            value={section.data.script ?? ''}
-            onChange={(script) => set({ script })}
-            maxLength={24}
+      {/* 이어 붙이기(템플릿4)는 작은 문구를 쓰지 않는다 */}
+      {!stack && (
+        <PanelSection title="문구">
+          <TextArea
+            label={polaroid ? '작은 문구' : '헤드라인'}
+            rows={polaroid ? 2 : 1}
+            value={section.data.headline}
+            onChange={(headline) => set({ headline })}
+            maxLength={40}
           />
-        )}
-      </PanelSection>
+          {polaroid && (
+            <TextField
+              label="필기체 문구 (영문)"
+              placeholder="Our Wedding Day"
+              value={section.data.script ?? ''}
+              onChange={(script) => set({ script })}
+              maxLength={24}
+            />
+          )}
+        </PanelSection>
+      )}
       <CoreLink what="이름·예식 일시·장소">
         <HostNameFields doc={doc} dispatch={dispatch} />
         <DatetimeField doc={doc} dispatch={dispatch} />

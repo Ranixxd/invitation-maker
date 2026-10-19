@@ -413,13 +413,17 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 /* 갤러리: 3×3 격자를 좌우 여백 없이 꽉 차게, 사진 사이 2px, 더보기 없이 9장 모두 */
 .inv--fam-lookbook .gallery-grid { gap: var(--bw-strong); width: calc(100% + 2 * var(--sp-gutter)); max-width: none; margin: 0 calc(-1 * var(--sp-gutter)); }
 .inv--fam-lookbook .gallery-item { border: 0; background: var(--c-ink-8); }
-/* 방명록: 보드 대신 한 행에 박스 하나 (이름 · 날짜 / 본문 2줄), 기울기·하트·구분선 없음 */
+/* 우리의 이야기: 선 없이 한 줄에 하나씩 모두 가운데 */
+.inv--fam-lookbook .story-ribbon { display: none; }
+.inv--fam-lookbook .story { grid-template-columns: 1fr; row-gap: var(--sp-8); width: 100%; margin: 0; padding: 0; }
+.inv--fam-lookbook .story > .story-item { grid-column: 1 !important; justify-self: center; text-align: center; }
+/* 방명록: 보드 대신 한 행에 박스 하나. 박스와 크게 보기 모두 이름 → 날짜 → 내용 순, 기울기·하트·구분선 없음 */
 .inv--fam-lookbook .gb-notes { grid-template-columns: 1fr; gap: var(--sp-2); width: 100%; max-width: var(--w-col); margin: 0 auto; }
 .inv--fam-lookbook .gb-note {
   display: grid;
-  grid-template-columns: 1fr auto;
-  grid-template-areas: 'name date' 'text text';
-  gap: var(--sp-1) var(--sp-3);
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 'name' 'date' 'text';
+  gap: var(--sp-1);
   aspect-ratio: auto;
   padding: var(--sp-3) var(--sp-4);
   border-color: var(--c-ink-20);
@@ -428,10 +432,19 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 }
 .inv--fam-lookbook .gb-note:hover { transform: none !important; border-color: var(--c-ink-60); }
 .inv--fam-lookbook .gb-note-name { grid-area: name; color: var(--c-ink); }
-.inv--fam-lookbook .gb-note-date { grid-area: date; align-self: center; font-size: var(--fs-small); }
-.inv--fam-lookbook .gb-note-text { grid-area: text; margin: 0; -webkit-line-clamp: 2; color: var(--c-ink-60); }
+.inv--fam-lookbook .gb-note-date { grid-area: date; font-size: var(--fs-small); }
+.inv--fam-lookbook .gb-note-text { grid-area: text; margin: var(--sp-1) 0 0; -webkit-line-clamp: 2; color: var(--c-ink); }
 .inv--fam-lookbook .gb-note .heart-cut,
-.inv--fam-lookbook .gb-note .ui-divider { display: none; }
+.inv--fam-lookbook .gb-note .ui-divider,
+.inv--fam-lookbook .gb-detail .heart-cut,
+.inv--fam-lookbook .gb-detail > .ui-divider { display: none; }
+/* 크게 보기: 박스와 같은 순서·색 (이름 잉크 → 날짜 → 내용 → 삭제) */
+.inv--fam-lookbook .ui-modal-card.gb-detail { gap: var(--sp-1); }
+.inv--fam-lookbook .gb-detail-name { order: 0; margin: 0; font-weight: var(--fw-medium); color: var(--c-ink); }
+.inv--fam-lookbook .gb-detail > .ui-caption { order: 1; font-size: var(--fs-small); }
+.inv--fam-lookbook .gb-detail-text { order: 2; margin: var(--sp-1) 0 0; }
+.inv--fam-lookbook .gb-detail > .ui-form,
+.inv--fam-lookbook .gb-detail > .ui-btn--chip { order: 3; margin-top: var(--sp-4); }
 .inv--fam-lookbook .inv-section,
 .inv-portal.inv--fam-lookbook .ui-modal-card { background-image: none; }
 .inv--fam-lookbook .heart-cut.ui-heart { display: none; }
@@ -439,7 +452,7 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 /* 예식 일자: 1번의 흐르는 SAVE THE DATE·오린 하트 대신, 예식일은 포인트 원 하나. 선·숫자도 가늘게 */
 .inv--fam-lookbook .save-marquee,
 .inv--fam-lookbook .heart-cut.cal-heart { display: none; }
-.inv--fam-lookbook .cal-strip { border-color: var(--c-ink-20); }
+.inv--fam-lookbook .cal-strip { border: 0; }
 .inv--fam-lookbook .cal-strip-num { font-weight: var(--fw-light); }
 .inv--fam-lookbook .cal-strip-day.is-day .cal-strip-num { border-radius: 50%; background: var(--c-accent); }
 .inv--fam-lookbook .cal-strip-day.is-day .cal-strip-n { font-weight: var(--fw-regular); }
@@ -470,11 +483,10 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
   text-shadow: 0 1px 8px color-mix(in srgb, var(--c-ink) 40%, transparent);
 }
 .hero-stk-info { display: flex; flex-direction: column; align-items: center; gap: var(--sp-3); padding: var(--sp-12) var(--sp-gutter) 0; }
-.hero-stk-label { font-size: var(--fs-small); font-weight: var(--fw-light); letter-spacing: 0.16em; color: var(--c-ink-60); }
 .inv .hero-stk-names { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--sp-4); margin: 0; font-size: var(--fs-cover); font-weight: var(--fw-thin); line-height: var(--lh-tight); }
-.hero-stk-names > span + span::before { content: ''; display: inline-block; width: var(--sp-4); margin-right: var(--sp-4); border-top: var(--bw) solid var(--c-ink-60); vertical-align: middle; }
+.hero-stk-names > span + span::before { content: '·'; margin-right: var(--sp-4); color: var(--c-ink-60); }
 .hero-stk-when { display: grid; font-weight: var(--fw-light); color: var(--c-ink-60); }
-.hero--stack .music-bar { align-self: stretch; margin-top: var(--sp-5); }
+.hero--stack .music-bar { margin-top: var(--sp-5); }
 
 /* ---- 갤러리: 캐러셀 (가로로 넘기는 사진) ---- */
 .gal-car { position: relative; width: calc(100% + 2 * var(--sp-gutter)); margin: 0 calc(-1 * var(--sp-gutter)); }
