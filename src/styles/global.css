@@ -414,16 +414,17 @@ a.choice-card:hover, button.choice-card:hover { border-color: var(--primary); tr
 .core-link-group h4 { margin: 0; font-size: 14px; }
 .parent-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; padding: 12px; border-radius: 12px; background: #f8f8fa; }
 .parent-fields .toggle-row { grid-column: 1 / -1; min-height: 32px; }
-.hero-thumb { width: 100%; max-height: 280px; object-fit: contain; background: #f2f2f5; border-radius: 10px; }
-.pick-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 6px; }
-.pick-item { padding: 0; border: 2px solid transparent; border-radius: 8px; overflow: hidden; aspect-ratio: 1; cursor: pointer; background: #eee; }
-.pick-item:hover { border-color: var(--primary); }
-.pick-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* 사진 칸 (§6.8): 칸 수 = 필요한 장수, 칸을 눌러 하나씩 채움 */
+.photo-slots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.photo-slot { position: relative; aspect-ratio: 1; border-radius: 10px; overflow: hidden; background: #f4f4f7; }
+.photo-slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo-slot-add { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border: 1.5px dashed #c9c9d2; border-radius: 10px; background: none; color: var(--muted); font-size: 12px; cursor: pointer; }
+.photo-slot-add span { font-size: 22px; line-height: 1; }
+.photo-slot-add:not(:disabled):hover { border-color: var(--primary); color: var(--primary); }
+.photo-slot-actions { position: absolute; inset: auto 0 0 0; display: flex; }
+.photo-slot-actions button { flex: 1; min-height: 32px; border: 0; background: rgba(0, 0, 0, 0.55); color: #fff; font-size: 12px; cursor: pointer; }
+.photo-slot-actions button + button { border-left: 1px solid rgba(255, 255, 255, 0.25); }
 .sample-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.gallery-edit { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
-.gallery-edit li { border-radius: 10px; overflow: hidden; background: #f4f4f7; }
-.gallery-edit img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
-.gallery-edit-actions { display: flex; justify-content: space-between; padding: 2px; }
 .account-edit { display: grid; gap: 6px; padding: 14px; border-radius: 12px; background: #f8f8fa; }
 .timeline-edit { grid-template-columns: 120px minmax(0, 1fr); gap: 10px; }
 .preset-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
