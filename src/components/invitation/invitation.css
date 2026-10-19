@@ -406,7 +406,32 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 .inv--fam-bloom .gb-detail-name .heart-cut { display: none; }
 
 /* ---- 룩북 계열 (템플릿4, §3.5 PRD-0023) ----
-   흰 지면 위 사진이 주인공. 글꼴은 Pretendard 하나, 이 계열만 얇은 굵기(200·300). 장식·종이 질감 없음 */
+   흰 지면 위 사진이 주인공. 글꼴은 Pretendard(이 계열만 얇은 굵기 200·300) + 사진 멘트만 Inter 굵은 기울임. 장식·종이 질감 없음 */
+.inv--fam-lookbook { --ff-caption: 'Inter', var(--ff-sans); }
+/* 섹션 사이 가는 구분선 (좌우 여백 안쪽, 히어로 다음부터, 브랜드 소개 앞은 없음) */
+.inv--fam-lookbook .inv-section + .inv-section:not(.inv-section--brand)::before { content: ''; position: absolute; top: 0; left: var(--sp-gutter); right: var(--sp-gutter); border-top: var(--bw) solid var(--c-ink-20); pointer-events: none; }
+/* 갤러리: 3×3 격자를 좌우 여백 없이 꽉 차게, 사진 사이 2px, 더보기 없이 9장 모두 */
+.inv--fam-lookbook .gallery-grid { gap: var(--bw-strong); width: calc(100% + 2 * var(--sp-gutter)); max-width: none; margin: 0 calc(-1 * var(--sp-gutter)); }
+.inv--fam-lookbook .gallery-item { border: 0; background: var(--c-ink-8); }
+/* 방명록: 보드 대신 한 행에 박스 하나 (이름 · 날짜 / 본문 2줄), 기울기·하트·구분선 없음 */
+.inv--fam-lookbook .gb-notes { grid-template-columns: 1fr; gap: var(--sp-2); width: 100%; max-width: var(--w-col); margin: 0 auto; }
+.inv--fam-lookbook .gb-note {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: 'name date' 'text text';
+  gap: var(--sp-1) var(--sp-3);
+  aspect-ratio: auto;
+  padding: var(--sp-3) var(--sp-4);
+  border-color: var(--c-ink-20);
+  background: transparent;
+  transform: none;
+}
+.inv--fam-lookbook .gb-note:hover { transform: none !important; border-color: var(--c-ink-60); }
+.inv--fam-lookbook .gb-note-name { grid-area: name; color: var(--c-ink); }
+.inv--fam-lookbook .gb-note-date { grid-area: date; align-self: center; font-size: var(--fs-small); }
+.inv--fam-lookbook .gb-note-text { grid-area: text; margin: 0; -webkit-line-clamp: 2; color: var(--c-ink-60); }
+.inv--fam-lookbook .gb-note .heart-cut,
+.inv--fam-lookbook .gb-note .ui-divider { display: none; }
 .inv--fam-lookbook .inv-section,
 .inv-portal.inv--fam-lookbook .ui-modal-card { background-image: none; }
 .inv--fam-lookbook .heart-cut.ui-heart { display: none; }
@@ -419,14 +444,13 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 .inv--fam-lookbook .cal-strip-day.is-day .cal-strip-num { border-radius: 50%; background: var(--c-accent); }
 .inv--fam-lookbook .cal-strip-day.is-day .cal-strip-n { font-weight: var(--fw-regular); }
 
-/* 히어로 이어 붙이기: 사진 1~3장을 여백 없이 세로로. 장수가 늘수록 납작하게 (1장 3:4 · 2장 4:3 · 3장 3:2) */
+/* 히어로 이어 붙이기: 정해진 영역(4:5)을 사진 1~3장이 같은 높이로 나눠 갖는다(여백 없이 세로로) */
 .hero--stack { display: flex; flex-direction: column; padding-bottom: var(--sp-section); }
-.hero-stk-photos { display: flex; flex-direction: column; }
-.hero-stk-shot { position: relative; margin: 0; aspect-ratio: 3 / 4; overflow: hidden; background: var(--c-ink-8); }
-.hero--stack.has-2 .hero-stk-shot { aspect-ratio: 4 / 3; }
-.hero--stack.has-3 .hero-stk-shot { aspect-ratio: 3 / 2; }
+.hero-stk-photos { display: flex; flex-direction: column; aspect-ratio: 4 / 5; min-height: 0; overflow: hidden; }
+.hero-stk-shot { position: relative; flex: 1 1 0; min-height: 0; margin: 0; overflow: hidden; background: var(--c-ink-8); }
+/* 사진 크기가 영역 높이를 밀어내지 않도록 칸 안에 띄워 채운다 */
 .hero-stk-shot > img,
-.hero-stk-shot > .hero-img--empty { width: 100%; height: 100%; object-fit: cover; }
+.hero-stk-shot > .hero-img--empty { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .hero-stk-shot > .hero-img--empty { display: grid; place-items: center; color: var(--c-ink-60); }
 /* 멘트가 읽히도록 아래만 살짝 어둡게 */
 .hero-stk-shot:has(.hero-stk-caption)::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, color-mix(in srgb, var(--c-ink) 32%, transparent), transparent 34%); pointer-events: none; }
@@ -436,10 +460,11 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
   right: var(--sp-6);
   bottom: var(--sp-5);
   z-index: 1;
+  font-family: var(--ff-caption);
   font-size: var(--fs-body);
-  font-weight: var(--fw-light);
+  font-style: italic;
+  font-weight: var(--fw-semibold);
   line-height: var(--lh-tight);
-  letter-spacing: 0.02em;
   text-align: center;
   color: #fff;
   text-shadow: 0 1px 8px color-mix(in srgb, var(--c-ink) 40%, transparent);

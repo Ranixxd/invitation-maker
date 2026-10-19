@@ -82,7 +82,6 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
     galleryLayout: 'grid',
     calendarStyle: 'strip',
     headline: 'THE WEDDING OF',
-    // 임시 문구 — 운영자가 줄 기본 멘트로 교체 예정
     heroCaptions: ['you are my today and all of my tomorrows', 'and so the adventure begins', 'together is a wonderful place to be'],
     sample: ['#c9d4b0', '#4d5a3a'],
   },

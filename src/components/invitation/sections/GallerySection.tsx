@@ -5,7 +5,7 @@ import type { SectionProps } from '../InvitationView';
 import { GALLERY_MAX } from '../../../lib/image';
 import { Button, IconChevronLeft, IconChevronRight, Modal, SectionHead } from '../ui';
 
-/** 접힌 상태에서 보이는 사진 수 (3열 × 2줄). 더 있으면 `더보기`로 펼친다 */
+/** 접힌 상태에서 보이는 사진 수 (3열 × 2줄). 더 있으면 `더보기`로 펼친다. 룩북 계열(템플릿4)은 접지 않고 3×3 모두 */
 const COLLAPSED = 6;
 
 /** 캐러셀: 가로로 넘기는 사진, 가운데 사진이 가장 크고 양옆은 작게 살짝 보인다 */
@@ -57,7 +57,7 @@ export function GallerySection({ doc, section, mode }: SectionProps<SectionOf<'g
   const images = imageIds.map((id) => doc.images[id]).filter(Boolean).slice(0, GALLERY_MAX);
   const [open, setOpen] = useState<number | null>(null);
   const [expanded, setExpanded] = useState(false);
-  const canFold = layout !== 'carousel' && images.length > COLLAPSED;
+  const canFold = layout !== 'carousel' && doc.theme.family !== 'lookbook' && images.length > COLLAPSED;
   const shown = canFold && !expanded ? images.slice(0, COLLAPSED) : images;
   const step = (d: number) => setOpen((i) => (i === null ? i : (i + d + images.length) % images.length));
 
