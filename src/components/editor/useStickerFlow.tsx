@@ -5,20 +5,19 @@
 import { useRef, useState, type ReactNode } from 'react';
 import type { InvitationDoc, Sticker } from '../../types/invitation';
 import type { EditorAction } from '../../store/editorReducer';
-import { DEFAULT_CROP, KINDS, MAX_STICKERS_PER_SECTION, MOTIONS, SHAPES, SIZES, stickersIn } from '../../lib/stickers';
+import { DEFAULT_CROP, MAX_STICKERS_PER_SECTION, MOTIONS, SHAPES, SIZES, stickersIn } from '../../lib/stickers';
 import { PhotoAdjust } from './PhotoAdjust';
 import { filesToAssets, MAX_IMAGES_PER_DOC } from '../../lib/image';
 import { uid } from '../../lib/id';
 import { toast } from '../common/toast';
 import { StickerArt } from '../invitation/StickerLayer';
 
-/** 새로 붙일 때 기본값: 섹션 가운데, 하트, 스티커(흰 테두리), 뿅뿅, 보통, 사진 조정 없음 */
-const NEW_DEFAULTS = { shape: 'heart', kind: 'sticker', motion: 'bounce', size: 'md', x: 50, y: 50 } as const;
+/** 새로 붙일 때 기본값: 섹션 가운데, 하트, 뿅뿅, 보통, 사진 조정 없음 (선·그림자 없음) */
+const NEW_DEFAULTS = { shape: 'heart', motion: 'bounce', size: 'md', x: 50, y: 50 } as const;
 
-type Tab = 'shape' | 'kind' | 'size' | 'motion';
+type Tab = 'shape' | 'size' | 'motion';
 const TABS: { value: Tab; label: string }[] = [
   { value: 'shape', label: '프레임' },
-  { value: 'kind', label: '종류' },
   { value: 'size', label: '크기' },
   { value: 'motion', label: '움직임' },
 ];
@@ -120,11 +119,7 @@ export function useStickerFlow(doc: InvitationDoc, dispatch: (a: EditorAction) =
     switch (t) {
       case 'shape':
         return SHAPES.map((s) =>
-          opt(s.value, selected.shape === s.value, s.label, () => update({ shape: s.value }), artOf({ shape: s.value, motion: 'none', kind: 'plain', crop: selected.crop })),
-        );
-      case 'kind':
-        return KINDS.map((k) =>
-          opt(k.value, selected.kind === k.value, k.label, () => update({ kind: k.value }), artOf({ shape: selected.shape, motion: 'none', kind: k.value, crop: selected.crop })),
+          opt(s.value, selected.shape === s.value, s.label, () => update({ shape: s.value }), artOf({ shape: s.value, motion: 'none', crop: selected.crop })),
         );
       case 'size':
         return SIZES.map((s) =>

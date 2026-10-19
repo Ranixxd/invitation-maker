@@ -807,7 +807,6 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
   border: 0;
   background: none;
   transform: translate(-50%, -50%);
-  filter: drop-shadow(0 4px 10px rgba(21, 21, 21, 0.18));
 }
 .sticker.is-editable { pointer-events: auto; cursor: pointer; }
 .inv--view .sticker-reveal { opacity: 0; transition: opacity 0.8s ease; }
@@ -842,53 +841,6 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
   user-select: none;
   -webkit-user-select: none;
 }
-
-/* ---- 종류(재질) ---- */
-/* 스티커: 모양을 따라 흰 칼선 테두리 */
-.is-kind-sticker {
-  filter: drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff) drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff);
-}
-/* 마스킹 테이프: 반투명 종이테이프 두 조각(끝은 지그재그) */
-.kind-tape {
-  position: absolute;
-  z-index: 1;
-  width: 48%;
-  height: 15%;
-  background:
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.28) 0 3px, transparent 3px 8px),
-    rgba(240, 222, 168, 0.85);
-  box-shadow: 0 1px 2px rgba(21, 21, 21, 0.12);
-  clip-path: polygon(0 0, 100% 0, 96% 25%, 100% 50%, 96% 75%, 100% 100%, 0 100%, 4% 75%, 0 50%, 4% 25%);
-}
-.tape-a { top: -3%; left: -10%; transform: rotate(-35deg); }
-.tape-b { bottom: -1%; right: -10%; transform: rotate(-35deg); }
-/* 골판지: 같은 모양의 골판지 판 위에 사진 */
-.kind-cardboard-back {
-  position: absolute;
-  inset: 0;
-  display: block;
-  mask-size: 100% 100%;
-  -webkit-mask-size: 100% 100%;
-  mask-repeat: no-repeat;
-  -webkit-mask-repeat: no-repeat;
-  background:
-    repeating-linear-gradient(90deg, rgba(90, 55, 20, 0.22) 0 2px, transparent 2px 6px),
-    linear-gradient(135deg, #d3a46a, #b9874f);
-}
-.kind-inset { position: absolute; inset: 11%; display: block; }
-/* 폴라로이드: 흰 카드, 아래 여백이 넓음 (카드 84% 폭, 사진 72% 정사각형) */
-.kind-polaroid-card {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 8%;
-  right: 8%;
-  display: block;
-  background: #fff;
-  border-radius: 2px;
-  box-shadow: 0 1px 3px rgba(21, 21, 21, 0.15);
-}
-.kind-polaroid-photo { position: absolute; top: 6%; left: 7.14%; right: 7.14%; aspect-ratio: 1; display: block; }
 
 /* 선택 박스 테두리 아래 [사진 조정] */
 .inv .sticker-adjust-chip {

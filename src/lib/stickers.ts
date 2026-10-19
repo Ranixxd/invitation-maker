@@ -1,5 +1,5 @@
-// 붙이기(스티커) 정의: 프레임 모양·종류·모션·크기·사진 조정·위치 규칙 (CONSTITUTION §4.10)
-import type { Sticker, StickerCrop, StickerKind, StickerMotion, StickerShape, StickerSize } from '../types/invitation';
+// 붙이기(스티커) 정의: 프레임 모양·모션·크기·사진 조정·위치 규칙 (CONSTITUTION §4.10)
+import type { Sticker, StickerCrop, StickerMotion, StickerShape, StickerSize } from '../types/invitation';
 
 export const MAX_STICKERS_PER_SECTION = 5;
 
@@ -9,8 +9,9 @@ const SHAPE_SVG: Record<StickerShape, string> = {
   heart:
     '<path d="M50 92C22 71 3 54 3 31 3 15 15 4 29 4c9 0 16 5 21 12 5-7 12-12 21-12 14 0 26 11 26 27 0 23-19 40-47 61z"/>',
   star: '<path d="M50 2l14 30 33 4-24 23 6 33-29-16-29 16 6-33L3 36l33-4z"/>',
+  // 네잎클로버: 꽃잎 위 2개 · 아래 2개
   clover:
-    '<circle cx="50" cy="27" r="23"/><circle cx="73" cy="50" r="23"/><circle cx="50" cy="73" r="23"/><circle cx="27" cy="50" r="23"/><circle cx="50" cy="50" r="18"/>',
+    '<circle cx="29" cy="29" r="27"/><circle cx="71" cy="29" r="27"/><circle cx="29" cy="71" r="27"/><circle cx="71" cy="71" r="27"/><circle cx="50" cy="50" r="20"/>',
   square: '<rect x="0" y="0" width="100" height="100" rx="7"/>',
 };
 
@@ -26,15 +27,6 @@ export function shapeMask(shape: StickerShape): string {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">${SHAPE_SVG[shape]}</svg>`;
   return `url("data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}")`;
 }
-
-/** 종류: 사진을 어떤 재질로 붙였는지 */
-export const KINDS: { value: StickerKind; label: string }[] = [
-  { value: 'plain', label: '기본' },
-  { value: 'sticker', label: '스티커' },
-  { value: 'tape', label: '마스킹 테이프' },
-  { value: 'cardboard', label: '골판지' },
-  { value: 'polaroid', label: '폴라로이드' },
-];
 
 export const MOTIONS: { value: StickerMotion; label: string }[] = [
   { value: 'none', label: '없음' },

@@ -15,7 +15,7 @@ export interface StickerEdit {
 }
 
 type ArtProps = {
-  sticker: Pick<Sticker, 'shape' | 'motion'> & Partial<Pick<Sticker, 'kind' | 'crop'>>;
+  sticker: Pick<Sticker, 'shape' | 'motion'> & Partial<Pick<Sticker, 'crop'>>;
   src: string;
   /** 사진 가로/세로 비율 (사진 조정 계산용) */
   aspect: number;
@@ -44,33 +44,12 @@ export function StickerPhoto({ shape, crop, src, aspect }: { shape: Sticker['sha
   );
 }
 
-/** 스티커 한 장: 움직임 + 종류(재질) + 프레임 사진 (CONSTITUTION §4.10) */
+/** 스티커 한 장: 움직임 + 프레임 사진. 선·그림자 없음 (CONSTITUTION §4.10) */
 export function StickerArt({ sticker, src, aspect }: ArtProps) {
-  const kind = sticker.kind ?? 'plain';
   const crop = sticker.crop ?? DEFAULT_CROP;
-  const photo = <StickerPhoto shape={sticker.shape} crop={crop} src={src} aspect={aspect} />;
-  const mask = shapeMask(sticker.shape);
   return (
-    <span className={`sticker-motion motion-${sticker.motion} sticker-kind is-kind-${kind}`}>
-      {kind === 'cardboard' ? (
-        // 골판지: 같은 모양의 골판지 판 위에 사진
-        <span className="kind-cardboard-back" style={{ maskImage: mask, WebkitMaskImage: mask } as CSSProperties}>
-          <span className="kind-inset">{photo}</span>
-        </span>
-      ) : kind === 'polaroid' ? (
-        // 폴라로이드: 흰 카드(아래 여백이 넓음) 안에 사진
-        <span className="kind-polaroid-card">
-          <span className="kind-polaroid-photo">{photo}</span>
-        </span>
-      ) : (
-        photo
-      )}
-      {kind === 'tape' && (
-        <>
-          <i className="kind-tape tape-a" aria-hidden />
-          <i className="kind-tape tape-b" aria-hidden />
-        </>
-      )}
+    <span className={`sticker-motion motion-${sticker.motion}`}>
+      <StickerPhoto shape={sticker.shape} crop={crop} src={src} aspect={aspect} />
     </span>
   );
 }

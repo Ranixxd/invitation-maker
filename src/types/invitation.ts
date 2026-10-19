@@ -193,8 +193,6 @@ export type SectionOf<K extends SectionType> = Extract<Section, { type: K }>;
 export type StickerShape = 'circle' | 'heart' | 'star' | 'clover' | 'square';
 export type StickerMotion = 'none' | 'bounce' | 'float' | 'spin' | 'pulse' | 'wiggle';
 export type StickerSize = 'sm' | 'md' | 'lg';
-/** 종류(재질 효과): 기본·스티커(흰 테두리)·마스킹 테이프·골판지·폴라로이드 */
-export type StickerKind = 'plain' | 'sticker' | 'tape' | 'cardboard' | 'polaroid';
 
 /** 사진 조정: 프레임 안에서 사진 확대·이동. ox·oy는 프레임 크기 대비 %, scale은 1~3 */
 export interface StickerCrop {
@@ -211,7 +209,6 @@ export interface Sticker {
   shape: StickerShape;
   motion: StickerMotion;
   size: StickerSize;
-  kind: StickerKind;
   crop: StickerCrop;
   x: number; // 0~100, 섹션 너비 기준 중심 x
   y: number; // 0~100, 섹션 높이 기준 중심 y
