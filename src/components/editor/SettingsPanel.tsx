@@ -32,20 +32,49 @@ function ParentFields({ role, parent, onChange }: { role: string; parent: Parent
   );
 }
 
-function HostFields({ host, dispatch, parentsLabel }: { host: HostSide; dispatch: Props['dispatch']; parentsLabel: string }) {
+export function DatetimeField({ doc, dispatch }: Props) {
+  return (
+    <TextField
+      label="일시"
+      type="datetime-local"
+      value={doc.core.datetime}
+      onChange={(datetime) => dispatch({ type: 'UPDATE_CORE', patch: { datetime } })}
+      hint="히어로·날짜 섹션에 함께 반영돼요"
+    />
+  );
+}
+
+/** 신랑·신부 이름만 (히어로처럼 이름만 쓰는 섹션용) */
+export function HostNameFields({ doc, dispatch }: Props) {
+  return (
+    <div className="form-grid two">
+      {doc.core.hosts.map((h) => (
+        <TextField
+          key={h.id}
+          label={`${h.label} 이름`}
+          value={h.name}
+          onChange={(name) => dispatch({ type: 'UPDATE_HOST', hostId: h.id, patch: { name } })}
+        />
+      ))}
+    </div>
+  );
+}
+
+/** 한쪽(신랑·신부)의 이름·연락처·혼주. 바깥 틀은 쓰는 쪽이 정한다 */
+export function HostInputs({ host, dispatch }: { host: HostSide; dispatch: Props['dispatch'] }) {
   const set = (patch: Partial<HostSide>) => dispatch({ type: 'UPDATE_HOST', hostId: host.id, patch });
   return (
-    <PanelSection title={`${host.label}측`}>
+    <>
       <div className="form-grid">
         <TextField label={`${host.label} 이름`} value={host.name} onChange={(name) => set({ name })} />
         <TextField label={`${host.label} 연락처`} type="tel" inputMode="tel" placeholder="010-0000-0000" value={host.phone} onChange={(phone) => set({ phone })} />
       </div>
       <details className="sub-details" open={!!(host.father.name || host.mother.name)}>
-        <summary>{parentsLabel}</summary>
+        <summary>혼주 (부모님)</summary>
         <ParentFields role="아버지" parent={host.father} onChange={(father) => set({ father })} />
         <ParentFields role="어머니" parent={host.mother} onChange={(mother) => set({ mother })} />
       </details>
-    </PanelSection>
+    </>
   );
 }
 
@@ -54,16 +83,12 @@ export function SettingsPanel({ doc, dispatch }: Props) {
     <div className="panel-body">
       <AccentPicker doc={doc} dispatch={dispatch} />
       <PanelSection title="예식 일시">
-        <TextField
-          label="일시"
-          type="datetime-local"
-          value={doc.core.datetime}
-          onChange={(datetime) => dispatch({ type: 'UPDATE_CORE', patch: { datetime } })}
-          hint="히어로·날짜 섹션에 함께 반영돼요"
-        />
+        <DatetimeField doc={doc} dispatch={dispatch} />
       </PanelSection>
       {doc.core.hosts.map((h) => (
-        <HostFields key={h.id} host={h} dispatch={dispatch} parentsLabel="혼주 (부모님)" />
+        <PanelSection key={h.id} title={`${h.label}측`}>
+          <HostInputs host={h} dispatch={dispatch} />
+        </PanelSection>
       ))}
       <PanelSection title="장소">
         <VenueFields doc={doc} dispatch={dispatch} />

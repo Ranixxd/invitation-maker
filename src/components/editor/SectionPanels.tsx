@@ -1,5 +1,5 @@
 // 섹션별 내용 편집 폼 (CONSTITUTION §4). 디자인(레이아웃·테마)은 템플릿이 결정하므로 다루지 않는다(§6.2)
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import type {
   BankAccount,
   InvitationDoc,
@@ -16,13 +16,12 @@ import { PhotoDrop } from '../common/shared';
 import { toast } from '../common/toast';
 import { filesToAssets, GALLERY_MAX, MAX_IMAGES_PER_DOC } from '../../lib/image';
 import { uid } from '../../lib/id';
-import { VenueFields } from './SettingsPanel';
+import { DatetimeField, HostInputs, HostNameFields, VenueFields } from './SettingsPanel';
 
 interface PanelProps<K extends SectionType> {
   doc: InvitationDoc;
   section: SectionOf<K>;
   dispatch: (a: EditorAction) => void;
-  goSettings: () => void;
 }
 
 function useUpdate<K extends SectionType>(type: K, dispatch: (a: EditorAction) => void) {
@@ -45,11 +44,24 @@ function useImageUpload(doc: InvitationDoc, dispatch: (a: EditorAction) => void,
   return { busy, upload };
 }
 
-const SettingsLink = ({ onClick, children }: { onClick: () => void; children: string }) => (
-  <button type="button" className="link-btn" onClick={onClick}>
-    {children} →
-  </button>
-);
+/**
+ * 기본 정보(core) 연동 블록 (CONSTITUTION §6.2). 섹션 폼에는 core 입력칸을 따로 두지 않고,
+ * 안내 + `여기서 수정할까요?`로 펼친 자리에서 기본 정보와 같은 값을 바로 고친다.
+ */
+function CoreLink({ what, children }: { what: string; children: ReactNode }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <section className="panel-section core-link">
+      <div className="core-link-head">
+        <p className="field-hint">{what} 정보는 기본 정보에서 수정할 수 있어요.</p>
+        <button type="button" className="btn btn-ghost sm" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
+          {open ? '접기' : '여기서 수정할까요?'}
+        </button>
+      </div>
+      {open && <div className="core-link-body">{children}</div>}
+    </section>
+  );
+}
 
 // ---------------- hero ----------------
 function HeroPanel({ doc, section, dispatch }: PanelProps<'hero'>) {
@@ -148,6 +160,11 @@ function HeroPanel({ doc, section, dispatch }: PanelProps<'hero'>) {
         )}
 
       </PanelSection>
+      <CoreLink what="이름·예식 일시·장소">
+        <HostNameFields doc={doc} dispatch={dispatch} />
+        <DatetimeField doc={doc} dispatch={dispatch} />
+        <VenueFields doc={doc} dispatch={dispatch} />
+      </CoreLink>
     </div>
   );
 }
@@ -180,24 +197,18 @@ function GreetingPanel({ section, dispatch }: PanelProps<'greeting'>) {
 }
 
 // ---------------- calendar ----------------
-function CalendarPanel({ doc, section, dispatch, goSettings }: PanelProps<'calendar'>) {
+function CalendarPanel({ doc, section, dispatch }: PanelProps<'calendar'>) {
   const set = useUpdate('calendar', dispatch);
   return (
     <div className="panel-body">
-      <PanelSection title="예식 일자">
-        <TextField
-          label="일시"
-          type="datetime-local"
-          value={doc.core.datetime}
-          onChange={(datetime) => dispatch({ type: 'UPDATE_CORE', patch: { datetime } })}
-          hint="히어로에도 함께 반영돼요"
-        />
-        <SettingsLink onClick={goSettings}>장소는 기본 정보에서 수정</SettingsLink>
-      </PanelSection>
       <PanelSection title="표시">
         <Toggle label="달력 보이기" checked={section.data.showCalendar} onChange={(showCalendar) => set({ showCalendar })} />
         <Toggle label="D-day 카운트다운" checked={section.data.showCountdown} onChange={(showCountdown) => set({ showCountdown })} />
       </PanelSection>
+      <CoreLink what="예식 일시·장소">
+        <DatetimeField doc={doc} dispatch={dispatch} />
+        <VenueFields doc={doc} dispatch={dispatch} />
+      </CoreLink>
     </div>
   );
 }
@@ -258,15 +269,22 @@ function GalleryPanel({ doc, section, dispatch }: PanelProps<'gallery'>) {
 }
 
 // ---------------- couple ----------------
-function CouplePanel({ section, dispatch, goSettings }: PanelProps<'couple'>) {
+function CouplePanel({ doc, section, dispatch }: PanelProps<'couple'>) {
   const set = useUpdate('couple', dispatch);
   return (
     <div className="panel-body">
       <PanelSection title="신랑·신부">
         <Toggle label="혼주(부모님) 성함 표시" hint="이름 아래 작게 보여요" checked={section.data.showParents} onChange={(showParents) => set({ showParents })} />
         <Toggle label="연락하기 버튼 표시" hint="전화번호를 넣은 사람만 보여요" checked={section.data.showContact} onChange={(showContact) => set({ showContact })} />
-        <SettingsLink onClick={goSettings}>이름·부모님 성함·연락처는 기본 정보에서</SettingsLink>
       </PanelSection>
+      <CoreLink what="이름·연락처·혼주">
+        {doc.core.hosts.map((h) => (
+          <div key={h.id} className="core-link-group">
+            <h4>{h.label}측</h4>
+            <HostInputs host={h} dispatch={dispatch} />
+          </div>
+        ))}
+      </CoreLink>
     </div>
   );
 }
@@ -401,9 +419,11 @@ function LocationPanel({ doc, section, dispatch }: PanelProps<'location'>) {
     <div className="panel-body">
       <PanelSection title="장소">
         <TextField label="섹션 제목" value={section.data.title} onChange={(title) => set({ title })} />
-        <VenueFields doc={doc} dispatch={dispatch} />
         <Toggle label="지도 앱 버튼 (카카오맵·네이버지도·티맵)" checked={section.data.showMapLinks} onChange={(showMapLinks) => set({ showMapLinks })} />
       </PanelSection>
+      <CoreLink what="장소">
+        <VenueFields doc={doc} dispatch={dispatch} />
+      </CoreLink>
       <PanelSection title="교통편 안내">
         <TextArea label="지하철" rows={2} placeholder="예) 7호선 청담역 9번 출구 도보 5분" value={section.data.subway} onChange={(subway) => set({ subway })} />
         <TextArea label="버스" rows={2} placeholder="예) 간선 301, 342" value={section.data.bus} onChange={(bus) => set({ bus })} />
@@ -490,7 +510,7 @@ function GuestbookPanel({ section, dispatch }: PanelProps<'guestbook'>) {
   );
 }
 
-export function SectionPanel(props: { doc: InvitationDoc; section: Section; dispatch: (a: EditorAction) => void; goSettings: () => void }) {
+export function SectionPanel(props: { doc: InvitationDoc; section: Section; dispatch: (a: EditorAction) => void }) {
   const { section } = props;
   switch (section.type) {
     case 'hero':

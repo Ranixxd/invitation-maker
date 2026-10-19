@@ -126,7 +126,7 @@ function DesktopEditor({ doc, dispatch }: { doc: InvitationDoc; dispatch: (a: Ed
           <>
             {section && !section.enabled && <p className="notice">이 섹션은 숨겨져 있어 초대장에 보이지 않아요.</p>}
             {selected === 'settings' && <SettingsPanel doc={doc} dispatch={dispatch} />}
-            {section && <SectionPanel doc={doc} section={section} dispatch={dispatch} goSettings={() => select('settings')} />}
+            {section && <SectionPanel doc={doc} section={section} dispatch={dispatch} />}
           </>
         )}
       </main>

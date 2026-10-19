@@ -197,7 +197,7 @@ export function MobileEditor({ doc, dispatch }: Props) {
                 />
               </div>
             )}
-            <SectionPanel doc={doc} section={section} dispatch={dispatch} goSettings={() => show('settings')} />
+            <SectionPanel doc={doc} section={section} dispatch={dispatch} />
           </>
         )}
       </BottomSheet>
