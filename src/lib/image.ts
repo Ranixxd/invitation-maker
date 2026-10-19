@@ -9,6 +9,8 @@ export const MAX_UPLOAD_PER_BATCH = 20;
 export const MAX_IMAGES_PER_DOC = 30;
 /** 갤러리 사진 최대 장수 (§4.6) */
 export const GALLERY_MAX = 9;
+/** 마무리 멘트 사진 띠 칸 수 */
+export const CLOSING_PHOTO_MAX = 3;
 
 async function decode(file: File): Promise<ImageBitmap | HTMLImageElement> {
   if ('createImageBitmap' in window) {

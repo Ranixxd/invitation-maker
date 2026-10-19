@@ -221,7 +221,7 @@ export function createSections(hosts: HostSide[]): Section[] {
       case 'snap':
         return { ...base, type, data: { title: WEDDING.snapTitle, description: WEDDING.snapDescription } };
       case 'closing':
-        return { ...base, type, data: { body: WEDDING.closingBody, showNames: true } };
+        return { ...base, type, data: { body: WEDDING.closingBody, showNames: true, imageIds: [] } };
       case 'brand':
         return { ...base, type, enabled: true, data: {} };
     }

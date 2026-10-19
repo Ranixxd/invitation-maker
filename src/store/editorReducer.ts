@@ -140,6 +140,8 @@ export function editorReducer(state: EditorState, action: EditorAction): EditorS
           };
         if (s.type === 'gallery')
           return { ...s, data: { ...s.data, imageIds: s.data.imageIds.filter((id) => id !== action.imageId) } };
+        if (s.type === 'closing')
+          return { ...s, data: { ...s.data, imageIds: (s.data.imageIds ?? []).filter((id) => id !== action.imageId) } };
         return s;
       });
       // 이 사진을 쓰는 스티커도 함께 제거 (§4.10)

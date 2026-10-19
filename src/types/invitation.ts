@@ -158,6 +158,8 @@ export interface SnapData {
 export interface ClosingData {
   body: string;
   showNames: boolean;
+  /** 아래 사진 띠 (최대 3장, §4.1). 예전 문서엔 없을 수 있음 */
+  imageIds?: string[];
 }
 /** 브랜드 소개: 편집할 값 없음, 항상 마지막·숨김 불가 (§4.9) */
 export type BrandData = Record<string, never>;

@@ -424,6 +424,10 @@ a.choice-card:hover, button.choice-card:hover { border-color: var(--primary); tr
 .photo-slot-actions { position: absolute; inset: auto 0 0 0; display: flex; }
 .photo-slot-actions button { flex: 1; min-height: 32px; border: 0; background: rgba(0, 0, 0, 0.55); color: #fff; font-size: 12px; cursor: pointer; }
 .photo-slot-actions button + button { border-left: 1px solid rgba(255, 255, 255, 0.25); }
+.photo-slot-handle { position: absolute; top: 4px; left: 4px; width: 32px; height: 32px; display: grid; place-items: center; border: 0; border-radius: 8px; background: rgba(0, 0, 0, 0.45); color: #fff; font-size: 16px; cursor: grab; touch-action: none; }
+.photo-slots.is-dragging .photo-slot-handle { cursor: grabbing; }
+.photo-slot.is-dragged { z-index: 2; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25); opacity: 0.9; }
+.photo-slot.is-target { outline: 2px solid var(--primary); outline-offset: 2px; }
 .sample-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .account-edit { display: grid; gap: 6px; padding: 14px; border-radius: 12px; background: #f8f8fa; }
 .timeline-edit { grid-template-columns: 120px minmax(0, 1fr); gap: 10px; }

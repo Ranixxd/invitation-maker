@@ -12,7 +12,7 @@ import type {
 import type { EditorAction } from '../../store/editorReducer';
 import { HERO_EXTRA_MAX } from '../../store/editorReducer';
 import { PanelSection, TextArea, TextField, Toggle } from '../common/fields';
-import { GALLERY_MAX } from '../../lib/image';
+import { CLOSING_PHOTO_MAX, GALLERY_MAX } from '../../lib/image';
 import { uid } from '../../lib/id';
 import { DatetimeField, HostInputs, HostNameFields, VenueFields } from './SettingsPanel';
 import { PhotoSlots } from './PhotoSlots';
@@ -154,6 +154,7 @@ function GalleryPanel({ doc, section, dispatch }: PanelProps<'gallery'>) {
           dispatch={dispatch}
           label="갤러리 사진"
           slots={slots}
+          reorderable
           onChange={(next) => set({ imageIds: next.filter((x): x is string => !!x) })}
         />
       </PanelSection>
@@ -264,8 +265,10 @@ const CLOSING_SAMPLES = [
   '저희 두 사람의 새로운 시작을\n따뜻한 마음으로 지켜봐 주세요.\n\n고맙습니다.',
 ];
 
-function ClosingPanel({ section, dispatch }: PanelProps<'closing'>) {
+function ClosingPanel({ doc, section, dispatch }: PanelProps<'closing'>) {
   const set = useUpdate('closing', dispatch);
+  const ids = (section.data.imageIds ?? []).filter((id) => doc.images[id]);
+  const slots = Array.from({ length: CLOSING_PHOTO_MAX }, (_, i) => ids[i] ?? null);
   return (
     <div className="panel-body">
       <PanelSection title="마무리 멘트">
@@ -290,6 +293,15 @@ function ClosingPanel({ section, dispatch }: PanelProps<'closing'>) {
           hint="예) 신랑 김민준 · 신부 이서연 드림"
           checked={section.data.showNames}
           onChange={(showNames) => set({ showNames })}
+        />
+      </PanelSection>
+      <PanelSection title="사진">
+        <PhotoSlots
+          doc={doc}
+          dispatch={dispatch}
+          label="마무리 멘트 사진"
+          slots={slots}
+          onChange={(next) => set({ imageIds: next.filter((x): x is string => !!x) })}
         />
       </PanelSection>
     </div>

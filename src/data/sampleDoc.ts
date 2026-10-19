@@ -1,5 +1,6 @@
 // 템플릿 미리보기용 샘플 청첩장 (CONSTITUTION §3.5). 모든 섹션이 채워진 상태로 보여준다.
 import type { ImageAsset, InvitationDoc, Section } from '../types/invitation';
+import { CLOSING_PHOTO_MAX } from '../lib/image';
 import { createDoc } from './templates';
 import { applyTemplate, type DesignTemplate } from './designTemplates';
 import { hashPassword, SAMPLE_PASSWORD } from '../lib/guestbook';
@@ -70,6 +71,8 @@ export function sampleDoc(t: DesignTemplate): InvitationDoc {
         };
       case 'gallery':
         return { ...s, data: { ...s.data, imageIds: gallery.map((g) => g.id) } };
+      case 'closing':
+        return { ...s, data: { ...s.data, imageIds: gallery.slice(0, CLOSING_PHOTO_MAX).map((g) => g.id) } };
       case 'location':
         return {
           ...s,
