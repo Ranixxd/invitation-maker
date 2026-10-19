@@ -100,7 +100,7 @@ export function SectionList({ doc, selected, onSelect, dispatch, showBasics = tr
             <button type="button" className={`list-item${selected === 'settings' ? ' is-on' : ''}`} onClick={() => onSelect('settings')}>
               <span className="list-icon" aria-hidden>📋</span>
               <span className="list-name">기본 정보</span>
-              <span className="list-desc">템플릿 컨셉 및 예식일, 혼주, 장소 정보 수정</span>
+              <span className="list-desc">색상, 예식일, 혼주, 장소</span>
             </button>
           </li>
         </ul>
