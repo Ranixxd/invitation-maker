@@ -35,3 +35,4 @@
 | [PRD-0020](./PRD-0020-theme2-love-letters.md) | 2번 테마: 러브 레터 | 2026-10-15 | 대체됨 → PRD-0021 |
 | [PRD-0021](./PRD-0021-theme2-cream-ticket.md) | 2번 테마: 크림 티켓 (러브 레터 대체) | 2026-10-15 | 확정 |
 | [PRD-0022](./PRD-0022-theme3-burgundy-bloom.md) | 3번 테마: 버건디 블룸 | 2026-10-17 | 확정 |
+| [PRD-0023](./PRD-0023-template4-lookbook.md) | 템플릿4: 룩북 (사진 중심 편집 디자인) | 2026-10-19 | 확정 |

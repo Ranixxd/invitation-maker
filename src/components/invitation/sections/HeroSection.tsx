@@ -220,6 +220,47 @@ export function HeroSection({ doc, section, mode }: SectionProps<SectionOf<'hero
     );
   }
 
+  // 이어 붙이기(템플릿4): 사진 1~3장을 여백 없이 세로로, 사진마다 아래 가운데 영문 멘트 → 작은 문구 · 이름 · 일시·장소 · 음악 (§3.5)
+  if (layout === 'stack') {
+    const extras = (section.data.extraImageIds ?? []).map((id) => doc.images[id]).filter(Boolean);
+    const shots = [img, ...extras].filter(Boolean).slice(0, 3);
+    const captions = section.data.captions ?? [];
+    return (
+      <div className={`hero hero--stack has-${Math.max(1, shots.length)}`}>
+        <div className="hero-stk-photos">
+          {(shots.length ? shots : [null]).map((shot, i) => {
+            const caption = captions[i]?.trim();
+            return (
+              <figure key={i} className="hero-stk-shot">
+                {shot ? <img src={shot.src} alt={i === 0 ? '대표 사진' : ''} /> : <div className="hero-img--empty">대표 사진을 추가해 주세요</div>}
+                {caption && (
+                  <figcaption className="hero-stk-caption" lang="en">
+                    {caption}
+                  </figcaption>
+                )}
+              </figure>
+            );
+          })}
+        </div>
+        <div className="hero-stk-info">
+          {headline && <p className="hero-stk-label">{headline}</p>}
+          <h1 className="hero-stk-names">
+            {names.map((n, i) => (
+              <span key={i}>{n}</span>
+            ))}
+          </h1>
+          {(date || venue) && (
+            <p className="hero-stk-when">
+              {date && <span>{formatDateKo(date)}</span>}
+              {venue && <span>{venue}</span>}
+            </p>
+          )}
+          <MusicBar title={section.data.music?.title || 'Our Wedding Song'} src={section.data.music?.src} />
+        </div>
+      </div>
+    );
+  }
+
   // 표지: 꽉 찬 사진 위 작은 문구·명조 이름(두 줄)·날짜/연도 → 포인트 띠 → 재생 바 (§3.5 템플릿2)
   if (layout === 'cover') {
     const pad = (n: number) => String(n).padStart(2, '0');

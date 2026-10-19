@@ -50,9 +50,14 @@ function CoreLink({ what, children }: { what: string; children: ReactNode }) {
 function HeroPanel({ doc, section, dispatch }: PanelProps<'hero'>) {
   const set = useUpdate('hero', dispatch);
   const polaroid = section.data.layout === 'polaroid';
-  // 폴라로이드는 대표 + 추가 2장 = 3칸, 그 외는 대표 1칸
+  const stack = section.data.layout === 'stack';
+  // 폴라로이드·이어 붙이기는 대표 + 추가 2장 = 3칸, 그 외는 대표 1칸
+  const multi = polaroid || stack;
   const extras = (section.data.extraImageIds ?? []).filter((id) => doc.images[id]);
-  const slots = [section.data.imageId, ...(polaroid ? Array.from({ length: HERO_EXTRA_MAX }, (_, i) => extras[i] ?? null) : [])];
+  const slots = [section.data.imageId, ...(multi ? Array.from({ length: HERO_EXTRA_MAX }, (_, i) => extras[i] ?? null) : [])];
+  const captions = section.data.captions ?? [];
+  const setCaption = (i: number, text: string) =>
+    set({ captions: Array.from({ length: HERO_EXTRA_MAX + 1 }, (_, k) => (k === i ? text : captions[k] ?? '')) });
   return (
     <div className="panel-body">
       <PanelSection title="사진">
@@ -62,10 +67,24 @@ function HeroPanel({ doc, section, dispatch }: PanelProps<'hero'>) {
           label="히어로 사진"
           slots={slots}
           onChange={([imageId, ...rest]) =>
-            set(polaroid ? { imageId, extraImageIds: rest.filter((x): x is string => !!x) } : { imageId })
+            set(multi ? { imageId, extraImageIds: rest.filter((x): x is string => !!x) } : { imageId })
           }
         />
       </PanelSection>
+      {stack && (
+        <PanelSection title="사진 멘트">
+          <p className="field-hint">사진 아래쪽에 한 줄로 보여요. 비우면 표시하지 않아요.</p>
+          {Array.from({ length: HERO_EXTRA_MAX + 1 }, (_, i) => (
+            <TextField
+              key={i}
+              label={`${i + 1}번째 사진`}
+              value={captions[i] ?? ''}
+              onChange={(text) => setCaption(i, text)}
+              maxLength={60}
+            />
+          ))}
+        </PanelSection>
+      )}
       <PanelSection title="문구">
         <TextArea
           label={polaroid ? '작은 문구' : '헤드라인'}
@@ -83,7 +102,6 @@ function HeroPanel({ doc, section, dispatch }: PanelProps<'hero'>) {
             maxLength={24}
           />
         )}
-
       </PanelSection>
       <CoreLink what="이름·예식 일시·장소">
         <HostNameFields doc={doc} dispatch={dispatch} />

@@ -405,6 +405,52 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 .inv--fam-bloom .ui-modal-card.gb-detail { border: var(--bw-card) solid var(--c-accent); }
 .inv--fam-bloom .gb-detail-name .heart-cut { display: none; }
 
+/* ---- 룩북 계열 (템플릿4, §3.5 PRD-0023) ----
+   흰 지면 위 사진이 주인공. 글꼴은 Pretendard 하나, 이 계열만 얇은 굵기(200·300). 장식·종이 질감 없음 */
+.inv--fam-lookbook .inv-section,
+.inv-portal.inv--fam-lookbook .ui-modal-card { background-image: none; }
+.inv--fam-lookbook .heart-cut.ui-heart { display: none; }
+.inv--fam-lookbook .ui-title { font-weight: var(--fw-light); }
+/* 예식 일자: 1번의 흐르는 SAVE THE DATE·오린 하트 대신, 예식일은 포인트 원 하나. 선·숫자도 가늘게 */
+.inv--fam-lookbook .save-marquee,
+.inv--fam-lookbook .heart-cut.cal-heart { display: none; }
+.inv--fam-lookbook .cal-strip { border-color: var(--c-ink-20); }
+.inv--fam-lookbook .cal-strip-num { font-weight: var(--fw-light); }
+.inv--fam-lookbook .cal-strip-day.is-day .cal-strip-num { border-radius: 50%; background: var(--c-accent); }
+.inv--fam-lookbook .cal-strip-day.is-day .cal-strip-n { font-weight: var(--fw-regular); }
+
+/* 히어로 이어 붙이기: 사진 1~3장을 여백 없이 세로로. 장수가 늘수록 납작하게 (1장 3:4 · 2장 4:3 · 3장 3:2) */
+.hero--stack { display: flex; flex-direction: column; padding-bottom: var(--sp-section); }
+.hero-stk-photos { display: flex; flex-direction: column; }
+.hero-stk-shot { position: relative; margin: 0; aspect-ratio: 3 / 4; overflow: hidden; background: var(--c-ink-8); }
+.hero--stack.has-2 .hero-stk-shot { aspect-ratio: 4 / 3; }
+.hero--stack.has-3 .hero-stk-shot { aspect-ratio: 3 / 2; }
+.hero-stk-shot > img,
+.hero-stk-shot > .hero-img--empty { width: 100%; height: 100%; object-fit: cover; }
+.hero-stk-shot > .hero-img--empty { display: grid; place-items: center; color: var(--c-ink-60); }
+/* 멘트가 읽히도록 아래만 살짝 어둡게 */
+.hero-stk-shot:has(.hero-stk-caption)::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, color-mix(in srgb, var(--c-ink) 32%, transparent), transparent 34%); pointer-events: none; }
+.hero-stk-caption {
+  position: absolute;
+  left: var(--sp-6);
+  right: var(--sp-6);
+  bottom: var(--sp-5);
+  z-index: 1;
+  font-size: var(--fs-body);
+  font-weight: var(--fw-light);
+  line-height: var(--lh-tight);
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 1px 8px color-mix(in srgb, var(--c-ink) 40%, transparent);
+}
+.hero-stk-info { display: flex; flex-direction: column; align-items: center; gap: var(--sp-3); padding: var(--sp-12) var(--sp-gutter) 0; }
+.hero-stk-label { font-size: var(--fs-small); font-weight: var(--fw-light); letter-spacing: 0.16em; color: var(--c-ink-60); }
+.inv .hero-stk-names { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--sp-4); margin: 0; font-size: var(--fs-cover); font-weight: var(--fw-thin); line-height: var(--lh-tight); }
+.hero-stk-names > span + span::before { content: ''; display: inline-block; width: var(--sp-4); margin-right: var(--sp-4); border-top: var(--bw) solid var(--c-ink-60); vertical-align: middle; }
+.hero-stk-when { display: grid; font-weight: var(--fw-light); color: var(--c-ink-60); }
+.hero--stack .music-bar { align-self: stretch; margin-top: var(--sp-5); }
+
 /* ---- 갤러리: 캐러셀 (가로로 넘기는 사진) ---- */
 .gal-car { position: relative; width: calc(100% + 2 * var(--sp-gutter)); margin: 0 calc(-1 * var(--sp-gutter)); }
 .gal-car-track { position: relative; display: flex; gap: var(--sp-3); padding: var(--sp-2) 21%; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; }

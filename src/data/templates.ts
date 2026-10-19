@@ -105,6 +105,20 @@ export const THEME_PRESETS: Record<ThemePreset, ThemePresetDef> = {
     board: '#faf8fc',
     font: 'sans',
   },
+  white: {
+    label: '화이트',
+    // 흰 바탕 + 짙은 올리브 포인트 원톤 (§3.5 템플릿4)
+    bg: '#fdfdfb',
+    surface: '#f3f3ef',
+    text: '#262624',
+    muted: '#7a7a74',
+    accent: '#4d5a3a',
+    band: '#4d5a3a',
+    onBand: '#fdfdfb',
+    paper: '#ffffff',
+    board: '#fdfdfb',
+    font: 'sans',
+  },
   romantic: {
     label: '로맨틱',
     bg: '#fff7f6',

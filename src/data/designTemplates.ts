@@ -17,6 +17,8 @@ export interface DesignTemplate {
   /** 예식 일자 표시 방식 (없으면 월 달력) */
   calendarStyle?: CalendarStyle;
   headline: string;
+  /** 히어로 사진 멘트 기본값 (stack 레이아웃, 사진 칸 순서) */
+  heroCaptions?: string[];
   /** 템플릿 카드 미리보기용 샘플 사진 색 [위, 아래] */
   sample: [string, string];
 }
@@ -67,6 +69,23 @@ export const DESIGN_TEMPLATES: DesignTemplate[] = [
     headline: '저희 두 사람, 결혼합니다',
     sample: ['#ddd3e8', '#5e3d8f'],
   },
+  {
+    // 템플릿4 — 사진 1~3장을 이어 붙인 편집 디자인, 사진마다 영문 멘트, 얇은 고딕 (§3.5, PRD-0023)
+    id: 'template4',
+    name: '템플릿4', // 이름은 나중에 정한다
+    preset: 'white',
+    family: 'lookbook',
+    shape: 'round',
+    font: 'sans',
+    accent: THEME_PRESETS.white.accent,
+    heroLayout: 'stack',
+    galleryLayout: 'grid',
+    calendarStyle: 'strip',
+    headline: 'THE WEDDING OF',
+    // 임시 문구 — 운영자가 줄 기본 멘트로 교체 예정
+    heroCaptions: ['you are my today and all of my tomorrows', 'and so the adventure begins', 'together is a wonderful place to be'],
+    sample: ['#c9d4b0', '#4d5a3a'],
+  },
 ];
 
 export const DEFAULT_TEMPLATE_ID = DESIGN_TEMPLATES[0].id;
@@ -86,7 +105,8 @@ export function applyTemplate(doc: InvitationDoc, t: DesignTemplate): Invitation
     templateId: t.id,
     theme: { preset: t.preset, font: t.font, accent: t.accent, family: t.family ?? 'basic', shape: t.shape ?? 'round' },
     sections: doc.sections.map((s) => {
-      if (s.type === 'hero') return { ...s, data: { ...s.data, layout: t.heroLayout, headline: t.headline } };
+      if (s.type === 'hero')
+        return { ...s, data: { ...s.data, layout: t.heroLayout, headline: t.headline, ...(t.heroCaptions && { captions: [...t.heroCaptions] }) } };
       if (s.type === 'gallery') return { ...s, data: { ...s.data, layout: t.galleryLayout } };
       if (s.type === 'calendar') return { ...s, data: { ...s.data, style: t.calendarStyle ?? 'month' } };
       return s;

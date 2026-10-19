@@ -38,6 +38,7 @@ export const FAMILY_LABELS: Record<ThemeFamily, string> = {
   editorial: '에디토리얼',
   ticket: '티켓',
   bloom: '블룸',
+  lookbook: '룩북',
 };
 
 /** 계열별 글꼴 토큰 */
@@ -49,6 +50,8 @@ const FAMILY_FONTS: Record<ThemeFamily, { title: string; display: string }> = {
   ticket: { title: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif", display: "'RIDIBatang', 'Gowun Batang', serif" },
   // 블룸: 본문 고딕 + 섹션 제목·히어로 작은 문구만 명조(리디바탕, tokens.css @font-face)
   bloom: { title: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif", display: "'RIDIBatang', 'Gowun Batang', serif" },
+  // 룩북: 모두 고딕(Pretendard), 얇은 굵기(200·300)는 계열 CSS에서
+  lookbook: { title: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif", display: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif" },
 };
 
 /** 팔레트·모양·계열 → CSS 변수 */

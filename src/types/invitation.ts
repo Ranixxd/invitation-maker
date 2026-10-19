@@ -3,11 +3,11 @@
 /** v0.2부터 결혼식 전용 (CONSTITUTION §1.3). 확장 여지를 위해 필드는 유지 */
 export type EventType = 'wedding';
 
-export type ThemePreset = 'classic' | 'modern' | 'romantic' | 'mono' | 'cream' | 'violet';
+export type ThemePreset = 'classic' | 'modern' | 'romantic' | 'mono' | 'cream' | 'violet' | 'white';
 export type ThemeFont = 'serif' | 'sans';
 
 /** 디자인 시스템 (§3.6): 스타일 계열 · 모양 */
-export type ThemeFamily = 'basic' | 'editorial' | 'ticket' | 'bloom';
+export type ThemeFamily = 'basic' | 'editorial' | 'ticket' | 'bloom' | 'lookbook';
 export type ThemeShape = 'round' | 'square';
 
 export interface Theme {
@@ -60,7 +60,7 @@ export interface ImageAsset {
 
 // ---- 섹션 ----
 
-export type HeroLayout = 'full' | 'frame' | 'arch' | 'polaroid' | 'cover' | 'unfold';
+export type HeroLayout = 'full' | 'frame' | 'arch' | 'polaroid' | 'cover' | 'unfold' | 'stack';
 /** 예식 일자 표시 방식: 월 달력 / 앞뒤 하루를 포함한 3일 띠(하트 표시) — 템플릿이 결정 */
 export type CalendarStyle = 'month' | 'strip' | 'ticket';
 /** grid 격자 / slide(예전 값, 격자와 같음) / carousel 하트 글자 띠 앞 가로로 넘기는 사진 (템플릿3) */
@@ -68,12 +68,14 @@ export type GalleryLayout = 'grid' | 'slide' | 'carousel';
 
 export interface HeroData {
   imageId: string | null;
-  /** 폴라로이드 레이아웃의 추가 사진(최대 2장). 대표 사진과 합쳐 최대 3장 */
+  /** 폴라로이드·이어 붙이기 레이아웃의 추가 사진(최대 2장). 대표 사진과 합쳐 최대 3장 */
   extraImageIds?: string[];
   layout: HeroLayout;
   headline: string;
   /** 폴라로이드 레이아웃의 영문 필기체 문구 (기본 'Our Wedding Day') */
   script?: string;
+  /** 이어 붙이기(stack) 레이아웃의 사진 멘트. 사진 칸 순서 기준(최대 3), 빈 값은 표시 안 함 */
+  captions?: string[];
   /** 배경음악: 히어로 하단 재생 바. src가 없으면 재생 모습만(연결 전) */
   music?: { title: string; src?: string };
 }
