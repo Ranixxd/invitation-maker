@@ -159,11 +159,11 @@ export function MobileEditor({ doc, dispatch }: Props) {
       {sticker.picker}
 
       <nav className="m-toolbar" aria-label="편집 도구" hidden={sticker.placing}>
-        <button type="button" onClick={() => show('list')}>
-          <span aria-hidden>☰</span>구성
-        </button>
         <button type="button" onClick={() => show('settings')}>
           <span aria-hidden>📋</span>기본 정보
+        </button>
+        <button type="button" onClick={() => show('list')}>
+          <span aria-hidden>☰</span>구성
         </button>
       </nav>
 

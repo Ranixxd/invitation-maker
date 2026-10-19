@@ -356,7 +356,6 @@ a.choice-card:hover, button.choice-card:hover { border-color: var(--primary); tr
 .list-name { flex: 1; min-width: 0; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .list-desc { flex-basis: 100%; padding-left: 32px; font-size: 12px; color: var(--muted); font-weight: 400; }
 .list-num { width: 22px; height: 22px; display: inline-grid; place-items: center; border-radius: 6px; background: #ededf2; font-size: 11px; color: var(--muted); }
-.list-badge { font-size: 11px; padding: 1px 6px; border-radius: 6px; background: #ededf2; color: var(--muted); font-weight: 400; }
 .section-row { position: relative; display: flex; align-items: center; gap: 2px; border-radius: 10px; background: #fff; transition: transform 0.15s ease; }
 .section-list.is-dragging { user-select: none; -webkit-user-select: none; }
 .section-row.is-dragged { z-index: 5; transition: none; box-shadow: 0 8px 24px rgba(21, 21, 21, 0.14); }

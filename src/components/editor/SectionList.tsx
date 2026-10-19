@@ -35,9 +35,12 @@ export function SectionList({ doc, selected, onSelect, dispatch, showBasics = tr
     setDrag(d);
   };
 
+  // 브랜드 소개(맨 뒤 고정)는 편집할 게 없어 목록에서 뺀다 (§4.9). 맨 뒤라 목록 순번 = 문서 순번
+  const listed = doc.sections.filter((s) => s.type !== PINNED_LAST);
+
   const onHandleDown = (e: PointerEvent, id: string, index: number) => {
     e.preventDefault();
-    rects.current = doc.sections.map((s) => {
+    rects.current = listed.map((s) => {
       const r = rowRefs.current.get(s.id)?.getBoundingClientRect();
       return { top: r?.top ?? 0, height: r?.height ?? 0 };
     });
@@ -61,10 +64,8 @@ export function SectionList({ doc, selected, onSelect, dispatch, showBasics = tr
     rects.current.forEach((o, j) => {
       if (j !== d.from && o.top + o.height / 2 < center) to++;
     });
-    // 고정 섹션 자리(맨 앞 히어로, 맨 뒤 브랜드)로는 들어갈 수 없다 (§4.2)
-    const last = doc.sections.length - 1;
-    const hi = doc.sections[last]?.type === PINNED_LAST ? last - 1 : last;
-    setDragBoth({ ...d, dy, to: Math.min(Math.max(1, to), hi) });
+    // 고정 섹션 자리(맨 앞 히어로)로는 들어갈 수 없다. 브랜드는 목록에 없어 맨 뒤 자리도 자연히 제외 (§4.2)
+    setDragBoth({ ...d, dy, to: Math.min(Math.max(1, to), listed.length - 1) });
   };
 
   const onHandleUp = () => {
@@ -99,14 +100,15 @@ export function SectionList({ doc, selected, onSelect, dispatch, showBasics = tr
             <button type="button" className={`list-item${selected === 'settings' ? ' is-on' : ''}`} onClick={() => onSelect('settings')}>
               <span className="list-icon" aria-hidden>📋</span>
               <span className="list-name">기본 정보</span>
-              <span className="list-desc">이름·날짜·장소·혼주</span>
+              <span className="list-desc">템플릿 컨셉 및 예식일, 혼주, 장소 정보 수정</span>
             </button>
           </li>
         </ul>
       )}
-      <p className="list-caption">섹션 (끌어서 순서를 바꿀 수 있어요)</p>
+      {/* 모바일 구성 시트는 시트 제목이 이미 `구성`이라 캡션을 생략 */}
+      {showBasics && <p className="list-caption">구성</p>}
       <ul>
-        {doc.sections.map((s, i) => {
+        {listed.map((s, i) => {
           const pinned = isPinned(s.type);
           const label = SECTION_LABELS[s.type];
           const isDragged = drag?.id === s.id;
@@ -123,7 +125,6 @@ export function SectionList({ doc, selected, onSelect, dispatch, showBasics = tr
               <button type="button" className={`list-item${selected === s.id ? ' is-on' : ''}`} onClick={() => onSelect(s.id)}>
                 <span className="list-num">{i + 1}</span>
                 <span className="list-name">{label}</span>
-                {pinned && <span className="list-badge">고정</span>}
               </button>
               {!pinned && (
                 <span className="row-actions">
