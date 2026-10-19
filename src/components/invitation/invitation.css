@@ -408,8 +408,8 @@ h1.hero-cov-names { display: grid; justify-items: center; margin: 0; font-size: 
 /* ---- 룩북 계열 (템플릿4, §3.5 PRD-0023) ----
    흰 지면 위 사진이 주인공. 글꼴은 Pretendard(이 계열만 얇은 굵기 200·300) + 사진 멘트만 Inter 굵은 기울임. 장식·종이 질감 없음 */
 .inv--fam-lookbook { --ff-caption: 'Inter', var(--ff-sans); }
-/* 섹션 사이 가는 구분선 (좌우 여백 안쪽, 히어로 다음부터, 브랜드 소개 앞은 없음) */
-.inv--fam-lookbook .inv-section + .inv-section:not(.inv-section--brand)::before { content: ''; position: absolute; top: 0; left: var(--sp-gutter); right: var(--sp-gutter); border-top: var(--bw) solid var(--c-ink-20); pointer-events: none; }
+/* 섹션 사이 가는 구분선 (가운데, 좌우 여백 안쪽 폭의 절반, 히어로 다음부터, 브랜드 소개 앞은 없음) */
+.inv--fam-lookbook .inv-section + .inv-section:not(.inv-section--brand)::before { content: ''; position: absolute; top: 0; left: 50%; width: calc(50% - var(--sp-gutter)); transform: translateX(-50%); border-top: var(--bw) solid var(--c-ink-20); pointer-events: none; }
 /* 갤러리: 3×3 격자를 좌우 여백 없이 꽉 차게, 사진 사이 2px, 더보기 없이 9장 모두 */
 .inv--fam-lookbook .gallery-grid { gap: var(--bw-strong); width: calc(100% + 2 * var(--sp-gutter)); max-width: none; margin: 0 calc(-1 * var(--sp-gutter)); }
 .inv--fam-lookbook .gallery-item { border: 0; background: var(--c-ink-8); }
